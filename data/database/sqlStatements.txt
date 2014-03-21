@@ -1,0 +1,63 @@
+drop table Users;
+drop table Projects;
+drop table Fields;
+drop table Batches;
+drop table Records;
+drop table IndexedData;
+
+CREATE  TABLE Users 
+(
+	UserID INTEGER PRIMARY KEY  AUTOINCREMENT  NOT NULL  UNIQUE ,
+	Username TEXT NOT NULL  UNIQUE ,
+	Password TEXT NOT NULL ,
+	FirstName TEXT NOT NULL ,
+	LastName TEXT NOT NULL ,
+	Email TEXT NOT NULL ,
+	IndexedRecords INTEGER NOT NULL  DEFAULT 0
+);
+
+CREATE  TABLE Projects
+(
+	ProjectID INTEGER PRIMARY KEY  AUTOINCREMENT  NOT NULL  UNIQUE ,
+	ProjectTitle TEXT NOT NULL ,
+	RecordsPerImage INTEGER NOT NULL ,
+	FirstYCoord INTEGER NOT NULL ,
+	RecordHeight INTEGER NOT NULL
+);
+
+CREATE TABLE Fields 
+(
+	FieldID INTEGER PRIMARY KEY  AUTOINCREMENT  NOT NULL  UNIQUE ,
+	FieldNumber INTEGER NOT NULL , 
+	FieldName TEXT NOT NULL,
+	XCoord INTEGER NOT NULL , 
+	Width INTEGER NOT NULL , 
+	HelpHTML TEXT NOT NULL , 
+	KnownData TEXT,
+	ProjectID INTEGER NOT NULL
+);
+
+CREATE TABLE Batches 
+(
+	BatchID INTEGER PRIMARY KEY  AUTOINCREMENT  NOT NULL  UNIQUE , 
+	ImagePath TEXT NOT NULL ,
+	ProjectID INTEGER NOT NULL,
+	FullyIndexed INTEGER NOT NULL DEFAULT 0,
+	UserID INTEGER
+);
+
+CREATE TABLE Records 
+(
+	RecordID INTEGER PRIMARY KEY  AUTOINCREMENT  NOT NULL  UNIQUE , 
+	RecordNumber INTEGER NOT NULL,
+	BatchID INTEGER NOT NULL
+
+);
+
+CREATE TABLE IndexedData 
+(
+	IndexedDataID INTEGER PRIMARY KEY  AUTOINCREMENT  NOT NULL  UNIQUE ,
+	DataValue TEXT,
+	RecordID INTEGER NOT NULL ,
+	FieldID INTEGER NOT NULL 
+);
