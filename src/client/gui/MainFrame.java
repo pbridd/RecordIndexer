@@ -2,6 +2,8 @@ package client.gui;
 
 import javax.swing.JFrame;
 
+import shared.model.User;
+
 public class MainFrame extends JFrame {
 
 	/**
@@ -9,20 +11,22 @@ public class MainFrame extends JFrame {
 	 */
 	private static final long serialVersionUID = 1L;
 	
-	/**
-	 * Main method
-	 * @param args
-	 */
-	public static void main(String[] args){
-		LoginFrame login = new LoginFrame("localhost", 8080);
-		login.pack();
-		login.setVisible(true);
-		if(login.userIsAuthenticated()){
-			
-		}
+	
+	
+	
+	//Non static methods and variables
+	//Global Variables
+	String server_host;
+	int server_port;
+	User user;
+	
+	
+	public MainFrame(String server_host, int server_port, User user) {
+		
 	}
 	
-	public MainFrame() {
+	private void createComponents(){
+		//Create the menu
 		
 	}
 	
