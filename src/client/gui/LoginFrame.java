@@ -10,10 +10,12 @@ import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 
+import client.ClientException;
 import shared.model.User;
 
 public class LoginFrame extends JFrame implements ActionListener{
@@ -30,6 +32,8 @@ public class LoginFrame extends JFrame implements ActionListener{
 	JButton exitButton;
 	boolean userIsAuthenticated;
 	User authenticatedUser;
+	String server_host;
+	int server_port;
 	
 	//constructors
 	/**
@@ -39,6 +43,8 @@ public class LoginFrame extends JFrame implements ActionListener{
 	 */
 	public LoginFrame(String server_host, int server_port){
 		super("Login to Indexer");
+		this.server_host = server_host;
+		this.server_port = server_port;
 		userIsAuthenticated = false;
 		authenticatedUser = null;
 		this.setResizable(false);
@@ -107,8 +113,35 @@ public class LoginFrame extends JFrame implements ActionListener{
 	 */
 	public void actionPerformed(ActionEvent e){
 		if(e.getSource() == loginButton){
+			String username = userTextField.getText();
+			String password = new String(passwordField.getPassword());
+			User tempUser;
+			//display an error message if something bad happens
+			try{
+				tempUser = UIIntegration.validateUser(username, password, server_host, server_port);
+			}
+			catch(ClientException exception){
+				JOptionPane.showMessageDialog(this, "An error occurred while communicating with the server: \n"
+						+ exception.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+				return;
+			}
+			
+			//display error message if the user couldn't be authenticated
+			if(tempUser == null){
+				JOptionPane.showMessageDialog(this, "Invalid username and/or password", "Login Failed", 
+						JOptionPane.ERROR_MESSAGE);
+			}
+			else{
+				authenticatedUser = tempUser;
+				userIsAuthenticated = true;
+				JOptionPane.showMessageDialog(this, "Welcome, " + tempUser.getFirstName() + " " +
+						tempUser.getLastName() + ".\nYou have indexed " + tempUser.getIndexedRecords() +
+						" records.", "Welcome to Indexer", JOptionPane.PLAIN_MESSAGE);
+				this.dispose();
+			}
 			
 		}
+		
 		else if(e.getSource() == exitButton){
 			System.exit(0);
 		}
@@ -120,7 +153,7 @@ public class LoginFrame extends JFrame implements ActionListener{
 	 * 	constructor
 	 * @return a boolean indicating whether a user was successfully authenticated
 	 */
-	public boolean userWasAuthenticated(){
+	public boolean userIsAuthenticated(){
 		return userIsAuthenticated;
 	}
 	

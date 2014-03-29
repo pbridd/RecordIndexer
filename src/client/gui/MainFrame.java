@@ -17,6 +17,9 @@ public class MainFrame extends JFrame {
 		LoginFrame login = new LoginFrame("localhost", 8080);
 		login.pack();
 		login.setVisible(true);
+		if(login.userIsAuthenticated()){
+			
+		}
 	}
 	
 	public MainFrame() {

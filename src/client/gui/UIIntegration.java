@@ -17,12 +17,12 @@ import client.communication.ClientCommunicator;
 public class UIIntegration {
 	/**
 	 * 
-	 * @param username
-	 * @param password
-	 * @param host
-	 * @param port
-	 * @return
-	 * @throws ClientException
+	 * @param username the username to authenticate
+	 * @param password the password to authenticate
+	 * @param host	the host to authenticate against
+	 * @param port the port to use for authentication
+	 * @return a user if authentication was successful, null if it wasn't
+	 * @throws ClientException if an error occurs with the server
 	 */
 	public static User validateUser(String username, String password, String host, int port) 
 			throws ClientException{
