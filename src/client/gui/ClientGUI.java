@@ -1,5 +1,7 @@
 package client.gui;
 
+import client.gui.synchronization.WindowManager;
+
 public class ClientGUI {
 	/**
 	 * Main method
@@ -25,12 +27,11 @@ public class ClientGUI {
 			server_port = 8080;
 		}
 		
-		LoginFrame login = new LoginFrame(server_host, server_port);
+		
+		WindowManager wManager = new WindowManager();
+		LoginFrame login = new LoginFrame(server_host, server_port, wManager);
 		login.pack();
-		login.setVisible(true);
-		//run the main frame if the user is authenticated
-		if(login.userIsAuthenticated()){
-			
-		}
+		
+		MainFrame mainFrame = new MainFrame(server_host, server_port, null, wManager);
 	}
 }

@@ -16,9 +16,11 @@ import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 
 import client.ClientException;
+import client.gui.synchronization.WindowManager;
+import client.gui.synchronization.WindowManagerListener;
 import shared.model.User;
 
-public class LoginFrame extends JFrame implements ActionListener{
+public class LoginFrame extends JFrame implements ActionListener, WindowManagerListener{
 	//static global variables
 	/**
 	 * Auto-generated serialVersionUID from Eclipse
@@ -26,14 +28,15 @@ public class LoginFrame extends JFrame implements ActionListener{
 	private static final long serialVersionUID = 1L;
 	
 	//global variables
-	JTextField userTextField;
-	JPasswordField passwordField;
-	JButton loginButton;
-	JButton exitButton;
-	boolean userIsAuthenticated;
-	User authenticatedUser;
-	String server_host;
-	int server_port;
+	private JTextField userTextField;
+	private JPasswordField passwordField;
+	private JButton loginButton;
+	private JButton exitButton;
+	private boolean userIsAuthenticated;
+	private User authenticatedUser;
+	private String server_host;
+	private int server_port;
+	private WindowManager wManager;
 	
 	//constructors
 	/**
@@ -41,14 +44,19 @@ public class LoginFrame extends JFrame implements ActionListener{
 	 * Constructor
 	 * @param server_port The port number to use when communicating with the server
 	 */
-	public LoginFrame(String server_host, int server_port){
+	public LoginFrame(String server_host, int server_port, WindowManager wManager){
 		super("Login to Indexer");
 		this.server_host = server_host;
 		this.server_port = server_port;
+		
+		//configure the window manager to notify this of any state changes
+		this.wManager = wManager;
+		this.wManager.addListener(this);
 		userIsAuthenticated = false;
 		authenticatedUser = null;
 		this.setResizable(false);
 		this.createComponents();
+		this.setVisible(true);
 		
 		
 	}
@@ -137,7 +145,8 @@ public class LoginFrame extends JFrame implements ActionListener{
 				JOptionPane.showMessageDialog(this, "Welcome, " + tempUser.getFirstName() + " " +
 						tempUser.getLastName() + ".\nYou have indexed " + tempUser.getIndexedRecords() +
 						" records.", "Welcome to Indexer", JOptionPane.PLAIN_MESSAGE);
-				this.dispose();
+				//set this to invisible
+				wManager.toggleVisibility(authenticatedUser);
 			}
 			
 		}
@@ -146,6 +155,24 @@ public class LoginFrame extends JFrame implements ActionListener{
 			System.exit(0);
 		}
 		
+	}
+	
+	
+	
+	@Override
+	public void visibilityToggled(boolean loginWindowVisible,
+			boolean mainWindowVisible, User user) {
+			if(!loginWindowVisible){
+				this.setVisible(false);
+			}
+			//reset the view of the login windows
+			else{
+				userIsAuthenticated = false;
+				authenticatedUser = null;
+				this.setResizable(false);
+				this.createComponents();
+				this.setVisible(true);
+			}
 	}
 	
 	/**
@@ -165,6 +192,8 @@ public class LoginFrame extends JFrame implements ActionListener{
 	public User getAuthenticatedUser(){
 		return authenticatedUser;
 	}
+
+	
 	
 	
 	
