@@ -1,6 +1,9 @@
 package client.gui;
 
 import javax.swing.JFrame;
+import javax.swing.JMenu;
+import javax.swing.JMenuBar;
+import javax.swing.JMenuItem;
 
 import shared.model.User;
 
@@ -11,22 +14,37 @@ public class MainFrame extends JFrame {
 	 */
 	private static final long serialVersionUID = 1L;
 	
-	
-	
-	
 	//Non static methods and variables
 	//Global Variables
 	String server_host;
 	int server_port;
 	User user;
+	JMenuBar menuBar;
+	JMenu menu;
+	JMenuItem downloadBatchMenuOption;
+	JMenuItem logoutMenuOption;
+	JMenuItem exitMenuOption;
 	
 	
 	public MainFrame(String server_host, int server_port, User user) {
-		
+		createComponents();
 	}
 	
 	private void createComponents(){
-		//Create the menu
+		//Create the menubar and the menu
+		menuBar = new JMenuBar();
+		
+		menu = new JMenu("File");
+		
+		downloadBatchMenuOption = new JMenuItem("Download Batch");
+		logoutMenuOption = new JMenuItem("Logout");
+		exitMenuOption = new JMenuItem("Exit");
+		
+		menu.add(downloadBatchMenuOption);
+		menu.add(logoutMenuOption);
+		menu.add(exitMenuOption);
+		menuBar.add(menu);
+
 		
 	}
 	
