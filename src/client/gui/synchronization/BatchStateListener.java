@@ -9,8 +9,8 @@ public interface BatchStateListener {
 	 * @param index The index of the field that has changed
 	 */
 	public void fieldHasChanged(int index);
-	public void selectedXHasChanged(int selectedX);
-	public void selectedYHasChanged(int selectedY);
+	public void selectedXHasChanged();
+	public void selectedYHasChanged();
 	public void dataValueHasChanged(int xIdx, int yIdx);
 	public void imageHasChanged();
 }

@@ -114,21 +114,19 @@ public class BatchState {
 		
 		/**
 		 * Fires the method selectedXHasChanged on all of its listeners
-		 * @param idx the index that the selected X value has changed to
 		 */
-		private void fireSelectedXHasChanged(int idx){
+		private void fireSelectedXHasChanged(){
 			for(BatchStateListener b : listeners){
-				b.selectedXHasChanged(idx);
+				b.selectedXHasChanged();
 			}
 		}
 		
 		/**
 		 * Fires the method selectedYHasChanged on all of its listeners
-		 * @param idx the index that the selected Y value has changed to
 		 */
-		private void fireSelectedYHasChanged(int idx){
+		private void fireSelectedYHasChanged(){
 			for(BatchStateListener b : listeners){
-				b.selectedYHasChanged(idx);
+				b.selectedYHasChanged();
 			}
 		}
 		
@@ -182,12 +180,6 @@ public class BatchState {
 			return fields.get(i);
 		}
 
-		/**
-		 * @param fields the fields to set
-		 */
-		public void setFields(List<Field> fields) {
-			this.fields = fields;
-		}
 
 
 		/**
@@ -227,6 +219,39 @@ public class BatchState {
 		 */
 		public String getImagePath() {
 			return imagePathOnLocalMachine;
+		}
+		
+		/**
+		 * Set the currently selected cell X coordinate, and fire the action listeners
+		 * @param idx The index of the selected X cell
+		 */
+		public void setSelectedCellX(int idx){
+			if(idx != selectedCellX){
+				selectedCellX = idx;
+				fireSelectedXHasChanged();
+			}
+		}
+		
+		/**
+		 * Set the currently selected cell Y Coordinate, and fire the action listeners
+		 * @param idx The index of the selected Y cell
+		 */
+		public void setSelectedCellY(int idx){
+			if(idx != selectedCellY){
+				selectedCellY = idx;
+				fireSelectedYHasChanged();
+			}
+		}
+		
+		
+		/**
+		 * Set the currently celected cell X and Y, using the methods already defined in this class
+		 * @param xIdx
+		 * @param yIdx
+		 */
+		public void setSelectedCell(int xIdx, int yIdx){
+			setSelectedCellX(xIdx);
+			setSelectedCellY(yIdx);
 		}
 		
 
