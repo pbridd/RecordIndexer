@@ -66,7 +66,7 @@ public class MainFrame extends JFrame implements ActionListener, WindowManagerLi
 		
 		this.add(menuBar, BorderLayout.NORTH);
 		
-		ImagePanel imagePanel = new ImagePanel();
+		ImagePanel imagePanel = new ImagePanel(server_host, server_port, user);
 		InfoPanel infoPanel = new InfoPanel();
 		TablePanel tablePanel = new TablePanel();
 		
