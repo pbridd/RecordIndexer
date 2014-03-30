@@ -32,6 +32,7 @@ public class ClientGUI {
 		LoginFrame login = new LoginFrame(server_host, server_port, wManager);
 		login.pack();
 		
+		@SuppressWarnings("unused")
 		MainFrame mainFrame = new MainFrame(server_host, server_port, null, wManager);
 	}
 }

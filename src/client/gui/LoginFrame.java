@@ -169,8 +169,6 @@ public class LoginFrame extends JFrame implements ActionListener, WindowManagerL
 			else{
 				userIsAuthenticated = false;
 				authenticatedUser = null;
-				this.setResizable(false);
-				this.createComponents();
 				this.setVisible(true);
 			}
 	}
