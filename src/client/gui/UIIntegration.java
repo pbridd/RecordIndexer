@@ -2,12 +2,15 @@ package client.gui;
 
 import java.util.List;
 
+import shared.communication.DownloadBatch_Params;
+import shared.communication.DownloadBatch_Result;
 import shared.communication.GetFields_Params;
 import shared.communication.GetFields_Result;
 import shared.communication.GetProjects_Params;
 import shared.communication.GetProjects_Result;
 import shared.communication.ValidateUser_Params;
 import shared.communication.ValidateUser_Result;
+import shared.model.Batch;
 import shared.model.Field;
 import shared.model.Project;
 import shared.model.User;
@@ -100,4 +103,20 @@ public class UIIntegration {
 	return result.getFields();
 		
     }
+    
+    
+    public DownloadBatch_Result downloadBatch(String username, String password, int projectID, String host, int port) 
+    		throws ClientException{
+		ClientCommunicator cc;
+		DownloadBatch_Params params;
+		cc = new ClientCommunicator(host, port);
+		params = new DownloadBatch_Params(username, password, projectID);
+		
+		DownloadBatch_Result result;
+		result = cc.downloadBatch(params);
+		
+		return result;
+		
+		
+	}
 }
