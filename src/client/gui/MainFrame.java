@@ -4,10 +4,12 @@ import java.awt.BorderLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
+import javax.swing.JPanel;
 import javax.swing.JSplitPane;
 
 import client.gui.synchronization.WindowManager;
@@ -86,6 +88,9 @@ public class MainFrame extends JFrame implements ActionListener, WindowManagerLi
 		}
 		
 		else if(e.getSource() == downloadBatchMenuOption){
+			JPanel dBatchPanel = new JPanel();
+			JPanel dBTopPanel = new JPanel();
+			JPanel dBBottomPanel = new JPanel();
 			
 		}
 		
@@ -107,10 +112,8 @@ public class MainFrame extends JFrame implements ActionListener, WindowManagerLi
 		}
 		
 	}
-
-
-	
 	
 	
 
 }
+
