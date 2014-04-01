@@ -14,6 +14,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JPasswordField;
 import javax.swing.JTextField;
+import javax.swing.WindowConstants;
 
 import client.ClientException;
 import client.gui.synchronization.WindowManager;
@@ -48,7 +49,7 @@ public class LoginFrame extends JFrame implements ActionListener, WindowManagerL
 		super("Login to Indexer");
 		this.server_host = server_host;
 		this.server_port = server_port;
-		
+		this.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 		//configure the window manager to notify this of any state changes
 		this.wManager = wManager;
 		this.wManager.addListener(this);

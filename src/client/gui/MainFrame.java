@@ -11,6 +11,7 @@ import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JPanel;
 import javax.swing.JSplitPane;
+import javax.swing.WindowConstants;
 
 import client.gui.synchronization.WindowManager;
 import client.gui.synchronization.WindowManagerListener;
@@ -43,6 +44,7 @@ public class MainFrame extends JFrame implements ActionListener, WindowManagerLi
 		this.setExtendedState(JFrame.MAXIMIZED_BOTH);
 		this.createComponents();
 		this.wManager = wManager;
+		this.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 		this.wManager.addListener(this);
 	}
 	

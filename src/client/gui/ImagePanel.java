@@ -1,7 +1,10 @@
 package client.gui;
 
 import java.awt.BorderLayout;
+import java.awt.Dimension;
 
+import javax.swing.Box;
+import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JPanel;
 
@@ -37,13 +40,21 @@ public class ImagePanel extends JPanel {
 		saveButton = new JButton("Save");
 		submitButton = new JButton("Submit");
 		
+		buttonsPanel.setLayout(new BoxLayout(buttonsPanel, BoxLayout.X_AXIS));
 	
+		buttonsPanel.add(Box.createRigidArea(new Dimension(5,0)));
 		buttonsPanel.add(zoomInButton);
+		buttonsPanel.add(Box.createRigidArea(new Dimension(5,0)));
 		buttonsPanel.add(zoomOutButton);
+		buttonsPanel.add(Box.createRigidArea(new Dimension(5,0)));
 		buttonsPanel.add(invertImageButton);
+		buttonsPanel.add(Box.createRigidArea(new Dimension(5,0)));
 		buttonsPanel.add(toggleHighlightsButton);
+		buttonsPanel.add(Box.createRigidArea(new Dimension(5,0)));
 		buttonsPanel.add(saveButton);
+		buttonsPanel.add(Box.createRigidArea(new Dimension(5,0)));
 		buttonsPanel.add(submitButton);
+		buttonsPanel.add(Box.createGlue());
 		disableButtons();
 		
 		//create the image panel and its image
