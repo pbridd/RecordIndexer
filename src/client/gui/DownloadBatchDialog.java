@@ -1,14 +1,18 @@
 package client.gui;
 
+import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.EventListener;
 import java.util.List;
 
+import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
+import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
@@ -16,7 +20,7 @@ import shared.model.User;
 import shared.model.Project;
 import client.gui.synchronization.BatchState;
 
-public class DownloadBatchPanel extends JPanel implements EventListener {
+public class DownloadBatchDialog extends JDialog implements ActionListener {
 	
 	private String server_host;
 	private int server_port;
@@ -30,11 +34,13 @@ public class DownloadBatchPanel extends JPanel implements EventListener {
 	private DefaultComboBoxModel<String> cbm;
 		
 	
-	public DownloadBatchPanel(String server_host, int server_port, User usr, BatchState bchS){
+	public DownloadBatchDialog(String server_host, int server_port, User usr, BatchState bchS){
 		this.server_host = server_host;
 		this.server_port = server_port;
 		this.user = usr;
 		this.bchS = bchS;
+		this.setModal(true);
+		this.setResizable(false);
 		this.createComponents();
 		
 	}
@@ -57,24 +63,42 @@ public class DownloadBatchPanel extends JPanel implements EventListener {
 		JPanel topPanel = new JPanel();
 		JPanel bottomPanel = new JPanel();
 		
-		this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
+		JPanel mainPanel = new JPanel();
+		
+		mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.Y_AXIS));
 		
 		topPanel.setLayout(new BoxLayout(topPanel, BoxLayout.X_AXIS));
 		topPanel.add(projectLabel);
+		topPanel.add(Box.createRigidArea(new Dimension(5,0)));
 		topPanel.add(projectSelectorBox);
+		topPanel.add(Box.createRigidArea(new Dimension(5,0)));
 		topPanel.add(viewSampleButton);
 		bottomPanel.setLayout(new BoxLayout(bottomPanel, BoxLayout.X_AXIS));
 		bottomPanel.add(cancelButton);
+		bottomPanel.add(Box.createRigidArea(new Dimension(5,0)));
 		bottomPanel.add(downloadButton);
+				
+		mainPanel.add(topPanel);
+		mainPanel.add(Box.createRigidArea(new Dimension(0,5)));
+		mainPanel.add(bottomPanel);
 		
-		this.add(topPanel);
-		this.add(bottomPanel);
+		//add this to the actionlisteners of the buttons
+		viewSampleButton.addActionListener(this);
+		cancelButton.addActionListener(this);
+		downloadButton.addActionListener(this);
+		
+		this.add(mainPanel);
+		
 		
 	}
 	
-	private void actionPerformed(ActionEvent e){
+	
+	public void actionPerformed(ActionEvent e){
 		if(e.getSource() == viewSampleButton){
 			
+		}
+		if(e.getSource() == cancelButton){
+			this.dispose();
 		}
 	}
 }

@@ -13,6 +13,7 @@ import javax.swing.JPanel;
 import javax.swing.JSplitPane;
 import javax.swing.WindowConstants;
 
+import client.gui.synchronization.BatchState;
 import client.gui.synchronization.WindowManager;
 import client.gui.synchronization.WindowManagerListener;
 import shared.model.User;
@@ -26,26 +27,28 @@ public class MainFrame extends JFrame implements ActionListener, WindowManagerLi
 	
 	//Non static methods and variables
 	//Global Variables
-	String server_host;
-	int server_port;
-	User user;
-	JMenuBar menuBar;
-	JMenu menu;
-	JMenuItem downloadBatchMenuOption;
-	JMenuItem logoutMenuOption;
-	JMenuItem exitMenuOption;
-	WindowManager wManager;
+	private String server_host;
+	private int server_port;
+	private User user;
+	private JMenuBar menuBar;
+	private JMenu menu;
+	private JMenuItem downloadBatchMenuOption;
+	private JMenuItem logoutMenuOption;
+	private JMenuItem exitMenuOption;
+	private WindowManager wManager;
+	private BatchState bchS;
 	
 	
-	public MainFrame(String server_host, int server_port, User user, WindowManager wManager) {
+	public MainFrame(String server_host, int server_port, User user, WindowManager wManager, BatchState bchS) {
 		this.user = user;
 		this.server_host = server_host;
 		this.server_port = server_port;
-		this.setExtendedState(JFrame.MAXIMIZED_BOTH);
+		this.setSize(900, 700);
 		this.createComponents();
 		this.wManager = wManager;
 		this.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 		this.wManager.addListener(this);
+		this.bchS = bchS;
 	}
 	
 	private void createComponents(){
@@ -78,6 +81,8 @@ public class MainFrame extends JFrame implements ActionListener, WindowManagerLi
 				infoPanel);
 		JSplitPane horizontalSplitPane = new JSplitPane(JSplitPane.VERTICAL_SPLIT, imagePanel, 
 				verticalSplitPane);
+		verticalSplitPane.setDividerLocation(500);
+		horizontalSplitPane.setDividerLocation(450);
 		this.add(horizontalSplitPane, BorderLayout.CENTER);
 		
 		
@@ -90,9 +95,10 @@ public class MainFrame extends JFrame implements ActionListener, WindowManagerLi
 		}
 		
 		else if(e.getSource() == downloadBatchMenuOption){
-			JPanel dBatchPanel = new JPanel();
-			JPanel dBTopPanel = new JPanel();
-			JPanel dBBottomPanel = new JPanel();
+			JDialog downloadBatchDialog = new DownloadBatchDialog(server_host, server_port, user, bchS);
+			downloadBatchDialog.pack();
+			downloadBatchDialog.setVisible(true);
+			
 			
 		}
 		

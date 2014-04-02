@@ -21,7 +21,9 @@ public class ImagePanel extends JPanel {
 	JButton submitButton;
 	
 	public ImagePanel(String server_host, int server_port, User user){
+
 		createComponents();
+		
 	}
 	
 	private void createComponents(){
@@ -40,7 +42,7 @@ public class ImagePanel extends JPanel {
 		saveButton = new JButton("Save");
 		submitButton = new JButton("Submit");
 		
-		buttonsPanel.setLayout(new BoxLayout(buttonsPanel, BoxLayout.X_AXIS));
+		buttonsPanel.setLayout(new BoxLayout(buttonsPanel, BoxLayout.LINE_AXIS));
 	
 		buttonsPanel.add(Box.createRigidArea(new Dimension(5,0)));
 		buttonsPanel.add(zoomInButton);
@@ -60,13 +62,9 @@ public class ImagePanel extends JPanel {
 		//create the image panel and its image
 		JPanel imagePanel = new JPanel();
 		
-		JPanel bufPanel = new JPanel();
-		JPanel topPanel = new JPanel();
-		topPanel.setLayout(new BorderLayout());
-		topPanel.add(bufPanel, BorderLayout.CENTER);
-		topPanel.add(buttonsPanel, BorderLayout.WEST);
+
 		
-		mainPanel.add(topPanel, BorderLayout.NORTH);
+		mainPanel.add(buttonsPanel, BorderLayout.NORTH);
 		mainPanel.add(imagePanel, BorderLayout.CENTER);
 		
 		this.add(mainPanel);

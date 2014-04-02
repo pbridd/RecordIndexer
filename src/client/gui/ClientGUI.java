@@ -1,5 +1,6 @@
 package client.gui;
 
+import client.gui.synchronization.BatchState;
 import client.gui.synchronization.WindowManager;
 
 public class ClientGUI {
@@ -32,7 +33,9 @@ public class ClientGUI {
 		LoginFrame login = new LoginFrame(server_host, server_port, wManager);
 		login.pack();
 		
+		BatchState bchS = new BatchState();
+		
 		@SuppressWarnings("unused")
-		MainFrame mainFrame = new MainFrame(server_host, server_port, null, wManager);
+		MainFrame mainFrame = new MainFrame(server_host, server_port, null, wManager, bchS);
 	}
 }
