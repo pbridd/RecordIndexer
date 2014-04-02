@@ -2,11 +2,15 @@ package client.gui;
 
 import java.awt.Dimension;
 import java.awt.FlowLayout;
+import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.IOException;
+import java.net.URL;
 import java.util.EventListener;
 import java.util.List;
 
+import javax.imageio.ImageIO;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.DefaultComboBoxModel;
@@ -101,10 +105,33 @@ public class DownloadBatchDialog extends JDialog implements ActionListener {
 	
 	public void actionPerformed(ActionEvent e){
 		if(e.getSource() == viewSampleButton){
+			//TODO implement
+			
+			String imgURL = null;
+			Image image;
+			try{
+	            URL url = new URL(imgURL);
+	            image = ImageIO.read(url);
+	        }
+	        catch(IOException ioex){
+	            System.out.println("Something bad just happened when trying to read the image"
+	                    + " URL!");
+	        }
 			
 		}
 		if(e.getSource() == cancelButton){
 			this.dispose();
 		}
+	}
+	
+	/**
+	 * Searches the list of projects projList for a certain name and returns its projectID
+	 * @param projectName The name of the project to search for
+	 * @return an int that is the project ID of the project that was asked for, or -1 if there
+	 * was no project with that name found
+	 */
+	private int getProjectID(String projectName){
+		//TODO implement
+		return -1;
 	}
 }

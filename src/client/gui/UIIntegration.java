@@ -8,6 +8,8 @@ import shared.communication.GetFields_Params;
 import shared.communication.GetFields_Result;
 import shared.communication.GetProjects_Params;
 import shared.communication.GetProjects_Result;
+import shared.communication.GetSampleImage_Params;
+import shared.communication.GetSampleImage_Result;
 import shared.communication.ValidateUser_Params;
 import shared.communication.ValidateUser_Result;
 import shared.model.Batch;
@@ -103,6 +105,30 @@ public class UIIntegration {
 	return result.getFields();
 		
     }
+    
+    /**
+     * Returns the URL of the requested sample image
+     * @return a String which is the URL of a sample image from the requested project
+     * @throws ClientException if an error occurs in communication
+     */
+    public String getSampleImage(String username, String password, int projectID, String host, int port) 
+    		throws ClientException {
+		ClientCommunicator cc;
+		GetSampleImage_Params params;
+
+		cc = new ClientCommunicator(host, port);
+		params =new GetSampleImage_Params(username, password, projectID);
+		
+		GetSampleImage_Result result;
+		result=cc.getSampleImage(params);
+		if(result == null){
+			throw new ClientException("Error 500: The server didn't send back an image.");
+		}
+		Batch batch = result.getBatch();
+		
+		String op = "http://" + host + ":" + port + "/"  + batch.getImagePath();
+		return op;
+	}
     
     
     public DownloadBatch_Result downloadBatch(String username, String password, int projectID, String host, int port) 
