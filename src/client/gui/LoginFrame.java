@@ -132,6 +132,7 @@ public class LoginFrame extends JFrame implements ActionListener, WindowManagerL
 			catch(ClientException exception){
 				JOptionPane.showMessageDialog(this, "An error occurred while communicating with the server: \n"
 						+ exception.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+				passwordField.setText("");
 				return;
 			}
 			
@@ -139,6 +140,8 @@ public class LoginFrame extends JFrame implements ActionListener, WindowManagerL
 			if(tempUser == null){
 				JOptionPane.showMessageDialog(this, "Invalid username and/or password", "Login Failed", 
 						JOptionPane.ERROR_MESSAGE);
+				passwordField.setText("");
+				
 			}
 			else{
 				authenticatedUser = tempUser;
