@@ -68,19 +68,25 @@ public class DownloadBatchDialog extends JDialog implements ActionListener {
 		mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.Y_AXIS));
 		
 		topPanel.setLayout(new BoxLayout(topPanel, BoxLayout.X_AXIS));
+		topPanel.add(Box.createRigidArea(new Dimension(5,0)));
 		topPanel.add(projectLabel);
 		topPanel.add(Box.createRigidArea(new Dimension(5,0)));
 		topPanel.add(projectSelectorBox);
 		topPanel.add(Box.createRigidArea(new Dimension(5,0)));
 		topPanel.add(viewSampleButton);
+		topPanel.add(Box.createRigidArea(new Dimension(5,0)));
+		bottomPanel.add(Box.createRigidArea(new Dimension(5,0)));
 		bottomPanel.setLayout(new BoxLayout(bottomPanel, BoxLayout.X_AXIS));
 		bottomPanel.add(cancelButton);
 		bottomPanel.add(Box.createRigidArea(new Dimension(5,0)));
 		bottomPanel.add(downloadButton);
-				
-		mainPanel.add(topPanel);
+		bottomPanel.add(Box.createRigidArea(new Dimension(5,0)));
+		
 		mainPanel.add(Box.createRigidArea(new Dimension(0,5)));
+		mainPanel.add(topPanel);
+		mainPanel.add(Box.createRigidArea(new Dimension(0,10)));
 		mainPanel.add(bottomPanel);
+		mainPanel.add(Box.createRigidArea(new Dimension(0,5)));
 		
 		//add this to the actionlisteners of the buttons
 		viewSampleButton.addActionListener(this);
