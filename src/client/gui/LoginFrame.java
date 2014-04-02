@@ -164,6 +164,8 @@ public class LoginFrame extends JFrame implements ActionListener, WindowManagerL
 	public void visibilityToggled(boolean loginWindowVisible,
 			boolean mainWindowVisible, User user) {
 			if(!loginWindowVisible){
+				userTextField.setText("");
+				passwordField.setText("");
 				this.setVisible(false);
 			}
 			//reset the view of the login windows
