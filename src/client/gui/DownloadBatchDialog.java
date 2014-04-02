@@ -1,5 +1,6 @@
 package client.gui;
 
+import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Image;
@@ -14,14 +15,17 @@ import javax.imageio.ImageIO;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.DefaultComboBoxModel;
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JDialog;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
 import shared.model.User;
 import shared.model.Project;
+import client.ClientException;
 import client.gui.synchronization.BatchState;
 
 public class DownloadBatchDialog extends JDialog implements ActionListener {
@@ -33,9 +37,11 @@ public class DownloadBatchDialog extends JDialog implements ActionListener {
 	private JButton viewSampleButton;
 	private JButton cancelButton;
 	private JButton downloadButton;
+	private JButton closeSampleImageButton;
 	private User user;
 	private List<Project> projList;
 	private DefaultComboBoxModel<String> cbm;
+	JDialog viewSampleImageDialog;
 		
 	
 	public DownloadBatchDialog(String server_host, int server_port, User usr, BatchState bchS){
@@ -107,31 +113,97 @@ public class DownloadBatchDialog extends JDialog implements ActionListener {
 		if(e.getSource() == viewSampleButton){
 			//TODO implement
 			
-			String imgURL = null;
+			int projID = getProjectID((String)projectSelectorBox.getSelectedItem());
+			
+			//make sure a project was found
+			if(projID == -1){
+				JOptionPane.showMessageDialog(this, "Could not find a project with the specified name",
+						"Error", JOptionPane.ERROR_MESSAGE);
+				return;
+			}
+			
+			
+			String imgURL;
+			try{
+				imgURL = UIIntegration.getSampleImage(user.getUsername(), user.getPassword(), projID, server_host, 
+						server_port);
+			}
+			catch(ClientException ce){
+				JOptionPane.showMessageDialog(this, "There was an error when contacting the server to get a URL for the sample image:\n" 
+						+ ce.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+				return;
+			}
+			
+			//get the image from the server
 			Image image;
 			try{
 	            URL url = new URL(imgURL);
 	            image = ImageIO.read(url);
 	        }
 	        catch(IOException ioex){
-	            System.out.println("Something bad just happened when trying to read the image"
-	                    + " URL!");
+	        	JOptionPane.showMessageDialog(this, "There was an error when trying to retrieve the image from the server:\n" 
+						+ ioex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+	            return;
 	        }
 			
+			
+			//make the dialog for viewing the sample image
+			viewSampleImageDialog = new JDialog();
+			
+			closeSampleImageButton = new JButton("Close");
+			
+			closeSampleImageButton.addActionListener(this);
+			
+			viewSampleImageDialog.setModal(true);
+			viewSampleImageDialog.setResizable(false);
+			viewSampleImageDialog.setTitle("Sample Image from " + (String)projectSelectorBox.getSelectedItem());
+			
+			
+			JPanel mJPanel = new JPanel();
+			mJPanel.setLayout(new BoxLayout(mJPanel, BoxLayout.Y_AXIS));
+			JPanel buttonPanel = new JPanel();
+			buttonPanel.setLayout(new BoxLayout(buttonPanel, BoxLayout.X_AXIS));
+			buttonPanel.add(Box.createGlue());
+			buttonPanel.add(closeSampleImageButton);
+			buttonPanel.add(Box.createGlue());
+			
+			
+			
+			
+	        JLabel lbImage = new JLabel(new ImageIcon(image));
+	        mJPanel.add(lbImage);
+	        mJPanel.add(Box.createRigidArea(new Dimension(0, 5)));
+	        mJPanel.add(buttonPanel);
+	        mJPanel.add(Box.createRigidArea(new Dimension(0, 5)));
+	        
+	        viewSampleImageDialog.setContentPane(mJPanel);
+	        viewSampleImageDialog.pack();
+	        viewSampleImageDialog.setVisible(true);
+	        
+			
 		}
+		
 		if(e.getSource() == cancelButton){
 			this.dispose();
+		}
+		
+		if(e.getSource() == closeSampleImageButton){
+			viewSampleImageDialog.dispose();
 		}
 	}
 	
 	/**
 	 * Searches the list of projects projList for a certain name and returns its projectID
-	 * @param projectName The name of the project to search for
+	 * @param projectTitle The name of the project to search for
 	 * @return an int that is the project ID of the project that was asked for, or -1 if there
 	 * was no project with that name found
 	 */
-	private int getProjectID(String projectName){
-		//TODO implement
+	private int getProjectID(String projectTitle){
+		for(Project p : projList){
+			if(projectTitle.equals(p.getProjectTitle())){
+				return p.getProjectID();
+			}
+		}
 		return -1;
 	}
 }

@@ -111,7 +111,7 @@ public class UIIntegration {
      * @return a String which is the URL of a sample image from the requested project
      * @throws ClientException if an error occurs in communication
      */
-    public String getSampleImage(String username, String password, int projectID, String host, int port) 
+    public static String getSampleImage(String username, String password, int projectID, String host, int port) 
     		throws ClientException {
 		ClientCommunicator cc;
 		GetSampleImage_Params params;
