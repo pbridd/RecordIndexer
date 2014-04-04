@@ -3,9 +3,14 @@ package client.gui;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
 import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.ComponentAdapter;
+import java.awt.event.ComponentEvent;
+import java.awt.geom.Rectangle2D;
 import java.io.IOException;
 import java.net.URL;
 import java.util.EventListener;
@@ -18,6 +23,7 @@ import javax.swing.DefaultComboBoxModel;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
+import javax.swing.JComponent;
 import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -111,7 +117,6 @@ public class DownloadBatchDialog extends JDialog implements ActionListener {
 	
 	public void actionPerformed(ActionEvent e){
 		if(e.getSource() == viewSampleButton){
-			//TODO implement
 			
 			int projID = getProjectID((String)projectSelectorBox.getSelectedItem());
 			
@@ -167,11 +172,11 @@ public class DownloadBatchDialog extends JDialog implements ActionListener {
 			buttonPanel.add(closeSampleImageButton);
 			buttonPanel.add(Box.createGlue());
 			
-			
-			
-			
-	        JLabel lbImage = new JLabel(new ImageIcon(image));
-	        mJPanel.add(lbImage);
+			JPanel imgPanel = new JPanel();
+			Image imgResized = image.getScaledInstance(500, 400, Image.SCALE_SMOOTH);
+	        JLabel lbImage = new JLabel(new ImageIcon(imgResized));
+	        imgPanel.add(lbImage);
+	        mJPanel.add(imgPanel);
 	        mJPanel.add(Box.createRigidArea(new Dimension(0, 5)));
 	        mJPanel.add(buttonPanel);
 	        mJPanel.add(Box.createRigidArea(new Dimension(0, 5)));
@@ -207,3 +212,5 @@ public class DownloadBatchDialog extends JDialog implements ActionListener {
 		return -1;
 	}
 }
+
+

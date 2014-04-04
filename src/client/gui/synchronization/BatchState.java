@@ -10,6 +10,7 @@ import java.util.List;
 import javax.imageio.ImageIO;
 
 import client.ClientException;
+import client.gui.synchronization.BatchStateListener.BatchActions;
 import shared.communication.DownloadBatch_Result;
 import shared.model.Batch;
 import shared.model.Field;
@@ -25,7 +26,7 @@ public class BatchState {
 		private IndexedData[][] values;
 		private int selectedCellX;
 		private int selectedCellY;
-		private String imagePathOnLocalMachine;
+		private String imagePath;
 		
 		
 		
@@ -60,7 +61,10 @@ public class BatchState {
 			String tempURL = server_host + ":" + server_port + "/" 
                     + batch.getImagePath();
 			
-			imagePathOnLocalMachine = processImageURL(tempURL);
+			imagePath = tempURL;
+			
+			//TODO take out if not used
+			//imagePathOnLocalMachine = processImageURL(tempURL);
 			fireImageHasChanged();
 			
 		}
@@ -70,6 +74,7 @@ public class BatchState {
 		 * This method downloads the image from the server and puts it in a local folder.
 		 * @param imgURL The URL of the image to download
 		 */
+		//TODO remove if unused.
 		private String processImageURL(String imgURL) throws ClientException{
 			BufferedImage image = null;
 			String imagePath = "localData/images/" + batch.getBatchID() + ".png";
@@ -89,7 +94,7 @@ public class BatchState {
 		 */
 		private void fireProjectHasChanged(){
 			for(BatchStateListener b : listeners){
-				b.projectHasChanged();
+				b.batchActionPerformed(BatchActions.PROJECTHASCHANGED);
 			}
 		}
 		
@@ -98,7 +103,7 @@ public class BatchState {
 		 */
 		private void fireBatchHasChanged(){
 			for(BatchStateListener b : listeners){
-				b.batchHasChanged();
+				b.batchActionPerformed(BatchActions.BATCHHASCHANGED);
 			}
 		}
 		
@@ -108,7 +113,7 @@ public class BatchState {
 		 */
 		private void fireFieldHasChanged(int idx){
 			for(BatchStateListener b : listeners){
-				b.fieldHasChanged(idx);
+				b.batchActionPerformed(BatchActions.FIELDHASCHANGED);
 			}
 		}
 		
@@ -117,7 +122,7 @@ public class BatchState {
 		 */
 		private void fireSelectedXHasChanged(){
 			for(BatchStateListener b : listeners){
-				b.selectedXHasChanged();
+				b.batchActionPerformed(BatchActions.SELECTEDXHASCHANGED);
 			}
 		}
 		
@@ -126,7 +131,7 @@ public class BatchState {
 		 */
 		private void fireSelectedYHasChanged(){
 			for(BatchStateListener b : listeners){
-				b.selectedYHasChanged();
+				b.batchActionPerformed(BatchActions.SELECTEDYHASCHANGED);
 			}
 		}
 		
@@ -137,13 +142,13 @@ public class BatchState {
 		 */
 		private void fireDataValueHasChanged(int xIdx, int yIdx){
 			for(BatchStateListener b : listeners){
-				b.dataValueHasChanged(xIdx, yIdx);
+				b.batchActionPerformed(BatchActions.DATAVALUEHASCHANGED);
 			}
 		}
 		
 		private void fireImageHasChanged(){
 			for(BatchStateListener b : listeners){
-				b.imageHasChanged();
+				b.batchActionPerformed(BatchActions.IMAGEHASCHANGED);
 			}
 		}
 		
@@ -218,7 +223,7 @@ public class BatchState {
 		 * @return the imagePathOnLocalMachine
 		 */
 		public String getImagePath() {
-			return imagePathOnLocalMachine;
+			return imagePath;
 		}
 		
 		/**
