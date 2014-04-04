@@ -29,6 +29,7 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
+import shared.communication.DownloadBatch_Result;
 import shared.model.User;
 import shared.model.Project;
 import client.ClientException;
@@ -128,14 +129,19 @@ public class DownloadBatchDialog extends JDialog implements ActionListener {
 			viewSampleImageDialog.dispose();
 		}
 		else if(e.getSource() == downloadButton){
+			DownloadBatch_Result res;
 			int projID = getProjectID((String)projectSelectorBox.getSelectedItem());
 			try{
-				UIIntegration.downloadBatch(user.getUsername(), user.getPassword(), projID, server_host, server_port);
+				 res = UIIntegration.downloadBatch(user.getUsername(), user.getPassword(), projID, server_host, server_port);
+				 bchS.processDownloadedBatch(res, server_host, server_port);
 			}
 			catch(ClientException ce){
 				JOptionPane.showMessageDialog(this, "There was an error while trying to download the batch from the server:\n" 
 						+ ce.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+				return;
 			}
+			
+			
 		}
 		
 	}

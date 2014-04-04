@@ -49,7 +49,7 @@ public class BatchState {
 		 * @param server_port the port the server is running on (to download the image)
 		 * @param result the imagebatch to process
 		 */
-		public void processDownloadedBatch(DownloadBatch_Result result, String server_host, String server_port) 
+		public void processDownloadedBatch(DownloadBatch_Result result, String server_host, int server_port) 
 				throws ClientException{
 			this.project = result.getProject();
 			fireProjectHasChanged();
