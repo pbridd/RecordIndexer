@@ -8,9 +8,10 @@ import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JPanel;
 
+import client.gui.synchronization.BatchStateListener;
 import shared.model.User;
 
-public class ImagePanel extends JPanel {
+public class ImagePanel extends JPanel implements BatchStateListener {
 	
 	//Global variables
 	JButton zoomInButton;
@@ -88,5 +89,13 @@ public class ImagePanel extends JPanel {
 		toggleHighlightsButton.setEnabled(true);
 		saveButton.setEnabled(true);
 		submitButton.setEnabled(true);
+	}
+
+	@Override
+	public void batchActionPerformed(BatchActions ba) {
+		if(ba == BatchActions.IMAGEHASCHANGED){
+			
+		}
+		
 	}
 }

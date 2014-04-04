@@ -116,85 +116,97 @@ public class DownloadBatchDialog extends JDialog implements ActionListener {
 	
 	
 	public void actionPerformed(ActionEvent e){
-		if(e.getSource() == viewSampleButton){
-			
-			int projID = getProjectID((String)projectSelectorBox.getSelectedItem());
-			
-			//make sure a project was found
-			if(projID == -1){
-				JOptionPane.showMessageDialog(this, "Could not find a project with the specified name",
-						"Error", JOptionPane.ERROR_MESSAGE);
-				return;
-			}
-			
-			
-			String imgURL;
-			try{
-				imgURL = UIIntegration.getSampleImage(user.getUsername(), user.getPassword(), projID, server_host, 
-						server_port);
-			}
-			catch(ClientException ce){
-				JOptionPane.showMessageDialog(this, "There was an error when contacting the server to get a URL for the sample image:\n" 
-						+ ce.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
-				return;
-			}
-			
-			//get the image from the server
-			Image image;
-			try{
-	            URL url = new URL(imgURL);
-	            image = ImageIO.read(url);
-	        }
-	        catch(IOException ioex){
-	        	JOptionPane.showMessageDialog(this, "There was an error when trying to retrieve the image from the server:\n" 
-						+ ioex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
-	            return;
-	        }
-			
-			
-			//make the dialog for viewing the sample image
-			viewSampleImageDialog = new JDialog();
-			
-			closeSampleImageButton = new JButton("Close");
-			
-			closeSampleImageButton.addActionListener(this);
-			
-			viewSampleImageDialog.setModal(true);
-			viewSampleImageDialog.setResizable(false);
-			viewSampleImageDialog.setTitle("Sample Image from " + (String)projectSelectorBox.getSelectedItem());
-			
-			
-			JPanel mJPanel = new JPanel();
-			mJPanel.setLayout(new BoxLayout(mJPanel, BoxLayout.Y_AXIS));
-			JPanel buttonPanel = new JPanel();
-			buttonPanel.setLayout(new BoxLayout(buttonPanel, BoxLayout.X_AXIS));
-			buttonPanel.add(Box.createGlue());
-			buttonPanel.add(closeSampleImageButton);
-			buttonPanel.add(Box.createGlue());
-			
-			JPanel imgPanel = new JPanel();
-			Image imgResized = image.getScaledInstance(500, 400, Image.SCALE_SMOOTH);
-	        JLabel lbImage = new JLabel(new ImageIcon(imgResized));
-	        imgPanel.add(lbImage);
-	        mJPanel.add(imgPanel);
-	        mJPanel.add(Box.createRigidArea(new Dimension(0, 5)));
-	        mJPanel.add(buttonPanel);
-	        mJPanel.add(Box.createRigidArea(new Dimension(0, 5)));
-	        
-	        viewSampleImageDialog.setContentPane(mJPanel);
-	        viewSampleImageDialog.pack();
-	        viewSampleImageDialog.setVisible(true);
-	        
-			
+		if(e.getSource() == viewSampleButton){	
+			displayViewSampleImageDialog();
 		}
 		
-		if(e.getSource() == cancelButton){
+		else if(e.getSource() == cancelButton){
 			this.dispose();
 		}
 		
-		if(e.getSource() == closeSampleImageButton){
+		else if(e.getSource() == closeSampleImageButton){
 			viewSampleImageDialog.dispose();
 		}
+		else if(e.getSource() == downloadButton){
+			int projID = getProjectID((String)projectSelectorBox.getSelectedItem());
+			try{
+				UIIntegration.downloadBatch(user.getUsername(), user.getPassword(), projID, server_host, server_port);
+			}
+			catch(ClientException ce){
+				JOptionPane.showMessageDialog(this, "There was an error while trying to download the batch from the server:\n" 
+						+ ce.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+			}
+		}
+		
+	}
+	
+	private void displayViewSampleImageDialog(){
+		int projID = getProjectID((String)projectSelectorBox.getSelectedItem());
+		
+		//make sure a project was found
+		if(projID == -1){
+			JOptionPane.showMessageDialog(this, "Could not find a project with the specified name",
+					"Error", JOptionPane.ERROR_MESSAGE);
+			return;
+		}
+		
+		
+		String imgURL;
+		try{
+			imgURL = UIIntegration.getSampleImage(user.getUsername(), user.getPassword(), projID, server_host, 
+					server_port);
+		}
+		catch(ClientException ce){
+			JOptionPane.showMessageDialog(this, "There was an error when contacting the server to get a URL for the sample image:\n" 
+					+ ce.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+			return;
+		}
+		
+		//get the image from the server
+		Image image;
+		try{
+            URL url = new URL(imgURL);
+            image = ImageIO.read(url);
+        }
+        catch(IOException ioex){
+        	JOptionPane.showMessageDialog(this, "There was an error when trying to retrieve the image from the server:\n" 
+					+ ioex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+		
+		
+		//make the dialog for viewing the sample image
+		viewSampleImageDialog = new JDialog();
+		
+		closeSampleImageButton = new JButton("Close");
+		
+		closeSampleImageButton.addActionListener(this);
+		
+		viewSampleImageDialog.setModal(true);
+		viewSampleImageDialog.setResizable(false);
+		viewSampleImageDialog.setTitle("Sample Image from " + (String)projectSelectorBox.getSelectedItem());
+		
+		
+		JPanel mJPanel = new JPanel();
+		mJPanel.setLayout(new BoxLayout(mJPanel, BoxLayout.Y_AXIS));
+		JPanel buttonPanel = new JPanel();
+		buttonPanel.setLayout(new BoxLayout(buttonPanel, BoxLayout.X_AXIS));
+		buttonPanel.add(Box.createGlue());
+		buttonPanel.add(closeSampleImageButton);
+		buttonPanel.add(Box.createGlue());
+		
+		JPanel imgPanel = new JPanel();
+		Image imgResized = image.getScaledInstance(500, 400, Image.SCALE_SMOOTH);
+        JLabel lbImage = new JLabel(new ImageIcon(imgResized));
+        imgPanel.add(lbImage);
+        mJPanel.add(imgPanel);
+        mJPanel.add(Box.createRigidArea(new Dimension(0, 5)));
+        mJPanel.add(buttonPanel);
+        mJPanel.add(Box.createRigidArea(new Dimension(0, 5)));
+        
+        viewSampleImageDialog.setContentPane(mJPanel);
+        viewSampleImageDialog.pack();
+        viewSampleImageDialog.setVisible(true);
 	}
 	
 	/**

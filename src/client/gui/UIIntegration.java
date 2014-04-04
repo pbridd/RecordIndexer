@@ -131,7 +131,7 @@ public class UIIntegration {
 	}
     
     
-    public DownloadBatch_Result downloadBatch(String username, String password, int projectID, String host, int port) 
+    public static DownloadBatch_Result downloadBatch(String username, String password, int projectID, String host, int port) 
     		throws ClientException{
 		ClientCommunicator cc;
 		DownloadBatch_Params params;
@@ -142,7 +142,7 @@ public class UIIntegration {
 		result = cc.downloadBatch(params);
 		
 		return result;
-		
-		
 	}
+    
+    
 }
