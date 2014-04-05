@@ -2,6 +2,7 @@ package client.gui;
 
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Image;
 import java.awt.event.ComponentAdapter;
@@ -12,9 +13,12 @@ import java.awt.event.MouseWheelEvent;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.NoninvertibleTransformException;
 import java.awt.geom.Point2D;
+import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.imageio.ImageIO;
 import javax.swing.JComponent;
@@ -42,28 +46,61 @@ public class ImageComponent extends JComponent implements BatchStateListener{
 	private int w_dragStartOriginX;
 	private int w_dragStartOriginY;
 	
+	private String imagePath;
+	private Image image;
 	
 	
+	private List<DrawingShape> shapes;
 	
 	private BatchState bchS;
 
-	public ImageComponent(){
-		this.setPreferredSize(new Dimension(800, 800));
-		this.setMinimumSize(new Dimension(100, 100));
-		this.setMaximumSize(new Dimension(1000, 1000));
+	public ImageComponent(BatchState bchS){
 		
-		this.setBackground(new Color(96, 96, 96));
+		shapes = new ArrayList<DrawingShape>();
+		String tempImgPath = bchS.getImagePath();
+		if(tempImgPath == null){
+			imagePath = "";
+		}
+		else
+			imagePath = tempImgPath;
+		
+		
 		w_originX = (int) this.getWidth() / 2;
 		w_originY = (int) this.getHeight() / 2;
+		scale = 1.0;
 		
 		initDrag();
+		
+		this.setBackground(new Color(96, 96, 96));
 		
 		this.addMouseListener(mouseAdapter);
 		this.addMouseMotionListener(mouseAdapter);
 		this.addComponentListener(componentAdapter);
 		
+		image = loadImage(imagePath);
+		shapes.add(new DrawingImage(image, new Rectangle2D.Double(350, 50, image.getWidth(null), image.getHeight(null))));
 		
-
+		
+	}
+	
+	//public methods
+	/**
+	 * Set the scale of the image
+	 * @param newScale the new scale to set the image to
+	 */
+	public void setScale(double newScale){
+		scale = newScale;
+		this.repaint();
+	}
+	
+	/**
+	 * Set the origin of the image
+	 * @param w_newOriginX	The new origin X to set
+	 * @param w_newOriginY	The new origin Y to set
+	 */
+	public void setOrigin(int w_newOriginX, int w_newOriginY){
+		w_originX = w_newOriginX;
+		w_originY = w_newOriginY;
 	}
 	
 	/**
@@ -90,6 +127,34 @@ public class ImageComponent extends JComponent implements BatchStateListener{
 		w_dragStartY = 0;
 		w_dragStartOriginX = 0;
 		w_dragStartOriginY = 0;
+	}
+	
+	@Override
+	protected void paintComponent(Graphics g){
+		super.paintComponent(g);
+		Graphics2D g2 = (Graphics2D)g;
+		drawBackground(g2);
+		
+		g2.scale(scale,  scale);
+		g2.translate(-w_originX, -w_originY);
+		
+		drawShapes(g2);
+		
+	}
+	
+	/**
+	 * Draw the background
+	 * @param g2
+	 */
+	private void drawBackground(Graphics2D g2){
+		g2.setColor(getBackground());
+		g2.fillRect(0, 0, getWidth(), getHeight());
+	}
+	
+	private void drawShapes(Graphics2D g2){
+		for(DrawingShape shape : shapes){
+			shape.draw(g2);
+		}
 	}
 	
 	private MouseAdapter mouseAdapter = new MouseAdapter() {
@@ -133,6 +198,7 @@ public class ImageComponent extends JComponent implements BatchStateListener{
 				w_dragStartOriginY = w_originY;
 			}
 		}
+		
 
 		@Override
 		public void mouseDragged(MouseEvent e) {		
@@ -165,6 +231,8 @@ public class ImageComponent extends JComponent implements BatchStateListener{
 				repaint();
 			}
 		}
+		
+		
 
 		@Override
 		public void mouseReleased(MouseEvent e) {
@@ -204,10 +272,49 @@ public class ImageComponent extends JComponent implements BatchStateListener{
 	public void batchActionPerformed(BatchActions ba) {
 		//Loads the image from the server if the image has changed
 		if(ba == BatchActions.IMAGEHASCHANGED){
-			//TODO implement the rest of this
-			Image image = loadImage(bchS.getImagePath());
+			this.imagePath = bchS.getImagePath();
+			this.image = loadImage(imagePath);
 		}
 		
 	}
+	/////////////////
+	//DRAWING SHAPE//
+	/////////////////
+	interface DrawingShape{
+		boolean contains(Graphics2D g2, double x, double y);
+		void draw(Graphics2D g2);
+		Rectangle2D getBounds(Graphics2D g2);
+	}
 	
+	/**
+	 * A class to draw the downloaded image
+	 * @author pbridd
+	 *
+	 */
+	class DrawingImage implements DrawingShape {
+		private Image image;
+		private Rectangle2D rect;
+		
+		public DrawingImage(Image image, Rectangle2D rect){
+			this.image = image;
+			this.rect = rect;
+		}
+		
+		@Override
+		public boolean contains(Graphics2D g2, double x, double y){
+			return rect.contains(x, y);
+		}
+		
+		@Override
+		public void draw(Graphics2D g2){
+			g2.drawImage(image, (int)rect.getMinX(), (int)rect.getMinY(), (int)rect.getMaxX(), (int)rect.getMaxY(),
+					0, 0, image.getWidth(null), image.getWidth(null), null);
+		}
+		
+		@Override
+		public Rectangle2D getBounds(Graphics2D g2){
+			return rect.getBounds2D();
+		}
+		
+	}
 }

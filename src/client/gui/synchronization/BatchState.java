@@ -38,6 +38,7 @@ public class BatchState {
 			project = null;
 			batch = null;
 			fields = new ArrayList<Field>();
+			listeners = new ArrayList<BatchStateListener>();
 		}
 		
 		

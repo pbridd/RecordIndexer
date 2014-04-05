@@ -1,9 +1,13 @@
 package client.gui;
 
 import java.awt.BorderLayout;
+import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+import javax.swing.Box;
+import javax.swing.BoxLayout;
+import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JMenu;
@@ -37,6 +41,12 @@ public class MainFrame extends JFrame implements ActionListener, WindowManagerLi
 	private JMenuItem exitMenuOption;
 	private WindowManager wManager;
 	private BatchState bchS;
+	JButton zoomInButton;
+	JButton zoomOutButton;
+	JButton invertImageButton;
+	JButton toggleHighlightsButton;
+	JButton saveButton;
+	JButton submitButton;
 	
 	
 	public MainFrame(String server_host, int server_port, User user, WindowManager wManager, BatchState bchS) {
@@ -44,11 +54,12 @@ public class MainFrame extends JFrame implements ActionListener, WindowManagerLi
 		this.server_host = server_host;
 		this.server_port = server_port;
 		this.setSize(900, 700);
-		this.createComponents();
 		this.wManager = wManager;
 		this.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 		this.wManager.addListener(this);
 		this.bchS = bchS;
+		this.createComponents();
+		
 	}
 	
 	private void createComponents(){
@@ -56,9 +67,7 @@ public class MainFrame extends JFrame implements ActionListener, WindowManagerLi
 		this.setLayout(new BorderLayout());
 		//Create the menubar and the menu
 		menuBar = new JMenuBar();
-		
 		menu = new JMenu("File");
-		
 		downloadBatchMenuOption = new JMenuItem("Download Batch");
 		logoutMenuOption = new JMenuItem("Logout");
 		exitMenuOption = new JMenuItem("Exit");
@@ -66,26 +75,72 @@ public class MainFrame extends JFrame implements ActionListener, WindowManagerLi
 		menu.add(logoutMenuOption);
 		menu.add(exitMenuOption);
 		menuBar.add(menu);
-		
+		this.setJMenuBar(menuBar);
 		downloadBatchMenuOption.addActionListener(this);
 		logoutMenuOption.addActionListener(this);
 		exitMenuOption.addActionListener(this);
 		
-		this.add(menuBar, BorderLayout.NORTH);
 		
-		ImagePanel imagePanel = new ImagePanel(server_host, server_port, user);
+		//setup the buttons panel--contains the buttons
+		JPanel buttonsPanel = new JPanel();
+		buttonsPanel.setLayout(new BoxLayout(buttonsPanel, BoxLayout.X_AXIS));
+		zoomInButton = new JButton("Zoom In");
+		zoomOutButton = new JButton("Zoom Out");
+		invertImageButton = new JButton("Invert Image");
+		toggleHighlightsButton = new JButton("Toggle Highlights");
+		saveButton = new JButton("Save");
+		submitButton = new JButton("Submit");
+		buttonsPanel.add(Box.createRigidArea(new Dimension(5,0)));
+		buttonsPanel.add(zoomInButton);
+		buttonsPanel.add(Box.createRigidArea(new Dimension(5,0)));
+		buttonsPanel.add(zoomOutButton);
+		buttonsPanel.add(Box.createRigidArea(new Dimension(5,0)));
+		buttonsPanel.add(invertImageButton);
+		buttonsPanel.add(Box.createRigidArea(new Dimension(5,0)));
+		buttonsPanel.add(toggleHighlightsButton);
+		buttonsPanel.add(Box.createRigidArea(new Dimension(5,0)));
+		buttonsPanel.add(saveButton);
+		buttonsPanel.add(Box.createRigidArea(new Dimension(5,0)));
+		buttonsPanel.add(submitButton);
+		buttonsPanel.add(Box.createGlue());
+		disableButtons();
+		
+		
+
+		
+		this.add(buttonsPanel, BorderLayout.NORTH);
+		//create the image panel and its image
+		ImageComponent imageComp = new ImageComponent(bchS);		
 		InfoPanel infoPanel = new InfoPanel();
 		TablePanel tablePanel = new TablePanel();
 		
 		JSplitPane verticalSplitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT,tablePanel,
 				infoPanel);
-		JSplitPane horizontalSplitPane = new JSplitPane(JSplitPane.VERTICAL_SPLIT, imagePanel, 
+		JSplitPane horizontalSplitPane = new JSplitPane(JSplitPane.VERTICAL_SPLIT, imageComp, 
 				verticalSplitPane);
 		verticalSplitPane.setDividerLocation(500);
 		horizontalSplitPane.setDividerLocation(450);
 		this.add(horizontalSplitPane, BorderLayout.CENTER);
 		
 		
+	}
+	
+	private void disableButtons(){
+		zoomInButton.setEnabled(false);
+		zoomOutButton.setEnabled(false);
+		invertImageButton.setEnabled(false);
+		toggleHighlightsButton.setEnabled(false);
+		saveButton.setEnabled(false);
+		submitButton.setEnabled(false);
+	}
+	
+	private void enableButtons(){
+		zoomInButton.setEnabled(true);
+		zoomOutButton.setEnabled(true);
+		invertImageButton.setEnabled(true);
+		toggleHighlightsButton.setEnabled(true);
+		saveButton.setEnabled(true);
+		submitButton.setEnabled(true);
 	}
 	
 	@Override
