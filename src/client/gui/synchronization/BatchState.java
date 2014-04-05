@@ -69,6 +69,14 @@ public class BatchState {
 			fireImageChanged();
 			fireBatchDownloaded();
 			
+			//initialize all of the values to blank
+			values = new IndexedData[project.getRecordsPerImage()][fields.size()];
+			for(int i = 0; i < values.length; i++){
+				for(int j = 0; j < values.length; j++){
+					values[i][j] = new IndexedData(-1, "", -1, -1);
+				}
+			}
+			
 		}
 		
 		

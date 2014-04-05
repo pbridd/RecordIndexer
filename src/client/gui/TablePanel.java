@@ -12,6 +12,12 @@ public class TablePanel extends JTabbedPane {
 		
 	}
 	
+	/**
+	 * Creates the tabs for the panel
+	 */
+	private void createComponents(){
+			
+	}
 	
 
 }
