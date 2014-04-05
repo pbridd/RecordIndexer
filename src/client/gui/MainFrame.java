@@ -55,12 +55,14 @@ public class MainFrame extends JFrame implements ActionListener, WindowManagerLi
 		this.user = user;
 		this.server_host = server_host;
 		this.server_port = server_port;
-		GraphicsDevice gd = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice();
+		
 		
 		//set default size
+		GraphicsDevice gd = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice();
 		int scWidth = gd.getDisplayMode().getWidth();
 		int scHeight = gd.getDisplayMode().getHeight();
 		this.setSize(scWidth, scHeight);
+		this.setLocation(scWidth/2 - this.getWidth(), scHeight/2 - this.getHeight());
 		this.wManager = wManager;
 		this.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 		this.wManager.addListener(this);

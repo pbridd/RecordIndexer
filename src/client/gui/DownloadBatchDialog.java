@@ -5,6 +5,8 @@ import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.GraphicsDevice;
+import java.awt.GraphicsEnvironment;
 import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -58,6 +60,10 @@ public class DownloadBatchDialog extends JDialog implements ActionListener {
 		this.bchS = bchS;
 		this.setModal(true);
 		this.setResizable(false);
+		GraphicsDevice gd = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice();
+		int scWidth = gd.getDisplayMode().getWidth();
+		int scHeight = gd.getDisplayMode().getHeight();
+		this.setLocation(scWidth/2 - this.getWidth(), scHeight/2 - this.getHeight());
 		this.createComponents();
 		
 	}

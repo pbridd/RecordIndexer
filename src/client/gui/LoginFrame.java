@@ -2,6 +2,8 @@ package client.gui;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
+import java.awt.GraphicsDevice;
+import java.awt.GraphicsEnvironment;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -51,6 +53,10 @@ public class LoginFrame extends JFrame implements ActionListener, WindowManagerL
 		this.server_port = server_port;
 		this.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 		//configure the window manager to notify this of any state changes
+		GraphicsDevice gd = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice();
+		int scWidth = gd.getDisplayMode().getWidth();
+		int scHeight = gd.getDisplayMode().getHeight();
+		this.setLocation(scWidth/2 - this.getWidth(), scHeight/2 - this.getHeight());
 		this.wManager = wManager;
 		this.wManager.addListener(this);
 		userIsAuthenticated = false;
