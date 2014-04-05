@@ -72,7 +72,7 @@ public class BatchState {
 			//initialize all of the values to blank
 			values = new IndexedData[project.getRecordsPerImage()][fields.size()];
 			for(int i = 0; i < values.length; i++){
-				for(int j = 0; j < values.length; j++){
+				for(int j = 0; j < values[0].length; j++){
 					values[i][j] = new IndexedData(-1, "", -1, -1);
 				}
 			}
@@ -264,6 +264,11 @@ public class BatchState {
 		public void addListener(BatchStateListener bl){
 			listeners.add(bl);
 		}
+		
+		public void setValueAt(String val, int row, int col){
+			values[row][col].setDataValue(val);
+		}
+		
 		
 
 

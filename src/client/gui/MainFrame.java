@@ -69,6 +69,7 @@ public class MainFrame extends JFrame implements ActionListener, WindowManagerLi
 		this.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 		this.wManager.addListener(this);
 		this.bchS = bchS;
+		bchS.addListener(this);
 		this.createComponents();
 		
 	}
@@ -123,7 +124,8 @@ public class MainFrame extends JFrame implements ActionListener, WindowManagerLi
 		//create the image panel and its image
 		ImageComponent imageComp = new ImageComponent(bchS);		
 		InfoPanel infoPanel = new InfoPanel();
-		TablePanel tablePanel = new TablePanel();
+		TablePanel tablePanel = new TablePanel(bchS);
+		
 		
 		JSplitPane verticalSplitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT,tablePanel,
 				infoPanel);
