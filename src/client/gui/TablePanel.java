@@ -1,17 +1,19 @@
 package client.gui;
 
-import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTabbedPane;
 
 import client.gui.synchronization.BatchState;
-import client.gui.synchronization.BatchStateListener;
 
+
+@SuppressWarnings("serial")
 public class TablePanel extends JTabbedPane  {
 	//Global Variables
-	
 	DataTable dTable;
+	FormEntryPanel fEntry;
 	BatchState bchS;
+	
+
 	
 	
 	/**
@@ -28,9 +30,14 @@ public class TablePanel extends JTabbedPane  {
 	private void createComponents(){
 		//set up table
 		dTable = new DataTable(bchS);
+		fEntry = new FormEntryPanel(bchS);
+		
 		
 		this.addTab("Table Entry", new JScrollPane(dTable));
+		this.addTab("Form Entry", fEntry);
 	}
+	
+	
 
 	
 	
