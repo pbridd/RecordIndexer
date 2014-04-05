@@ -59,7 +59,7 @@ public class BatchState {
 			this.fields = result.getFields();
 			fireFieldHasChanged(-1);
 			
-			String tempURL = server_host + ":" + server_port + "/" 
+			String tempURL ="http://"+ server_host + ":" + server_port + "/" 
                     + batch.getImagePath();
 			
 			imagePath = tempURL;
@@ -258,6 +258,14 @@ public class BatchState {
 		public void setSelectedCell(int xIdx, int yIdx){
 			setSelectedCellX(xIdx);
 			setSelectedCellY(yIdx);
+		}
+		
+		/**
+		 * Add a listener to this batchstate object
+		 * @param BatchStateListener the batch state listener to add
+		 */
+		public void addListener(BatchStateListener bl){
+			listeners.add(bl);
 		}
 		
 

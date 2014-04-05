@@ -55,7 +55,8 @@ public class ImageComponent extends JComponent implements BatchStateListener{
 	private BatchState bchS;
 
 	public ImageComponent(BatchState bchS){
-		
+		this.bchS = bchS;
+		bchS.addListener(this);
 		shapes = new ArrayList<DrawingShape>();
 		String tempImgPath = bchS.getImagePath();
 		if(tempImgPath == null){
@@ -274,6 +275,10 @@ public class ImageComponent extends JComponent implements BatchStateListener{
 		if(ba == BatchActions.IMAGEHASCHANGED){
 			this.imagePath = bchS.getImagePath();
 			this.image = loadImage(imagePath);
+			
+			shapes.clear();
+			shapes.add(new DrawingImage(image, new Rectangle2D.Double(350, 50, image.getWidth(null), image.getHeight(null))));
+			this.repaint();
 		}
 		
 	}
