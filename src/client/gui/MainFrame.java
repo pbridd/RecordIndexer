@@ -2,6 +2,8 @@ package client.gui;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
+import java.awt.GraphicsDevice;
+import java.awt.GraphicsEnvironment;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -53,7 +55,12 @@ public class MainFrame extends JFrame implements ActionListener, WindowManagerLi
 		this.user = user;
 		this.server_host = server_host;
 		this.server_port = server_port;
-		this.setSize(900, 700);
+		GraphicsDevice gd = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice();
+		
+		//set default size
+		int scWidth = gd.getDisplayMode().getWidth();
+		int scHeight = gd.getDisplayMode().getHeight();
+		this.setSize(scWidth, scHeight);
 		this.wManager = wManager;
 		this.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 		this.wManager.addListener(this);
@@ -118,8 +125,8 @@ public class MainFrame extends JFrame implements ActionListener, WindowManagerLi
 				infoPanel);
 		JSplitPane horizontalSplitPane = new JSplitPane(JSplitPane.VERTICAL_SPLIT, imageComp, 
 				verticalSplitPane);
-		verticalSplitPane.setDividerLocation(500);
-		horizontalSplitPane.setDividerLocation(450);
+		verticalSplitPane.setDividerLocation(this.getWidth()/2);
+		horizontalSplitPane.setDividerLocation(this.getHeight()/2);
 		this.add(horizontalSplitPane, BorderLayout.CENTER);
 		
 		
