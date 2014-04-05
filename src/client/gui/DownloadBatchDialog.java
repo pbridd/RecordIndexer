@@ -146,6 +146,7 @@ public class DownloadBatchDialog extends JDialog implements ActionListener {
 						+ ce.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
 				return;
 			}
+			this.dispose();
 			
 			
 		}

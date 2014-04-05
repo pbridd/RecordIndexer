@@ -272,7 +272,7 @@ public class ImageComponent extends JComponent implements BatchStateListener{
 	@Override
 	public void batchActionPerformed(BatchActions ba) {
 		//Loads the image from the server if the image has changed
-		if(ba == BatchActions.IMAGEHASCHANGED){
+		if(ba == BatchActions.IMAGECHANGED){
 			this.imagePath = bchS.getImagePath();
 			this.image = loadImage(imagePath);
 			

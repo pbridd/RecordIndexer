@@ -45,7 +45,7 @@ public class BatchState {
 		/**
 		 * Processes the batch that was downloaded. This includes instantiating most of its objects, 
 		 * 	storing the image of the batch on the local machine, and notifying all of its listeners that
-		 * 	something has changed.
+		 * 	something  changed.
 		 * @param server_host the hostname of the server (to download the image)
 		 * @param server_port the port the server is running on (to download the image)
 		 * @param result the imagebatch to process
@@ -53,11 +53,11 @@ public class BatchState {
 		public void processDownloadedBatch(DownloadBatch_Result result, String server_host, int server_port) 
 				throws ClientException{
 			this.project = result.getProject();
-			fireProjectHasChanged();
+			fireProjectChanged();
 			this.batch = result.getBatch();
-			fireBatchHasChanged();
+			fireBatchChanged();
 			this.fields = result.getFields();
-			fireFieldHasChanged(-1);
+			fireFieldChanged(-1);
 			
 			String tempURL ="http://"+ server_host + ":" + server_port + "/" 
                     + batch.getImagePath();
@@ -66,90 +66,79 @@ public class BatchState {
 			
 			//TODO take out if not used
 			//imagePathOnLocalMachine = processImageURL(tempURL);
-			fireImageHasChanged();
+			fireImageChanged();
+			fireBatchDownloaded();
 			
 		}
 		
 		
-		/**
-		 * This method downloads the image from the server and puts it in a local folder.
-		 * @param imgURL The URL of the image to download
-		 */
-		//TODO remove if unused.
-		private String processImageURL(String imgURL) throws ClientException{
-			BufferedImage image = null;
-			String imagePath = "localData/images/" + batch.getBatchID() + ".png";
-			 try{
-				 URL url = new URL(imgURL);
-				 image = ImageIO.read(url);
-				 ImageIO.write(image, "png",new File(imagePath));
-			 }
-			 catch(IOException e){
-				 throw new ClientException(e.getMessage());
-			 }
-			 return imagePath;
-		}
+		
 		//BatchStateListener notification methods
-		/**
-		 * Fires the method projectHasChanged on all of its listeners
-		 */
-		private void fireProjectHasChanged(){
+		private void fireBatchDownloaded(){
 			for(BatchStateListener b : listeners){
-				b.batchActionPerformed(BatchActions.PROJECTHASCHANGED);
+				b.batchActionPerformed(BatchActions.BATCHDOWNLOADED);
+			}
+		}
+		/**
+		 * Fires the method projectChanged on all of its listeners
+		 */
+		private void fireProjectChanged(){
+			for(BatchStateListener b : listeners){
+				b.batchActionPerformed(BatchActions.PROJECTCHANGED);
 			}
 		}
 		
 		/**
-		 * Fires the method batchHasChanged on all of its listeners
+		 * Fires the method batchChanged on all of its listeners
 		 */
-		private void fireBatchHasChanged(){
+		private void fireBatchChanged(){
 			for(BatchStateListener b : listeners){
-				b.batchActionPerformed(BatchActions.BATCHHASCHANGED);
+				b.batchActionPerformed(BatchActions.BATCHCHANGED);
 			}
 		}
 		
 		/**
-		 * Fires the method fieldHasChanged on all of its listeners
-		 * @param idx The index of the field that has changed
+		 * Fires the method fieldChanged on all of its listeners
+		 * @param idx The index of the field that  changed
 		 */
-		private void fireFieldHasChanged(int idx){
+		private void fireFieldChanged(int idx){
 			for(BatchStateListener b : listeners){
-				b.batchActionPerformed(BatchActions.FIELDHASCHANGED);
+				b.batchActionPerformed(BatchActions.FIELDCHANGED);
 			}
 		}
 		
 		/**
-		 * Fires the method selectedXHasChanged on all of its listeners
+		 * Fires the method selectedXChanged on all of its listeners
 		 */
-		private void fireSelectedXHasChanged(){
+		private void fireSelectedXChanged(){
 			for(BatchStateListener b : listeners){
-				b.batchActionPerformed(BatchActions.SELECTEDXHASCHANGED);
+				b.batchActionPerformed(BatchActions.SELECTEDXCHANGED);
 			}
 		}
 		
 		/**
-		 * Fires the method selectedYHasChanged on all of its listeners
+		 * Fires the method selectedYChanged on all of its listeners
 		 */
-		private void fireSelectedYHasChanged(){
+		private void fireSelectedYChanged(){
 			for(BatchStateListener b : listeners){
-				b.batchActionPerformed(BatchActions.SELECTEDYHASCHANGED);
+				b.batchActionPerformed(BatchActions.SELECTEDYCHANGED);
 			}
 		}
 		
 		/**
-		 * Fires the method dataValueHasChanged on all of its listeners
-		 * @param xIdx the X index of the data that has changed
-		 * @param yIdx the Y index of the data that has changed
+		 * Fires the method dataValueChanged on all of its listeners
+		 * @param xIdx the X index of the data that  changed
+		 * @param yIdx the Y index of the data that  changed
 		 */
-		private void fireDataValueHasChanged(int xIdx, int yIdx){
+		private void fireDataValueChanged(int xIdx, int yIdx){
 			for(BatchStateListener b : listeners){
-				b.batchActionPerformed(BatchActions.DATAVALUEHASCHANGED);
+				b.batchActionPerformed(BatchActions.DATAVALUECHANGED);
 			}
 		}
 		
-		private void fireImageHasChanged(){
+		private void fireImageChanged(){
 			for(BatchStateListener b : listeners){
-				b.batchActionPerformed(BatchActions.IMAGEHASCHANGED);
+				b.batchActionPerformed(BatchActions.IMAGECHANGED);
 			}
 		}
 		
@@ -234,7 +223,7 @@ public class BatchState {
 		public void setSelectedCellX(int idx){
 			if(idx != selectedCellX){
 				selectedCellX = idx;
-				fireSelectedXHasChanged();
+				fireSelectedXChanged();
 			}
 		}
 		
@@ -245,7 +234,7 @@ public class BatchState {
 		public void setSelectedCellY(int idx){
 			if(idx != selectedCellY){
 				selectedCellY = idx;
-				fireSelectedYHasChanged();
+				fireSelectedYChanged();
 			}
 		}
 		
