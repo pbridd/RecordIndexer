@@ -12,4 +12,5 @@ public interface BatchStateListener {
 	}
 	
 	public void batchActionPerformed(BatchActions ba);
+	public void batchActionPerformed(BatchActions ba, int row, int col);
 }

@@ -138,7 +138,7 @@ public class BatchState {
 		 * @param xIdx the X index of the data that  changed
 		 * @param yIdx the Y index of the data that  changed
 		 */
-		private void fireDataValueChanged(int xIdx, int yIdx){
+		private void fireDataValueChanged(int row, int col){
 			for(BatchStateListener b : listeners){
 				b.batchActionPerformed(BatchActions.DATAVALUECHANGED);
 			}
@@ -252,9 +252,9 @@ public class BatchState {
 		 * @param xIdx
 		 * @param yIdx
 		 */
-		public void setSelectedCell(int xIdx, int yIdx){
-			setSelectedCellX(xIdx);
-			setSelectedCellY(yIdx);
+		public void setSelectedCell(int row, int col){
+			setSelectedCellX(row);
+			setSelectedCellY(col);
 		}
 		
 		/**
@@ -267,6 +267,7 @@ public class BatchState {
 		
 		public void setValueAt(String val, int row, int col){
 			values[row][col].setDataValue(val);
+			this.fireDataValueChanged(row, col);
 		}
 		
 		

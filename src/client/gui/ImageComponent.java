@@ -184,12 +184,12 @@ public class ImageComponent extends JComponent implements BatchStateListener{
 			boolean hitShape = false;
 			
 			Graphics2D g2 = (Graphics2D)getGraphics();
-			/*for (DrawingShape shape : shapes) {
+			for (DrawingShape shape : shapes) {
 				if (shape.contains(g2, w_X, w_Y)) {
 					hitShape = true;
 					break;
 				}
-			}*/
+			}
 			
 			if (hitShape) {
 				dragging = true;		
@@ -320,6 +320,12 @@ public class ImageComponent extends JComponent implements BatchStateListener{
 		public Rectangle2D getBounds(Graphics2D g2){
 			return rect.getBounds2D();
 		}
+		
+	}
+
+	@Override
+	public void batchActionPerformed(BatchActions ba, int row, int col) {
+		// TODO Auto-generated method stub
 		
 	}
 }

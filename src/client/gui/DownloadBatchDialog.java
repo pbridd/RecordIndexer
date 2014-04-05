@@ -1,21 +1,13 @@
 package client.gui;
 
-import java.awt.BorderLayout;
 import java.awt.Dimension;
-import java.awt.FlowLayout;
-import java.awt.Graphics;
-import java.awt.Graphics2D;
 import java.awt.GraphicsDevice;
 import java.awt.GraphicsEnvironment;
 import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.ComponentAdapter;
-import java.awt.event.ComponentEvent;
-import java.awt.geom.Rectangle2D;
 import java.io.IOException;
 import java.net.URL;
-import java.util.EventListener;
 import java.util.List;
 
 import javax.imageio.ImageIO;
@@ -25,7 +17,6 @@ import javax.swing.DefaultComboBoxModel;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
-import javax.swing.JComponent;
 import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -37,6 +28,7 @@ import shared.model.Project;
 import client.ClientException;
 import client.gui.synchronization.BatchState;
 
+@SuppressWarnings("serial")
 public class DownloadBatchDialog extends JDialog implements ActionListener {
 	
 	private String server_host;

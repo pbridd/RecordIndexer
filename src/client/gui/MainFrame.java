@@ -174,6 +174,8 @@ public class MainFrame extends JFrame implements ActionListener, WindowManagerLi
 			System.exit(0);
 		}
 		
+		
+		
 	}
 
 	@Override
@@ -193,6 +195,7 @@ public class MainFrame extends JFrame implements ActionListener, WindowManagerLi
 	public void batchActionPerformed(BatchActions ba) {
 		if(ba == BatchActions.BATCHDOWNLOADED){
 			enableButtons();
+			downloadBatchMenuOption.setEnabled(false);
 		}
 		
 	}
@@ -205,6 +208,12 @@ public class MainFrame extends JFrame implements ActionListener, WindowManagerLi
 		WindowState ws = new WindowState();
 		ws.setHeightOfWindow(this.getHeight());
 		ws.setWidthOfWindow(this.getWidth());
+		
+	}
+
+	@Override
+	public void batchActionPerformed(BatchActions ba, int row, int col) {
+		// TODO Auto-generated method stub
 		
 	}
 	
