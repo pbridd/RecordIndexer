@@ -24,8 +24,8 @@ public class BatchState {
 		private List<Field> fields;
 		private List<BatchStateListener> listeners;
 		private IndexedData[][] values;
-		private int selectedCellX;
-		private int selectedCellY;
+		private int selectedCellRow;
+		private int selectedCellCol;
 		private String imagePath;
 		
 		
@@ -120,7 +120,7 @@ public class BatchState {
 		 */
 		private void fireSelectedXChanged(){
 			for(BatchStateListener b : listeners){
-				b.batchActionPerformed(BatchActions.SELECTEDXCHANGED);
+				b.batchActionPerformed(BatchActions.SELECTEDROWCHANGED);
 			}
 		}
 		
@@ -129,7 +129,7 @@ public class BatchState {
 		 */
 		private void fireSelectedYChanged(){
 			for(BatchStateListener b : listeners){
-				b.batchActionPerformed(BatchActions.SELECTEDYCHANGED);
+				b.batchActionPerformed(BatchActions.SELECTEDCOLCHANGED);
 			}
 		}
 		
@@ -204,16 +204,16 @@ public class BatchState {
 		/**
 		 * @return the selectedCellX
 		 */
-		public int getSelectedCellX() {
-			return selectedCellX;
+		public int getSelectedCellRow() {
+			return selectedCellRow;
 		}
 
 
 		/**
 		 * @return the selectedCellY
 		 */
-		public int getSelectedCellY() {
-			return selectedCellY;
+		public int getSelectedCellCol() {
+			return selectedCellCol;
 		}
 
 
@@ -228,9 +228,9 @@ public class BatchState {
 		 * Set the currently selected cell X coordinate, and fire the action listeners
 		 * @param idx The index of the selected X cell
 		 */
-		public void setSelectedCellX(int idx){
-			if(idx != selectedCellX){
-				selectedCellX = idx;
+		public void setSelectedCellRow(int idx){
+			if(idx != selectedCellRow){
+				selectedCellRow = idx;
 				fireSelectedXChanged();
 			}
 		}
@@ -239,9 +239,9 @@ public class BatchState {
 		 * Set the currently selected cell Y Coordinate, and fire the action listeners
 		 * @param idx The index of the selected Y cell
 		 */
-		public void setSelectedCellY(int idx){
-			if(idx != selectedCellY){
-				selectedCellY = idx;
+		public void setSelectedCellCol(int idx){
+			if(idx != selectedCellCol){
+				selectedCellCol = idx;
 				fireSelectedYChanged();
 			}
 		}
@@ -253,8 +253,8 @@ public class BatchState {
 		 * @param yIdx
 		 */
 		public void setSelectedCell(int row, int col){
-			setSelectedCellX(row);
-			setSelectedCellY(col);
+			setSelectedCellRow(row);
+			setSelectedCellCol(col);
 		}
 		
 		/**

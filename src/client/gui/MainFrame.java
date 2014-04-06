@@ -123,7 +123,7 @@ public class MainFrame extends JFrame implements ActionListener, WindowManagerLi
 		this.add(buttonsPanel, BorderLayout.NORTH);
 		//create the image panel and its image
 		ImageComponent imageComp = new ImageComponent(bchS);		
-		InfoPanel infoPanel = new InfoPanel();
+		InfoPanel infoPanel = new InfoPanel(bchS);
 		TablePanel tablePanel = new TablePanel(bchS);
 		
 		
