@@ -62,10 +62,7 @@ public class LoginFrame extends JFrame implements ActionListener, WindowManagerL
 		userIsAuthenticated = false;
 		authenticatedUser = null;
 		this.setResizable(false);
-		this.createComponents();
-		this.setVisible(true);
-		
-		
+		this.createComponents();	
 	}
 	
 	private void createComponents(){
@@ -155,7 +152,7 @@ public class LoginFrame extends JFrame implements ActionListener, WindowManagerL
 				JOptionPane.showMessageDialog(this, "Welcome, " + tempUser.getFirstName() + " " +
 						tempUser.getLastName() + ".\nYou have indexed " + tempUser.getIndexedRecords() +
 						" records.", "Welcome to Indexer", JOptionPane.PLAIN_MESSAGE);
-				//set this to invisible
+				//pass control to the MainFrame
 				wManager.toggleVisibility(authenticatedUser);
 			}
 			

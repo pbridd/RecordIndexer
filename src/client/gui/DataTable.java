@@ -41,7 +41,6 @@ public class DataTable extends JTable implements BatchStateListener {
 	@Override
 	public void batchActionPerformed(BatchActions ba, int row, int col) {
 		// TODO Auto-generated method stub
-		
 	}
 
 }

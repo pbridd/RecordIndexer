@@ -1,16 +1,24 @@
 package client.gui;
 
+import java.awt.EventQueue;
+
+import shared.model.User;
 import client.gui.synchronization.BatchState;
 import client.gui.synchronization.WindowManager;
+import client.gui.synchronization.WindowManagerListener;
 
-public class ClientGUI {
+public class ClientGUI implements WindowManagerListener{
+	//Static Global Variables
+	private static String server_host;
+	private static int server_port;
+	private static WindowManager wManager;
+
+	
 	/**
 	 * Main method
 	 * @param args
 	 */
 	public static void main(String[] args){
-		String server_host;
-		int server_port;
 		
 		//process the arguments
 		if(args.length == 2){
@@ -28,14 +36,50 @@ public class ClientGUI {
 			server_port = 8080;
 		}
 		
+		wManager = new WindowManager();
 		
-		WindowManager wManager = new WindowManager();
-		LoginFrame login = new LoginFrame(server_host, server_port, wManager);
-		login.pack();
+		EventQueue.invokeLater(new Runnable(){
+			public void run(){
+				@SuppressWarnings("unused")
+				ClientGUI gui = new ClientGUI();
+			}
+		});
+
 		
-		BatchState bchS = new BatchState();
 		
-		@SuppressWarnings("unused")
-		MainFrame mainFrame = new MainFrame(server_host, server_port, null, wManager, bchS);
+	}
+	
+	//nonstatic global variables
+	private MainFrame mainFrame;
+	private LoginFrame loginFrame;
+	private BatchState bchS;
+	
+	public ClientGUI(){
+		//Start with the first login frame
+		loginFrame = new LoginFrame(server_host, server_port, wManager);
+		loginFrame.pack();
+		loginFrame.setVisible(true);
+		wManager.addListener(this);
+	}
+
+	@Override
+	public void visibilityToggled(boolean loginWindowVisible,
+			boolean mainWindowVisible, User currUser) {
+		if(loginWindowVisible == true){
+			mainFrame.dispose();
+			mainFrame = null;
+			loginFrame = new LoginFrame(server_host, server_port, wManager);
+			loginFrame.pack();
+			mainFrame = null;
+			loginFrame.setVisible(true);
+		}
+		else if(mainWindowVisible == true){
+			loginFrame.dispose();
+			loginFrame = null;
+			bchS = new BatchState();
+			mainFrame = new MainFrame(server_host, server_port, currUser, wManager, bchS);
+			mainFrame.setVisible(true);
+		}
+		
 	}
 }
