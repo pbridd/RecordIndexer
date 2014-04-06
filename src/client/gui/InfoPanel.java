@@ -1,17 +1,20 @@
 package client.gui;
 
 import java.awt.Color;
+import java.awt.Dimension;
 import java.io.IOException;
 
 import javax.swing.JEditorPane;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
+import javax.swing.JTabbedPane;
 
 import client.gui.synchronization.BatchState;
 import client.gui.synchronization.BatchStateListener;
 
-public class InfoPanel extends JPanel implements BatchStateListener {
+@SuppressWarnings("serial")
+public class InfoPanel extends JTabbedPane implements BatchStateListener {
 	//global variables
 	private BatchState bchS;
 	JEditorPane htmlPane;
@@ -19,16 +22,21 @@ public class InfoPanel extends JPanel implements BatchStateListener {
 	//constructors
 	public InfoPanel(BatchState bchS){
 		this.bchS = bchS;
+		bchS.addListener(this);
 	}
 	
 	private void createComponents(){
-		htmlPane = new JEditorPane();
 		htmlPane = new JEditorPane();
 		htmlPane.setOpaque(true);
 		htmlPane.setBackground(Color.white);
 		htmlPane.setEditable(false);
 		JScrollPane htmlScrollPane = new JScrollPane(htmlPane);
 		htmlScrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
+		
+		htmlPane.setContentType("text/html");
+		this.add("Field Help", htmlPane);
+		
+		
 	}
 	
 	private void loadPage(String url) {
@@ -48,13 +56,25 @@ public class InfoPanel extends JPanel implements BatchStateListener {
 	public void batchActionPerformed(BatchActions ba) {
 		if(ba == BatchActions.SELECTEDCOLCHANGED){
 			String prelURL = bchS.getField(bchS.getSelectedCellCol()).getHelpHTML();
+			String finURL = "http://" + bchS.getServer_host() + ":" + bchS.getServer_port() +"/"
+					+ prelURL;
+			loadPage(finURL);
+		}
+		if(ba == BatchActions.SELECTEDROWCHANGED){
+			String prelURL = bchS.getField(bchS.getSelectedCellCol()).getHelpHTML();
+			String finURL = "http://" + bchS.getServer_host() + ":" + bchS.getServer_port() +"/"
+					+ prelURL;
+			loadPage(finURL);
+		}
+		else if(ba == BatchActions.BATCHDOWNLOADED){
+			createComponents();
 		}
 		
 	}
 
 	@Override
 	public void batchActionPerformed(BatchActions ba, int row, int col) {
-		// TODO Auto-generated method stub
+		// purposely left blank--not needed for the current implementation
 		
 	}
 	

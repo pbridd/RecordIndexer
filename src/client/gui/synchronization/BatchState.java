@@ -27,7 +27,8 @@ public class BatchState {
 		private int selectedCellRow;
 		private int selectedCellCol;
 		private String imagePath;
-		
+		private String server_host;
+		private int server_port;
 		
 		
 		//Constructors
@@ -52,6 +53,8 @@ public class BatchState {
 		 */
 		public void processDownloadedBatch(DownloadBatch_Result result, String server_host, int server_port) 
 				throws ClientException{
+			this.setServer_host(server_host);
+			this.setServer_port(server_port);
 			this.project = result.getProject();
 			fireProjectChanged();
 			this.batch = result.getBatch();
@@ -118,7 +121,7 @@ public class BatchState {
 		/**
 		 * Fires the method selectedXChanged on all of its listeners
 		 */
-		private void fireSelectedXChanged(){
+		private void fireSelectedCellRowChanged(){
 			for(BatchStateListener b : listeners){
 				b.batchActionPerformed(BatchActions.SELECTEDROWCHANGED);
 			}
@@ -127,7 +130,7 @@ public class BatchState {
 		/**
 		 * Fires the method selectedYChanged on all of its listeners
 		 */
-		private void fireSelectedYChanged(){
+		private void fireSelectedCellColChanged(){
 			for(BatchStateListener b : listeners){
 				b.batchActionPerformed(BatchActions.SELECTEDCOLCHANGED);
 			}
@@ -225,13 +228,45 @@ public class BatchState {
 		}
 		
 		/**
+		 * @return the server_host
+		 */
+		public String getServer_host() {
+			return server_host;
+		}
+
+
+		/**
+		 * @param server_host the server_host to set
+		 */
+		public void setServer_host(String server_host) {
+			this.server_host = server_host;
+		}
+
+
+		/**
+		 * @return the server_port
+		 */
+		public int getServer_port() {
+			return server_port;
+		}
+
+
+		/**
+		 * @param server_port the server_port to set
+		 */
+		public void setServer_port(int server_port) {
+			this.server_port = server_port;
+		}
+
+
+		/**
 		 * Set the currently selected cell X coordinate, and fire the action listeners
 		 * @param idx The index of the selected X cell
 		 */
 		public void setSelectedCellRow(int idx){
 			if(idx != selectedCellRow){
 				selectedCellRow = idx;
-				fireSelectedXChanged();
+				fireSelectedCellRowChanged();
 			}
 		}
 		
@@ -242,7 +277,7 @@ public class BatchState {
 		public void setSelectedCellCol(int idx){
 			if(idx != selectedCellCol){
 				selectedCellCol = idx;
-				fireSelectedYChanged();
+				fireSelectedCellColChanged();
 			}
 		}
 		

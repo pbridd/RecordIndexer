@@ -124,7 +124,7 @@ public class MainFrame extends JFrame implements ActionListener, WindowManagerLi
 		//create the image panel and its image
 		ImageComponent imageComp = new ImageComponent(bchS);		
 		InfoPanel infoPanel = new InfoPanel(bchS);
-		TablePanel tablePanel = new TablePanel(bchS);
+		EntryPanel tablePanel = new EntryPanel(bchS);
 		
 		
 		JSplitPane verticalSplitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT,tablePanel,

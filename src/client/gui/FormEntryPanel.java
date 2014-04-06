@@ -112,10 +112,7 @@ public class FormEntryPanel extends JPanel implements BatchStateListener, Action
 
 	@Override
 	public void actionPerformed(ActionEvent arg0) {
-		
-		
-		
-		
+		//purposely left blank
 	}
 
 	@Override
@@ -127,12 +124,19 @@ public class FormEntryPanel extends JPanel implements BatchStateListener, Action
 			for(int i = 0; i < inputFields.size(); i++){
 				inputFields.get(i).setText(bchS.getValues()[recordList.getSelectedIndex()][i].getDataValue());
 			}
+			bchS.setSelectedCellRow(recordList.getSelectedIndex());
 		}
 		
 	}
 
 	@Override
 	public void focusGained(FocusEvent arg0) {
+		for(int i = 0; i < inputFields.size(); i++){
+			JTextField j = inputFields.get(i);
+			if(arg0.getSource() == j){
+				bchS.setSelectedCell(recordList.getSelectedIndex(), i);
+			}
+		}
 		
 	}
 
