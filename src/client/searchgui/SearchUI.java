@@ -13,6 +13,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
+
 import javax.imageio.ImageIO;
 import javax.swing.AbstractListModel;
 import javax.swing.DefaultComboBoxModel;
@@ -22,6 +23,7 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.ListModel;
+
 import shared.communication.Search_Result;
 import shared.model.Field;
 import shared.model.Project;
@@ -30,6 +32,7 @@ import shared.model.Project;
  *
  * @author pbridd
  */
+@SuppressWarnings("serial")
 public class SearchUI extends javax.swing.JFrame {
 
     private String username;

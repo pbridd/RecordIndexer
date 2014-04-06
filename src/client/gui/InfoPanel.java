@@ -1,12 +1,10 @@
 package client.gui;
 
 import java.awt.Color;
-import java.awt.Dimension;
 import java.io.IOException;
 
 import javax.swing.JEditorPane;
 import javax.swing.JOptionPane;
-import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTabbedPane;
 

@@ -1,13 +1,9 @@
 package client.gui.synchronization;
 
-import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.IOException;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.imageio.ImageIO;
+
 
 import client.ClientException;
 import client.gui.synchronization.BatchStateListener.BatchActions;
@@ -19,68 +15,68 @@ import shared.model.IndexedData;
 
 public class BatchState {
 	//Global Variables
-		private Project project;
-		private Batch batch;
-		private List<Field> fields;
-		private List<BatchStateListener> listeners;
-		private IndexedData[][] values;
-		private int selectedCellRow;
-		private int selectedCellCol;
-		private String imagePath;
-		private String server_host;
-		private int server_port;
+	private Project project;
+	private Batch batch;
+	private List<Field> fields;
+	private List<BatchStateListener> listeners;
+	private IndexedData[][] values;
+	private int selectedCellRow;
+	private int selectedCellCol;
+	private String imagePath;
+	private String server_host;
+	private int server_port;
 		
 		
-		//Constructors
-		/**
-		 * Default constructor, set batch to null and initialize fields
-		 */
-		public BatchState(){
-			project = null;
-			batch = null;
-			fields = new ArrayList<Field>();
-			listeners = new ArrayList<BatchStateListener>();
-		}
+	//Constructors
+	/**
+	 * Default constructor, set batch to null and initialize fields
+	 */
+	public BatchState(){
+		project = null;
+		batch = null;
+		fields = new ArrayList<Field>();
+		listeners = new ArrayList<BatchStateListener>();
+	}
+	
+	
+	/**
+	 * Processes the batch that was downloaded. This includes instantiating most of its objects, 
+	 * 	storing the image of the batch on the local machine, and notifying all of its listeners that
+	 * 	something  changed.
+	 * @param server_host the hostname of the server (to download the image)
+	 * @param server_port the port the server is running on (to download the image)
+	 * @param result the imagebatch to process
+	 */
+	public void processDownloadedBatch(DownloadBatch_Result result, String server_host, int server_port) 
+			throws ClientException{
+		this.setServer_host(server_host);
+		this.setServer_port(server_port);
+		this.project = result.getProject();
+		fireProjectChanged();
+		this.batch = result.getBatch();
+		fireBatchChanged();
+		this.fields = result.getFields();
+		fireFieldChanged(-1);
 		
+		String tempURL ="http://"+ server_host + ":" + server_port + "/" 
+                + batch.getImagePath();
 		
-		/**
-		 * Processes the batch that was downloaded. This includes instantiating most of its objects, 
-		 * 	storing the image of the batch on the local machine, and notifying all of its listeners that
-		 * 	something  changed.
-		 * @param server_host the hostname of the server (to download the image)
-		 * @param server_port the port the server is running on (to download the image)
-		 * @param result the imagebatch to process
-		 */
-		public void processDownloadedBatch(DownloadBatch_Result result, String server_host, int server_port) 
-				throws ClientException{
-			this.setServer_host(server_host);
-			this.setServer_port(server_port);
-			this.project = result.getProject();
-			fireProjectChanged();
-			this.batch = result.getBatch();
-			fireBatchChanged();
-			this.fields = result.getFields();
-			fireFieldChanged(-1);
-			
-			String tempURL ="http://"+ server_host + ":" + server_port + "/" 
-                    + batch.getImagePath();
-			
-			imagePath = tempURL;
-			
-			//TODO take out if not used
-			//imagePathOnLocalMachine = processImageURL(tempURL);
-			fireImageChanged();
-			fireBatchDownloaded();
-			
-			//initialize all of the values to blank
-			values = new IndexedData[project.getRecordsPerImage()][fields.size()];
-			for(int i = 0; i < values.length; i++){
-				for(int j = 0; j < values[0].length; j++){
-					values[i][j] = new IndexedData(-1, "", -1, -1);
-				}
+		imagePath = tempURL;
+		
+		//TODO take out if not used
+		//imagePathOnLocalMachine = processImageURL(tempURL);
+		fireImageChanged();
+		fireBatchDownloaded();
+		
+		//initialize all of the values to blank
+		values = new IndexedData[project.getRecordsPerImage()][fields.size()];
+		for(int i = 0; i < values.length; i++){
+			for(int j = 0; j < values[0].length; j++){
+				values[i][j] = new IndexedData(-1, "", -1, -1);
 			}
-			
 		}
+		
+	}
 		
 		
 		

@@ -5,7 +5,6 @@ import javax.swing.table.AbstractTableModel;
 
 import client.gui.synchronization.BatchState;
 import client.gui.synchronization.BatchStateListener;
-import client.gui.synchronization.BatchStateListener.BatchActions;
 
 @SuppressWarnings("serial")
 public class DataTable extends JTable implements BatchStateListener {
@@ -30,6 +29,9 @@ public class DataTable extends JTable implements BatchStateListener {
 		if(ba == BatchActions.BATCHDOWNLOADED){
 			DataTableModel currModel = new DataTableModel(bchS);
 			this.setModel(currModel);
+		}
+		else if(ba == BatchActions.SELECTEDCOLCHANGED || ba == BatchActions.SELECTEDROWCHANGED){
+			this.changeSelection(bchS.getSelectedCellRow(), bchS.getSelectedCellCol() + 1, false, false);
 		}
 		
 	}
