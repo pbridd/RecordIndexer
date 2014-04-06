@@ -140,7 +140,7 @@ public class BatchState {
 		 */
 		private void fireDataValueChanged(int row, int col){
 			for(BatchStateListener b : listeners){
-				b.batchActionPerformed(BatchActions.DATAVALUECHANGED);
+				b.batchActionPerformed(BatchActions.DATAVALUECHANGED, row, col);
 			}
 		}
 		
