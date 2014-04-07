@@ -1,16 +1,13 @@
 package client.gui.synchronization;
 
 public class WindowState {
-	private int zoomLevel;
-	private int scrollPosition;
-	private int xPosOnDesktop;
-	private int yPosOnDesktop;
+	private double xPosOnDesktop;
+	private double yPosOnDesktop;
 	private int widthOfWindow;
 	private int heightOfWindow;
 	private int verticalPanePosition;
 	private int horizontalPanePosition;
-	private boolean imageIsInverted;
-	private boolean highlightsAreVisible;
+	
 	
 	
 	/**
@@ -19,44 +16,10 @@ public class WindowState {
 	public WindowState(){
 		
 	}
-
-
-	/**
-	 * @return the zoomLevel
-	 */
-	public int getZoomLevel() {
-		return zoomLevel;
-	}
-
-
-	/**
-	 * @param zoomLevel the zoomLevel to set
-	 */
-	public void setZoomLevel(int zoomLevel) {
-		this.zoomLevel = zoomLevel;
-	}
-
-
-	/**
-	 * @return the scrollPosition
-	 */
-	public int getScrollPosition() {
-		return scrollPosition;
-	}
-
-
-	/**
-	 * @param scrollPosition the scrollPosition to set
-	 */
-	public void setScrollPosition(int scrollPosition) {
-		this.scrollPosition = scrollPosition;
-	}
-
-
 	/**
 	 * @return the xPosOnDesktop
 	 */
-	public int getxPosOnDesktop() {
+	public double getxPosOnDesktop() {
 		return xPosOnDesktop;
 	}
 
@@ -64,7 +27,7 @@ public class WindowState {
 	/**
 	 * @param xPosOnDesktop the xPosOnDesktop to set
 	 */
-	public void setxPosOnDesktop(int xPosOnDesktop) {
+	public void setxPosOnDesktop(double xPosOnDesktop) {
 		this.xPosOnDesktop = xPosOnDesktop;
 	}
 
@@ -72,7 +35,7 @@ public class WindowState {
 	/**
 	 * @return the yPosOnDesktop
 	 */
-	public int getyPosOnDesktop() {
+	public double getyPosOnDesktop() {
 		return yPosOnDesktop;
 	}
 
@@ -80,7 +43,7 @@ public class WindowState {
 	/**
 	 * @param yPosOnDesktop the yPosOnDesktop to set
 	 */
-	public void setyPosOnDesktop(int yPosOnDesktop) {
+	public void setyPosOnDesktop(double yPosOnDesktop) {
 		this.yPosOnDesktop = yPosOnDesktop;
 	}
 
@@ -146,37 +109,5 @@ public class WindowState {
 	 */
 	public void setHorizontalPanePosition(int horizontalPanePosition) {
 		this.horizontalPanePosition = horizontalPanePosition;
-	}
-
-
-	/**
-	 * @return the imageIsInverted
-	 */
-	public boolean isImageIsInverted() {
-		return imageIsInverted;
-	}
-
-
-	/**
-	 * @param imageIsInverted the imageIsInverted to set
-	 */
-	public void setImageIsInverted(boolean imageIsInverted) {
-		this.imageIsInverted = imageIsInverted;
-	}
-
-
-	/**
-	 * @return the highlightsAreVisible
-	 */
-	public boolean isHighlightsAreVisible() {
-		return highlightsAreVisible;
-	}
-
-
-	/**
-	 * @param highlightsAreVisible the highlightsAreVisible to set
-	 */
-	public void setHighlightsAreVisible(boolean highlightsAreVisible) {
-		this.highlightsAreVisible = highlightsAreVisible;
 	}
 }

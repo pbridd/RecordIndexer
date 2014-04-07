@@ -6,6 +6,14 @@ import java.awt.GraphicsDevice;
 import java.awt.GraphicsEnvironment;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 
 import javax.swing.Box;
 import javax.swing.BoxLayout;
@@ -19,10 +27,12 @@ import javax.swing.JPanel;
 import javax.swing.JSplitPane;
 import javax.swing.WindowConstants;
 
+import com.thoughtworks.xstream.XStream;
+import com.thoughtworks.xstream.io.json.JettisonMappedXmlDriver;
+
 import client.gui.synchronization.BatchState;
 import client.gui.synchronization.BatchStateListener;
 import client.gui.synchronization.WindowManager;
-import client.gui.synchronization.WindowManagerListener;
 import client.gui.synchronization.WindowState;
 import shared.model.User;
 
@@ -45,6 +55,8 @@ public class MainFrame extends JFrame implements ActionListener, BatchStateListe
 	private JMenuItem exitMenuOption;
 	private WindowManager wManager;
 	private BatchState bchS;
+	JSplitPane horizontalSplitPane;
+	JSplitPane verticalSplitPane;
 	JButton zoomInButton;
 	JButton zoomOutButton;
 	JButton invertImageButton;
@@ -186,7 +198,7 @@ public class MainFrame extends JFrame implements ActionListener, BatchStateListe
 		}	
 	}
 	
-	/**
+	/** 
 	 * Saves the state of the window and batch into a JSON file.
 	 */
 	public void saveState(){
@@ -194,6 +206,62 @@ public class MainFrame extends JFrame implements ActionListener, BatchStateListe
 		WindowState ws = new WindowState();
 		ws.setHeightOfWindow(this.getHeight());
 		ws.setWidthOfWindow(this.getWidth());
+		ws.setHorizontalPanePosition(horizontalSplitPane.getDividerLocation());
+		ws.setVerticalPanePosition(verticalSplitPane.getDividerLocation());
+		double xOnScreen = this.getLocationOnScreen().getX();
+		double yOnScreen = this.getLocationOnScreen().getY();
+		ws.setxPosOnDesktop(xOnScreen);
+		ws.setyPosOnDesktop(yOnScreen);
+		ws.setWidthOfWindow(this.getWidth());
+		ws.setHeightOfWindow(this.getHeight());
+		serializeObject(ws, user.getUsername() + user.getUserID() + "_WindowState");
+		serializeObject(bchS, user.getUsername() + user.getUserID() + "_BatchState");
+		
+	}
+	
+	private static void serializeObject(Object obj, String fileName) {
+		XStream xStream = new XStream(new JettisonMappedXmlDriver());
+		
+		OutputStream outFile;
+		try {
+			outFile = new BufferedOutputStream(new FileOutputStream("SavedData/" + fileName + ".json"));
+			xStream.toXML(obj, outFile);
+			try {
+				outFile.close();
+			} catch (IOException e) {
+				//do nothing
+			}
+		} catch (FileNotFoundException e1) {
+			//do nothing
+		}
+		
+		
+		
+	}
+	
+	private static Object getSerializedObject(String fileName){
+		XStream xStream = new XStream(new JettisonMappedXmlDriver());
+		
+			InputStream inFile;
+			Object retObj;
+			try {
+				inFile = new BufferedInputStream(new FileInputStream("SavedData/" + fileName + ".json"));
+				retObj = xStream.fromXML(inFile);
+				try {
+					inFile.close();
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			} catch (FileNotFoundException e) {
+				return null;
+			}
+			
+			return retObj;
+			
+		
+		
+		
 		
 	}
 
