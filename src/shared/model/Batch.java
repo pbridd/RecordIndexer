@@ -1,6 +1,12 @@
 package shared.model;
 
-public class Batch {
+import java.io.Serializable;
+
+public class Batch implements Serializable{
+	/**
+	 * Automatically added by Eclipse
+	 */
+	private static final long serialVersionUID = 793423587252809116L;
 	private int batchID;
 	private String imagePath;
 	private int projectID;

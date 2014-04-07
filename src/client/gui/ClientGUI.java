@@ -3,7 +3,6 @@ package client.gui;
 import java.awt.EventQueue;
 
 import shared.model.User;
-import client.gui.synchronization.BatchState;
 import client.gui.synchronization.WindowManager;
 import client.gui.synchronization.WindowManagerListener;
 
@@ -52,7 +51,6 @@ public class ClientGUI implements WindowManagerListener{
 	//nonstatic global variables
 	private MainFrame mainFrame;
 	private LoginFrame loginFrame;
-	private BatchState bchS;
 	
 	public ClientGUI(){
 		//Start with the first login frame
@@ -76,8 +74,7 @@ public class ClientGUI implements WindowManagerListener{
 		else if(mainWindowVisible == true){
 			loginFrame.dispose();
 			loginFrame = null;
-			bchS = new BatchState();
-			mainFrame = new MainFrame(server_host, server_port, currUser, wManager, bchS);
+			mainFrame = new MainFrame(server_host, server_port, currUser, wManager);
 			mainFrame.setVisible(true);
 		}
 		

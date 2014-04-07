@@ -1,6 +1,12 @@
 package client.gui.synchronization;
 
-public class WindowState {
+import java.io.Serializable;
+
+public class WindowState implements Serializable{
+	/**
+	 * Automatically added by Java
+	 */
+	private static final long serialVersionUID = -6693255986177069610L;
 	private double xPosOnDesktop;
 	private double yPosOnDesktop;
 	private int widthOfWindow;
