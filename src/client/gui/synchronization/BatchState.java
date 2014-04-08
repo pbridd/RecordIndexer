@@ -71,8 +71,6 @@ public class BatchState implements Serializable{
 		
 		imagePath = tempURL;
 		
-		//TODO take out if not used
-		//imagePathOnLocalMachine = processImageURL(tempURL);
 		fireImageChanged();
 		fireBatchDownloaded();
 		
@@ -91,6 +89,10 @@ public class BatchState implements Serializable{
 	}
 		
 		//BatchStateListener notification methods
+		/**
+		 * Fires the method batchactionperformed with the parameter BATCHDOWNLOADED on each
+		 * of its listeners
+		 */
 		public void fireBatchDownloaded(){
 			for(BatchStateListener b : listeners){
 				b.batchActionPerformed(BatchActions.BATCHDOWNLOADED);
@@ -156,6 +158,15 @@ public class BatchState implements Serializable{
 		public void fireImageChanged(){
 			for(BatchStateListener b : listeners){
 				b.batchActionPerformed(BatchActions.IMAGECHANGED);
+			}
+		}
+		
+		/**
+		 * Fires the method batchCleared on all of its listeners
+		 */
+		public void fireBatchCleared(){
+			for(BatchStateListener b : listeners){
+				b.batchActionPerformed(BatchActions.BATCHCLEARED);
 			}
 		}
 		
