@@ -10,7 +10,6 @@ import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -32,16 +31,6 @@ import javax.swing.JSplitPane;
 import javax.swing.WindowConstants;
 
 
-
-
-
-
-
-
-import com.thoughtworks.xstream.XStream;
-import com.thoughtworks.xstream.io.json.JettisonMappedXmlDriver;
-import com.thoughtworks.xstream.io.xml.DomDriver;
-
 import client.gui.synchronization.BatchState;
 import client.gui.synchronization.BatchStateListener;
 import client.gui.synchronization.WindowManager;
@@ -58,8 +47,6 @@ public class MainFrame extends JFrame implements ActionListener, BatchStateListe
 	private static final long serialVersionUID = 1611729556318338736L;
 	//Non static methods and variables
 	//Global Variables
-	private String server_host;
-	private int server_port;
 	private User user;
 	private JMenuBar menuBar;
 	private JMenu menu;
@@ -80,17 +67,19 @@ public class MainFrame extends JFrame implements ActionListener, BatchStateListe
 	
 	public MainFrame(String server_host, int server_port, User user, WindowManager wManager) {
 		this.user = user;
-		this.server_host = server_host;
-		this.server_port = server_port;
 		
 		//process the serialized batchState for this user
 		Object bsO = (BatchState) getSerializedObject(user.getUsername() + user.getUserID() + "_BatchState");
 		if(bsO == null){
 			bchS = new BatchState();
+			bchS.setServer_host(server_host);
+			bchS.setServer_port(server_port);
 		}
 		else{
 			bchS = (BatchState) bsO;
 			bchS.initializeListenerList();
+			bchS.setServer_host(server_host);
+			bchS.setServer_port(server_port);
 		}
 		
 		//process the serialized windowState for this user
@@ -218,7 +207,7 @@ public class MainFrame extends JFrame implements ActionListener, BatchStateListe
 			wManager.toggleVisibility(null);
 		}
 		else if(e.getSource() == downloadBatchMenuOption){
-			JDialog downloadBatchDialog = new DownloadBatchDialog(server_host, server_port, user, bchS);
+			JDialog downloadBatchDialog = new DownloadBatchDialog(user, bchS);
 			downloadBatchDialog.pack();
 			downloadBatchDialog.setVisible(true);
 			

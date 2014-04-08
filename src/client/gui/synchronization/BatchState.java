@@ -55,7 +55,7 @@ public class BatchState implements Serializable{
 	 * @param server_port the port the server is running on (to download the image)
 	 * @param result the imagebatch to process
 	 */
-	public void processDownloadedBatch(DownloadBatch_Result result, String server_host, int server_port) 
+	public void processDownloadedBatch(DownloadBatch_Result result) 
 			throws ClientException{
 		this.setServer_host(server_host);
 		this.setServer_port(server_port);
