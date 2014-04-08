@@ -103,6 +103,9 @@ public class FormEntryPanel extends JPanel implements BatchStateListener, Action
 		if(ba == BatchActions.BATCHDOWNLOADED){
 			createComponents();
 		}
+		if(ba == BatchActions.SELECTEDROWCHANGED){
+			recordList.setSelectedIndex(bchS.getSelectedCellRow());
+		}
 		
 	}
 
