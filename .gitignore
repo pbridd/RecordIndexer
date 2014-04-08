@@ -86,3 +86,4 @@ hs_err_pid*
 data/knowndata/*
 data/fieldhelp/*
 data/images/*
+SavedData/*
