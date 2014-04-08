@@ -186,7 +186,11 @@ public class MainFrame extends JFrame implements ActionListener, BatchStateListe
 		}
 		this.add(horizontalSplitPane, BorderLayout.CENTER);
 		
-		
+		if(bchS.getBatch() != null){
+			bchS.fireBatchDownloaded();
+			bchS.fireSelectedCellRowChanged();
+			bchS.fireSelectedCellColChanged();
+		}
 	}
 	
 	private void disableButtons(){

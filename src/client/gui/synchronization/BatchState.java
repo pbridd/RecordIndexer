@@ -42,6 +42,8 @@ public class BatchState implements Serializable{
 		batch = null;
 		fields = new ArrayList<Field>();
 		listeners = new ArrayList<BatchStateListener>();
+		this.selectedCellRow = -1;
+		this.selectedCellCol = -1;
 	}
 	
 	
@@ -89,7 +91,7 @@ public class BatchState implements Serializable{
 	}
 		
 		//BatchStateListener notification methods
-		private void fireBatchDownloaded(){
+		public void fireBatchDownloaded(){
 			for(BatchStateListener b : listeners){
 				b.batchActionPerformed(BatchActions.BATCHDOWNLOADED);
 			}
@@ -97,7 +99,7 @@ public class BatchState implements Serializable{
 		/**
 		 * Fires the method projectChanged on all of its listeners
 		 */
-		private void fireProjectChanged(){
+		public void fireProjectChanged(){
 			for(BatchStateListener b : listeners){
 				b.batchActionPerformed(BatchActions.PROJECTCHANGED);
 			}
@@ -106,7 +108,7 @@ public class BatchState implements Serializable{
 		/**
 		 * Fires the method batchChanged on all of its listeners
 		 */
-		private void fireBatchChanged(){
+		public void fireBatchChanged(){
 			for(BatchStateListener b : listeners){
 				b.batchActionPerformed(BatchActions.BATCHCHANGED);
 			}
@@ -116,7 +118,7 @@ public class BatchState implements Serializable{
 		 * Fires the method fieldChanged on all of its listeners
 		 * @param idx The index of the field that  changed
 		 */
-		private void fireFieldChanged(int idx){
+		public void fireFieldChanged(int idx){
 			for(BatchStateListener b : listeners){
 				b.batchActionPerformed(BatchActions.FIELDCHANGED);
 			}
@@ -125,7 +127,7 @@ public class BatchState implements Serializable{
 		/**
 		 * Fires the method selectedXChanged on all of its listeners
 		 */
-		private void fireSelectedCellRowChanged(){
+		public void fireSelectedCellRowChanged(){
 			for(BatchStateListener b : listeners){
 				b.batchActionPerformed(BatchActions.SELECTEDROWCHANGED);
 			}
@@ -134,7 +136,7 @@ public class BatchState implements Serializable{
 		/**
 		 * Fires the method selectedYChanged on all of its listeners
 		 */
-		private void fireSelectedCellColChanged(){
+		public void fireSelectedCellColChanged(){
 			for(BatchStateListener b : listeners){
 				b.batchActionPerformed(BatchActions.SELECTEDCOLCHANGED);
 			}
@@ -145,13 +147,13 @@ public class BatchState implements Serializable{
 		 * @param xIdx the X index of the data that  changed
 		 * @param yIdx the Y index of the data that  changed
 		 */
-		private void fireDataValueChanged(int row, int col){
+		public void fireDataValueChanged(int row, int col){
 			for(BatchStateListener b : listeners){
 				b.batchActionPerformed(BatchActions.DATAVALUECHANGED, row, col);
 			}
 		}
 		
-		private void fireImageChanged(){
+		public void fireImageChanged(){
 			for(BatchStateListener b : listeners){
 				b.batchActionPerformed(BatchActions.IMAGECHANGED);
 			}
