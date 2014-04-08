@@ -83,6 +83,21 @@ public class BatchState implements Serializable{
 		}
 		
 	}
+	
+	/**
+	 * Clears all of the data in this batch to its default values
+	 * except for the server information and its listeners
+	 */
+	public void clearBatch(){
+		project = null;
+		batch = null;
+		fields = new ArrayList<Field>();
+		values = null;
+		selectedCellRow = -1;
+		selectedCellCol = -1;
+		imagePath = null;
+		fireBatchCleared();
+	}
 		
 	public void initializeListenerList(){
 		listeners = new ArrayList<BatchStateListener>();
