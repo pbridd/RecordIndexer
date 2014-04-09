@@ -1,9 +1,15 @@
 package client.gui;
 
+import java.awt.Color;
+import java.awt.Component;
 import java.io.Serializable;
 
+import javax.swing.BorderFactory;
+import javax.swing.JLabel;
 import javax.swing.JTable;
+import javax.swing.border.Border;
 import javax.swing.table.AbstractTableModel;
+import javax.swing.table.TableCellRenderer;
 
 import client.gui.synchronization.BatchState;
 import client.gui.synchronization.BatchStateListener;
@@ -51,6 +57,39 @@ public class DataTable extends JTable implements BatchStateListener, Serializabl
 	@Override
 	public void batchActionPerformed(BatchActions ba, int row, int col) {
 		// TODO Auto-generated method stub
+	}
+
+}
+
+@SuppressWarnings("serial")
+class DataCellRenderer extends JLabel implements TableCellRenderer {
+
+	private Border unselectedBorder = BorderFactory.createLineBorder(Color.BLACK, 1);
+	private Border selectedBorder = BorderFactory.createLineBorder(Color.BLUE, 2);
+	private Color selectedBackground = new Color(105, 185, 251);
+
+	public DataCellRenderer() {
+		
+		setOpaque(true);
+		setFont(getFont().deriveFont(16.0f));
+	}
+
+	public Component getTableCellRendererComponent(JTable table,
+			Object value, boolean isSelected, boolean hasFocus, int row,
+			int column) {
+		
+		if (isSelected) {
+			this.setBorder(selectedBorder);
+			this.setBackground(selectedBackground);
+		}
+		else {
+			this.setBorder(unselectedBorder);
+			this.setBackground(Color.white);
+		}
+		
+		this.setText((String)value);
+		
+		return this;
 	}
 
 }
