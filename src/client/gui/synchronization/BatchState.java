@@ -42,8 +42,8 @@ public class BatchState implements Serializable{
 		batch = null;
 		fields = new ArrayList<Field>();
 		listeners = new ArrayList<BatchStateListener>();
-		this.selectedCellRow = -1;
-		this.selectedCellCol = -1;
+		this.selectedCellRow = 0;
+		this.selectedCellCol = 1;
 	}
 	
 	
@@ -71,9 +71,6 @@ public class BatchState implements Serializable{
 		
 		imagePath = tempURL;
 		
-		fireImageChanged();
-		fireBatchDownloaded();
-		
 		//initialize all of the values to blank
 		values = new IndexedData[project.getRecordsPerImage()][fields.size()];
 		for(int i = 0; i < values.length; i++){
@@ -81,6 +78,11 @@ public class BatchState implements Serializable{
 				values[i][j] = new IndexedData(-1, "", -1, -1);
 			}
 		}
+		
+		fireImageChanged();
+		fireBatchDownloaded();
+		
+		
 		
 	}
 	
@@ -93,8 +95,8 @@ public class BatchState implements Serializable{
 		batch = null;
 		fields = new ArrayList<Field>();
 		values = null;
-		selectedCellRow = -1;
-		selectedCellCol = -1;
+		selectedCellRow = 0;
+		selectedCellCol = 1;
 		imagePath = null;
 		fireBatchCleared();
 	}
@@ -330,6 +332,11 @@ public class BatchState implements Serializable{
 		 */
 		public void addListener(BatchStateListener bl){
 			listeners.add(bl);
+		}
+		
+		public void removeListener(BatchStateListener bl){
+			boolean debugBool = listeners.remove(bl);
+			assert(debugBool);
 		}
 		
 		public void setValueAt(String val, int row, int col){

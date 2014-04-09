@@ -26,8 +26,10 @@ public class DataTable extends JTable implements BatchStateListener, Serializabl
 	public DataTable(BatchState bchS){
 		this.bchS = bchS;
 		bchS.addListener(this);
-		
 	}
+	
+	
+
 
 
 
@@ -106,5 +108,7 @@ class DataTableModel extends AbstractTableModel{
 		}
 		return bchS.getField(col-1).getFieldName();
 	}
+	
+	
 	
 }

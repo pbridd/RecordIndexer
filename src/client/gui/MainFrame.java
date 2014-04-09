@@ -64,6 +64,7 @@ public class MainFrame extends JFrame implements ActionListener, BatchStateListe
 	JButton saveButton;
 	JButton submitButton;
 	EntryPanel entryPanel;
+	InfoPanel infoPanel;
 	
 	
 	public MainFrame(String server_host, int server_port, User user, WindowManager wManager) {
@@ -158,7 +159,7 @@ public class MainFrame extends JFrame implements ActionListener, BatchStateListe
 		this.add(buttonsPanel, BorderLayout.NORTH);
 		//create the image panel and its image
 		ImageComponent imageComp = new ImageComponent(bchS);		
-		InfoPanel infoPanel = new InfoPanel(bchS);
+		infoPanel = new InfoPanel(bchS);
 		entryPanel = new EntryPanel(bchS);
 		
 		
@@ -233,8 +234,9 @@ public class MainFrame extends JFrame implements ActionListener, BatchStateListe
 			else{
 				this.disableButtons();
 				downloadBatchMenuOption.setEnabled(true);
+				//reset the info and entry panels to their default views
 				entryPanel.clearComponents();
-				bchS.clearBatch();
+				infoPanel.clearComponents();
 			}
 			
 			

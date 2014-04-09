@@ -43,6 +43,13 @@ public class InfoPanel extends JTabbedPane implements BatchStateListener, Serial
 		
 	}
 	
+	/**
+	 * Clears the components--erases them
+	 */
+	public void clearComponents(){
+		this.removeAll();
+	}
+	
 	private void loadPage(String url) {
 	
         try {

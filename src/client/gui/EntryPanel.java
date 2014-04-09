@@ -11,6 +11,7 @@ import javax.swing.event.TableColumnModelEvent;
 import javax.swing.event.TableColumnModelListener;
 
 import client.gui.synchronization.BatchState;
+import client.gui.synchronization.BatchStateListener;
 
 
 
@@ -35,7 +36,7 @@ public class EntryPanel extends JTabbedPane implements TableColumnModelListener,
 	 */
 	public EntryPanel(BatchState bchS){
 		this.bchS = bchS;
-		createComponents();
+		this.createComponents();
 	}
 	
 	/**
@@ -55,7 +56,15 @@ public class EntryPanel extends JTabbedPane implements TableColumnModelListener,
 	
 	public void clearComponents(){
 		this.removeAll();
-		this.createComponents();
+		createComponents();
+	}
+	
+	public DataTable getTable(){
+		return dTable;
+	}
+	
+	public FormEntryPanel getForms(){
+		return fEntry;
 	}
 	
 	
@@ -87,6 +96,8 @@ public class EntryPanel extends JTabbedPane implements TableColumnModelListener,
 
 	@Override
 	public void columnSelectionChanged(ListSelectionEvent arg0) {
+		if(dTable.getColumnModel().getSelectedColumns().length == 0)
+			return;
 		int column = dTable.getColumnModel().getSelectedColumns()[0];
 		if(column <= 0){
 			column = 0;
@@ -104,8 +115,9 @@ public class EntryPanel extends JTabbedPane implements TableColumnModelListener,
 			selRow = 0;
 		}
 		bchS.setSelectedCellRow(selRow);
-		
 	}
+
+	
 
 	
 	
