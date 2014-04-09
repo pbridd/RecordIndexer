@@ -9,6 +9,7 @@ import client.gui.synchronization.BatchState;
 import client.gui.synchronization.BatchStateListener;
 
 
+
 public class DataTable extends JTable implements BatchStateListener, Serializable {
 
 	/**
@@ -39,6 +40,7 @@ public class DataTable extends JTable implements BatchStateListener, Serializabl
 		else if(ba == BatchActions.SELECTEDCOLCHANGED || ba == BatchActions.SELECTEDROWCHANGED){
 			this.changeSelection(bchS.getSelectedCellRow(), bchS.getSelectedCellCol() + 1, false, false);
 		}
+		
 		
 	}
 

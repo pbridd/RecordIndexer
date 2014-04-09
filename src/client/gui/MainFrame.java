@@ -26,10 +26,10 @@ import javax.swing.JFrame;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JSplitPane;
 import javax.swing.WindowConstants;
-
 
 import client.gui.synchronization.BatchState;
 import client.gui.synchronization.BatchStateListener;
@@ -63,6 +63,7 @@ public class MainFrame extends JFrame implements ActionListener, BatchStateListe
 	JButton toggleHighlightsButton;
 	JButton saveButton;
 	JButton submitButton;
+	EntryPanel entryPanel;
 	
 	
 	public MainFrame(String server_host, int server_port, User user, WindowManager wManager) {
@@ -125,6 +126,7 @@ public class MainFrame extends JFrame implements ActionListener, BatchStateListe
 		exitMenuOption.addActionListener(this);
 		
 		
+		
 		//setup the buttons panel--contains the buttons
 		JPanel buttonsPanel = new JPanel();
 		buttonsPanel.setLayout(new BoxLayout(buttonsPanel, BoxLayout.X_AXIS));
@@ -148,7 +150,8 @@ public class MainFrame extends JFrame implements ActionListener, BatchStateListe
 		buttonsPanel.add(submitButton);
 		buttonsPanel.add(Box.createGlue());
 		disableButtons();
-		
+		saveButton.addActionListener(this);
+		submitButton.addActionListener(this);
 		
 
 		
@@ -156,10 +159,10 @@ public class MainFrame extends JFrame implements ActionListener, BatchStateListe
 		//create the image panel and its image
 		ImageComponent imageComp = new ImageComponent(bchS);		
 		InfoPanel infoPanel = new InfoPanel(bchS);
-		EntryPanel tablePanel = new EntryPanel(bchS);
+		entryPanel = new EntryPanel(bchS);
 		
 		
-		verticalSplitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT,tablePanel,
+		verticalSplitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT,entryPanel,
 				infoPanel);
 		horizontalSplitPane = new JSplitPane(JSplitPane.VERTICAL_SPLIT, imageComp, 
 				verticalSplitPane);
@@ -218,19 +221,37 @@ public class MainFrame extends JFrame implements ActionListener, BatchStateListe
 			System.exit(0);
 		}
 		
+		else if(e.getSource() == submitButton){
+			//submit and get the result
+			boolean successful = UIIntegration.submitBatch(user.getUsername(), user.getPassword(), bchS);
+			//make sure the batch submit was successful.
+			if(!successful){
+				JOptionPane.showMessageDialog(this, "There was a problem when submitting the batch! Batch not submitted.\n", 
+							 "Error", JOptionPane.ERROR_MESSAGE);
+				return;
+			}
+			else{
+				this.disableButtons();
+				downloadBatchMenuOption.setEnabled(true);
+				entryPanel.clearComponents();
+				bchS.clearBatch();
+			}
+			
+			
+			
+			
+		}
+		else if(e.getSource() == saveButton){
+			saveState();
+		}
+		
 		
 		
 		
 	}
 
 	
-	@Override
-	public void batchActionPerformed(BatchActions ba) {
-		if(ba == BatchActions.BATCHDOWNLOADED){
-			enableButtons();
-			downloadBatchMenuOption.setEnabled(false);
-		}	
-	}
+	
 	
 	/** 
 	 * Saves the state of the window and batch into a JSON file.
@@ -295,6 +316,12 @@ public class MainFrame extends JFrame implements ActionListener, BatchStateListe
 			} catch (IOException e) {
 				return null;
 			} catch (ClassNotFoundException e) {
+				//close the input
+				try {
+					inFile.close();
+				} catch (IOException e1) {
+					e1.printStackTrace();
+				}
 				return null;
 				
 			}
@@ -305,9 +332,19 @@ public class MainFrame extends JFrame implements ActionListener, BatchStateListe
 	}
 
 	@Override
+	public void batchActionPerformed(BatchActions ba) {
+		if(ba == BatchActions.BATCHDOWNLOADED){
+			enableButtons();
+			downloadBatchMenuOption.setEnabled(false);
+		}
+		
+	}
+	@Override
 	public void batchActionPerformed(BatchActions ba, int row, int col) {
 		// TODO Auto-generated method stub
 	}
+	
+	
 	
 	
 

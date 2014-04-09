@@ -53,6 +53,11 @@ public class EntryPanel extends JTabbedPane implements TableColumnModelListener,
 		dTable.getSelectionModel().addListSelectionListener(this);
 	}
 	
+	public void clearComponents(){
+		this.removeAll();
+		this.createComponents();
+	}
+	
 	
 	
 	//implemented methods from TableColumnModelListener
@@ -101,6 +106,8 @@ public class EntryPanel extends JTabbedPane implements TableColumnModelListener,
 		bchS.setSelectedCellRow(selRow);
 		
 	}
+
+	
 	
 	
 	
