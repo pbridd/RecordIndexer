@@ -3,10 +3,12 @@ package client.gui;
 import java.awt.EventQueue;
 
 import shared.model.User;
+import client.gui.synchronization.BatchState;
+import client.gui.synchronization.MainFrameListener;
 import client.gui.synchronization.WindowManager;
 import client.gui.synchronization.WindowManagerListener;
 
-public class ClientGUI implements WindowManagerListener{
+public class ClientGUI implements WindowManagerListener, MainFrameListener{
 	//Static Global Variables
 	private static String server_host;
 	private static int server_port;
@@ -74,9 +76,19 @@ public class ClientGUI implements WindowManagerListener{
 		else if(mainWindowVisible == true){
 			loginFrame.dispose();
 			loginFrame = null;
-			mainFrame = new MainFrame(server_host, server_port, currUser, wManager);
+			mainFrame = new MainFrame(server_host, server_port, currUser, wManager, this);
 			mainFrame.setVisible(true);
 		}
+		
+	}
+
+	@Override
+	public void MainFrameSubmittedBatch() {
+		//dispose of the old mainframe and make a new one
+		BatchState tempBatch = mainFrame.getBatchState();
+		mainFrame.dispose();
+		mainFrame = new MainFrame(server_host, server_port, tempBatch.getUser(), wManager, this);
+		mainFrame.setVisible(true);
 		
 	}
 }

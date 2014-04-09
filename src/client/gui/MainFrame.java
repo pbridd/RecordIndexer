@@ -17,6 +17,8 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.OutputStream;
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.swing.Box;
 import javax.swing.BoxLayout;
@@ -33,6 +35,7 @@ import javax.swing.WindowConstants;
 
 import client.gui.synchronization.BatchState;
 import client.gui.synchronization.BatchStateListener;
+import client.gui.synchronization.MainFrameListener;
 import client.gui.synchronization.WindowManager;
 import client.gui.synchronization.WindowState;
 import shared.model.User;
@@ -47,7 +50,6 @@ public class MainFrame extends JFrame implements ActionListener, BatchStateListe
 	private static final long serialVersionUID = 1611729556318338736L;
 	//Non static methods and variables
 	//Global Variables
-	private User user;
 	private JMenuBar menuBar;
 	private JMenu menu;
 	private JMenuItem downloadBatchMenuOption;
@@ -65,13 +67,16 @@ public class MainFrame extends JFrame implements ActionListener, BatchStateListe
 	JButton submitButton;
 	EntryPanel entryPanel;
 	InfoPanel infoPanel;
+	private List<MainFrameListener> listeners;
 	
 	
-	public MainFrame(String server_host, int server_port, User user, WindowManager wManager) {
-		this.user = user;
+	public MainFrame(String server_host, int server_port, User user, WindowManager wManager, MainFrameListener listen) {
+		listeners = new ArrayList<MainFrameListener>();
+		listeners.add(listen);
 		
 		//process the serialized batchState for this user
 		Object bsO = (BatchState) getSerializedObject(user.getUsername() + user.getUserID() + "_BatchState");
+		
 		if(bsO == null){
 			bchS = new BatchState();
 			bchS.setServer_host(server_host);
@@ -83,6 +88,8 @@ public class MainFrame extends JFrame implements ActionListener, BatchStateListe
 			bchS.setServer_host(server_host);
 			bchS.setServer_port(server_port);
 		}
+		//set the user
+		bchS.setUser(user);
 		
 		//process the serialized windowState for this user
 		Object wsO = (WindowState) getSerializedObject(user.getUsername() + user.getUserID() + "_WindowState");
@@ -105,6 +112,35 @@ public class MainFrame extends JFrame implements ActionListener, BatchStateListe
 		this.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 		bchS.addListener(this);
 		this.createComponents(ws);
+		
+	}
+	
+	public MainFrame(BatchState bchS, WindowManager wManager, MainFrameListener listen){
+		listeners = new ArrayList<MainFrameListener>();
+		listeners.add(listen);
+		//process the serialized windowState for this user
+		Object wsO = (WindowState) getSerializedObject(bchS.getUser().getUsername() 
+				+ bchS.getUser().getUserID() + "_WindowState");
+		WindowState ws = null;
+		if(wsO == null){
+			//set default size
+			GraphicsDevice gd = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice();
+			int scWidth = gd.getDisplayMode().getWidth();
+			int scHeight = gd.getDisplayMode().getHeight();
+			this.setSize(scWidth, scHeight);
+			this.setLocation(scWidth/2 - this.getWidth(), scHeight/2 - this.getHeight());
+		}
+		else{
+			ws = (WindowState) wsO;
+			this.setSize((int)ws.getWidthOfWindow(), (int)ws.getHeightOfWindow());
+			this.setLocation((int)ws.getxPosOnDesktop(), (int)ws.getyPosOnDesktop());
+		}
+		
+		this.wManager = wManager;
+		this.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+		bchS.addListener(this);
+		this.createComponents(ws);
+		
 		
 	}
 	
@@ -211,7 +247,7 @@ public class MainFrame extends JFrame implements ActionListener, BatchStateListe
 			wManager.toggleVisibility(null);
 		}
 		else if(e.getSource() == downloadBatchMenuOption){
-			JDialog downloadBatchDialog = new DownloadBatchDialog(user, bchS);
+			JDialog downloadBatchDialog = new DownloadBatchDialog(bchS);
 			downloadBatchDialog.pack();
 			downloadBatchDialog.setVisible(true);
 			
@@ -224,7 +260,8 @@ public class MainFrame extends JFrame implements ActionListener, BatchStateListe
 		
 		else if(e.getSource() == submitButton){
 			//submit and get the result
-			boolean successful = UIIntegration.submitBatch(user.getUsername(), user.getPassword(), bchS);
+			boolean successful = UIIntegration.submitBatch(bchS.getUser().getUsername(), 
+					bchS.getUser().getPassword(), bchS);
 			//make sure the batch submit was successful.
 			if(!successful){
 				JOptionPane.showMessageDialog(this, "There was a problem when submitting the batch! Batch not submitted.\n", 
@@ -234,9 +271,16 @@ public class MainFrame extends JFrame implements ActionListener, BatchStateListe
 			else{
 				this.disableButtons();
 				downloadBatchMenuOption.setEnabled(true);
-				//reset the info and entry panels to their default views
-				entryPanel.clearComponents();
-				infoPanel.clearComponents();
+				bchS.clearBatch();
+				File tempFile = new File("SavedData/" + bchS.getUser().getUsername() + 
+						bchS.getUser().getUserID() + ".ser");
+				tempFile.delete();
+				saveWindowState();
+				
+				for(MainFrameListener l : listeners){
+					l.MainFrameSubmittedBatch();
+				}
+				
 			}
 			
 			
@@ -259,6 +303,12 @@ public class MainFrame extends JFrame implements ActionListener, BatchStateListe
 	 * Saves the state of the window and batch into a JSON file.
 	 */
 	public void saveState(){
+		this.saveWindowState();
+		serializeObject(bchS, bchS.getUser().getUsername() + bchS.getUser().getUserID() + "_BatchState");
+		
+	}
+	
+	public void saveWindowState(){
 		//save all of the GUI states
 		WindowState ws = new WindowState();
 		ws.setHeightOfWindow(this.getHeight());
@@ -271,9 +321,16 @@ public class MainFrame extends JFrame implements ActionListener, BatchStateListe
 		ws.setyPosOnDesktop(yOnScreen);
 		ws.setWidthOfWindow(this.getWidth());
 		ws.setHeightOfWindow(this.getHeight());
-		serializeObject(ws, user.getUsername() + user.getUserID() + "_WindowState");
-		serializeObject(bchS, user.getUsername() + user.getUserID() + "_BatchState");
-		
+		serializeObject(ws, bchS.getUser().getUsername() + bchS.getUser().getUserID() + "_WindowState");
+	}
+	
+	
+	/**
+	 * Return the batchState
+	 * @return the current batchState
+	 */
+	public BatchState getBatchState(){
+		return bchS;
 	}
 	
 	/**
@@ -314,6 +371,7 @@ public class MainFrame extends JFrame implements ActionListener, BatchStateListe
 				ObjectInputStream input = new ObjectInputStream(inFile);
 				retObj = input.readObject();
 				input.close();
+
 				
 			} catch (IOException e) {
 				return null;
@@ -325,7 +383,6 @@ public class MainFrame extends JFrame implements ActionListener, BatchStateListe
 					e1.printStackTrace();
 				}
 				return null;
-				
 			}
 			
 			
@@ -338,6 +395,7 @@ public class MainFrame extends JFrame implements ActionListener, BatchStateListe
 		if(ba == BatchActions.BATCHDOWNLOADED){
 			enableButtons();
 			downloadBatchMenuOption.setEnabled(false);
+
 		}
 		
 	}

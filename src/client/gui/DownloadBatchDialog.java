@@ -42,14 +42,12 @@ public class DownloadBatchDialog extends JDialog implements ActionListener, Seri
 	private JButton cancelButton;
 	private JButton downloadButton;
 	private JButton closeSampleImageButton;
-	private User user;
 	private List<Project> projList;
 	private DefaultComboBoxModel<String> cbm;
 	JDialog viewSampleImageDialog;
 		
 	
-	public DownloadBatchDialog(User usr, BatchState bchS){
-		this.user = usr;
+	public DownloadBatchDialog(BatchState bchS){
 		this.bchS = bchS;
 		this.setModal(true);
 		this.setResizable(false);
@@ -64,7 +62,7 @@ public class DownloadBatchDialog extends JDialog implements ActionListener, Seri
 	private void createComponents(){
 		JLabel projectLabel = new JLabel("Project:");
 		cbm = new DefaultComboBoxModel<String>();
-		projList = UIIntegration.getProjects(user.getUsername(), user.getPassword(), 
+		projList = UIIntegration.getProjects(bchS.getUser().getUsername(), bchS.getUser().getPassword(), 
 				bchS.getServer_host(), bchS.getServer_port());
 		
 		//add the projects to the defaultComboBoxModel
@@ -132,7 +130,7 @@ public class DownloadBatchDialog extends JDialog implements ActionListener, Seri
 			DownloadBatch_Result res;
 			int projID = getProjectID((String)projectSelectorBox.getSelectedItem());
 			try{
-				 res = UIIntegration.downloadBatch(user.getUsername(), user.getPassword(),
+				 res = UIIntegration.downloadBatch(bchS.getUser().getUsername(), bchS.getUser().getPassword(),
 						 projID, bchS.getServer_host(), bchS.getServer_port());
 				 bchS.processDownloadedBatch(res);
 			}
@@ -161,8 +159,8 @@ public class DownloadBatchDialog extends JDialog implements ActionListener, Seri
 		
 		String imgURL;
 		try{
-			imgURL = UIIntegration.getSampleImage(user.getUsername(), user.getPassword(), projID, bchS.getServer_host(), 
-					bchS.getServer_port());
+			imgURL = UIIntegration.getSampleImage(bchS.getUser().getUsername(), bchS.getUser().getPassword(), 
+					projID, bchS.getServer_host(), bchS.getServer_port());
 		}
 		catch(ClientException ce){
 			JOptionPane.showMessageDialog(this, "There was an error when contacting the server to get a URL for the sample image:\n" 

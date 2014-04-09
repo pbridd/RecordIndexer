@@ -7,6 +7,7 @@ import java.util.List;
 
 
 
+
 import client.ClientException;
 import client.gui.synchronization.BatchStateListener.BatchActions;
 import shared.communication.DownloadBatch_Result;
@@ -14,6 +15,7 @@ import shared.model.Batch;
 import shared.model.Field;
 import shared.model.Project;
 import shared.model.IndexedData;
+import shared.model.User;
 
 public class BatchState implements Serializable{
 	/**
@@ -31,6 +33,7 @@ public class BatchState implements Serializable{
 	private String imagePath;
 	private String server_host;
 	private int server_port;
+	private User user;
 		
 		
 	//Constructors
@@ -282,6 +285,21 @@ public class BatchState implements Serializable{
 		 */
 		public int getServer_port() {
 			return server_port;
+		}
+		
+		/**
+		 * @return the user
+		 */
+		public User getUser(){
+			return user;
+		}
+		
+		/**
+		 * set the user
+		 * @param user The user to set
+		 */
+		public void setUser(User user){
+			this.user = user;
 		}
 
 
