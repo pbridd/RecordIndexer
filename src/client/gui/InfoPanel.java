@@ -27,12 +27,13 @@ public class InfoPanel extends JTabbedPane implements BatchStateListener, Serial
 	public InfoPanel(BatchState bchS){
 		this.bchS = bchS;
 		bchS.addListener(this);
+		createComponents();
 	}
 	
 	private void createComponents(){
 		htmlPane = new JEditorPane();
 		htmlPane.setOpaque(true);
-		htmlPane.setBackground(Color.white);
+		htmlPane.setBackground(Color.gray);
 		htmlPane.setEditable(false);
 		JScrollPane htmlScrollPane = new JScrollPane(htmlPane);
 		htmlScrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
@@ -71,7 +72,9 @@ public class InfoPanel extends JTabbedPane implements BatchStateListener, Serial
 			loadPage(finURL);
 		}
 		else if(ba == BatchActions.BATCHDOWNLOADED){
-			createComponents();
+			//set the background
+			if(bchS.getBatch() != null)
+				htmlPane.setBackground(Color.white);
 		}
 		
 	}

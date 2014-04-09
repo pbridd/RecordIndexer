@@ -297,8 +297,6 @@ public class MainFrame extends JFrame implements ActionListener, BatchStateListe
 	}
 
 	
-	
-	
 	/** 
 	 * Saves the state of the window and batch into a JSON file.
 	 */
@@ -395,7 +393,6 @@ public class MainFrame extends JFrame implements ActionListener, BatchStateListe
 		if(ba == BatchActions.BATCHDOWNLOADED){
 			enableButtons();
 			downloadBatchMenuOption.setEnabled(false);
-
 		}
 		
 	}
