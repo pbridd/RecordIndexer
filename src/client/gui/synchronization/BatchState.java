@@ -86,7 +86,7 @@ public class BatchState implements Serializable{
 	
 	/**
 	 * Clears all of the data in this batch to its default values
-	 * except for the server information and its listeners
+	 * except for the server information and its listeners, and notify listeners
 	 */
 	public void clearBatch(){
 		project = null;
