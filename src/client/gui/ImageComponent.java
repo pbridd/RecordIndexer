@@ -50,6 +50,8 @@ public class ImageComponent extends JComponent implements BatchStateListener, Se
 	
 	private String imagePath;
 	private BufferedImage image;
+	private BufferedImage invertedImage;
+	private BufferedImage originalImage;
 	
 	
 	private List<DrawingShape> shapes;
