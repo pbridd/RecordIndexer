@@ -1,6 +1,7 @@
 package client.gui;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -36,12 +37,14 @@ public class FormEntryPanel extends JPanel implements BatchStateListener, Action
 	BatchState bchS;
 	JList<String> recordList;
     List<JTextField> inputFields;
+    DataTable table;
 
 	
-	public FormEntryPanel(BatchState bchS){
+	public FormEntryPanel(BatchState bchS, DataTable table){
 		this.bchS = bchS;
 		bchS.addListener(this);
 		inputFields = new ArrayList<JTextField>();
+		this.table = table;
 	}
 	
 	private void createComponents(){
@@ -114,6 +117,10 @@ public class FormEntryPanel extends JPanel implements BatchStateListener, Action
 		if(ba == BatchActions.DATAVALUECHANGED){
 			if(row == recordList.getSelectedIndex()){
 				inputFields.get(col).setText(bchS.getValues()[row][col].getDataValue());
+				if(table.getIsKnownWord(bchS.getValues()[row][col].getDataValue(), col+1))
+					inputFields.get(col).setBackground(Color.white);
+				else
+					inputFields.get(col).setBackground(Color.red);
 			}
 		}
 		if(ba == BatchActions.SELECTEDROWCHANGED){
@@ -135,6 +142,10 @@ public class FormEntryPanel extends JPanel implements BatchStateListener, Action
 				return;
 			for(int i = 0; i < inputFields.size(); i++){
 				inputFields.get(i).setText(bchS.getValues()[recordList.getSelectedIndex()][i].getDataValue());
+				if(table.getIsKnownWord(bchS.getValues()[recordList.getSelectedIndex()][i].getDataValue(), i+1))
+					inputFields.get(i).setBackground(Color.white);
+				else
+					inputFields.get(i).setBackground(Color.red);
 			}
 			bchS.setSelectedCellRow(recordList.getSelectedIndex());
 		}

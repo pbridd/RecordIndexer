@@ -44,7 +44,7 @@ public class EntryPanel extends JTabbedPane implements TableColumnModelListener,
 	private void createComponents(){
 		//set up table
 		dTable = new DataTable(bchS);
-		fEntry = new FormEntryPanel(bchS);
+		fEntry = new FormEntryPanel(bchS, dTable);
 
 
 		this.addTab("Table Entry", new JScrollPane(dTable));
