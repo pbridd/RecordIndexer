@@ -19,6 +19,11 @@ public class ImageState implements Serializable{
 	
 	
 	public ImageState(){
+		this.imageIsInverted = false;
+		this.imageIsHighlighted = true;
+		this.imagePosX = 0;
+		this.imagePosY = 0;
+		this.zoom = 100;
 		this.listeners = new ArrayList<ImageStateListener>();
 	}
 	

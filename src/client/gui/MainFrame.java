@@ -38,6 +38,7 @@ import javax.swing.WindowConstants;
 
 import client.gui.synchronization.BatchState;
 import client.gui.synchronization.BatchStateListener;
+import client.gui.synchronization.ImageState;
 import client.gui.synchronization.MainFrameListener;
 import client.gui.synchronization.WindowManager;
 import client.gui.synchronization.WindowState;
@@ -60,6 +61,7 @@ public class MainFrame extends JFrame implements ActionListener, BatchStateListe
 	private JMenuItem exitMenuOption;
 	private WindowManager wManager;
 	private BatchState bchS;
+	private ImageState imgS;
 	JSplitPane horizontalSplitPane;
 	JSplitPane verticalSplitPane;
 	JButton zoomInButton;
@@ -94,22 +96,7 @@ public class MainFrame extends JFrame implements ActionListener, BatchStateListe
 		//set the user
 		bchS.setUser(user);
 		
-		//process the serialized windowState for this user
-		Object wsO = (WindowState) getSerializedObject(user.getUsername() + user.getUserID() + "_WindowState");
-		WindowState ws = null;
-		if(wsO == null){
-			//set default size
-			GraphicsDevice gd = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice();
-			int scWidth = gd.getDisplayMode().getWidth();
-			int scHeight = gd.getDisplayMode().getHeight();
-			this.setSize(scWidth, scHeight);
-			this.setLocation(scWidth/2 - this.getWidth(), scHeight/2 - this.getHeight());
-		}
-		else{
-			ws = (WindowState) wsO;
-			this.setSize((int)ws.getWidthOfWindow(), (int)ws.getHeightOfWindow());
-			this.setLocation((int)ws.getxPosOnDesktop(), (int)ws.getyPosOnDesktop());
-		}
+		WindowState ws = getWindowStateFromSerialized(user);
 		
 		this.wManager = wManager;
 		this.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
@@ -118,26 +105,13 @@ public class MainFrame extends JFrame implements ActionListener, BatchStateListe
 		
 	}
 	
+	
+	
 	public MainFrame(BatchState bchS, WindowManager wManager, MainFrameListener listen){
 		listeners = new ArrayList<MainFrameListener>();
 		listeners.add(listen);
-		//process the serialized windowState for this user
-		Object wsO = (WindowState) getSerializedObject(bchS.getUser().getUsername() 
-				+ bchS.getUser().getUserID() + "_WindowState");
-		WindowState ws = null;
-		if(wsO == null){
-			//set default size
-			GraphicsDevice gd = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice();
-			int scWidth = gd.getDisplayMode().getWidth();
-			int scHeight = gd.getDisplayMode().getHeight();
-			this.setSize(scWidth, scHeight);
-			this.setLocation(scWidth/2 - this.getWidth(), scHeight/2 - this.getHeight());
-		}
-		else{
-			ws = (WindowState) wsO;
-			this.setSize((int)ws.getWidthOfWindow(), (int)ws.getHeightOfWindow());
-			this.setLocation((int)ws.getxPosOnDesktop(), (int)ws.getyPosOnDesktop());
-		}
+		
+		WindowState ws = getWindowStateFromSerialized(bchS.getUser());
 		
 		this.wManager = wManager;
 		this.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
@@ -299,9 +273,6 @@ public class MainFrame extends JFrame implements ActionListener, BatchStateListe
 			saveState();
 		}
 		
-		
-		
-		
 	}
 
 	
@@ -310,11 +281,12 @@ public class MainFrame extends JFrame implements ActionListener, BatchStateListe
 	 */
 	public void saveState(){
 		this.saveWindowState();
-		serializeObject(bchS, bchS.getUser().getUsername() + bchS.getUser().getUserID() + "_BatchState");
+		this.saveBatchState();
+		this.saveImageState();
 		
 	}
 	
-	public void saveWindowState(){
+	private void saveWindowState(){
 		//save all of the GUI states
 		WindowState ws = new WindowState();
 		ws.setHeightOfWindow(this.getHeight());
@@ -330,6 +302,14 @@ public class MainFrame extends JFrame implements ActionListener, BatchStateListe
 		serializeObject(ws, bchS.getUser().getUsername() + bchS.getUser().getUserID() + "_WindowState");
 	}
 	
+	private void saveBatchState(){
+		serializeObject(bchS, bchS.getUser().getUsername() + bchS.getUser().getUserID() + "_BatchState");
+	}
+	
+	private void saveImageState(){
+		serializeObject(imgS, bchS.getUser().getUsername() + bchS.getUser().getUserID() + "_ImageState");
+	}
+	
 	
 	/**
 	 * Return the batchState
@@ -337,6 +317,27 @@ public class MainFrame extends JFrame implements ActionListener, BatchStateListe
 	 */
 	public BatchState getBatchState(){
 		return bchS;
+	}
+	
+	private WindowState getWindowStateFromSerialized(User user){
+		//process the serialized windowState for this user
+		Object wsO = (WindowState) getSerializedObject(user.getUsername() + user.getUserID() + "_WindowState");
+		WindowState ws = null;
+		if(wsO == null){
+			//set default size
+			GraphicsDevice gd = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice();
+			int scWidth = gd.getDisplayMode().getWidth();
+			int scHeight = gd.getDisplayMode().getHeight();
+			this.setSize(scWidth, scHeight);
+			this.setLocation(scWidth/2 - this.getWidth(), scHeight/2 - this.getHeight());
+		}
+		else{
+			ws = (WindowState) wsO;
+			this.setSize((int)ws.getWidthOfWindow(), (int)ws.getHeightOfWindow());
+			this.setLocation((int)ws.getxPosOnDesktop(), (int)ws.getyPosOnDesktop());
+		}
+		
+		return ws;
 	}
 	
 	/**
