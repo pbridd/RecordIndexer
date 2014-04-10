@@ -60,6 +60,9 @@ public class Dictionary implements Trie {
 		if(word.charAt(0) == ' '){
 			return findHelper(word, 0, baseNode.getNode(26));
 		}
+		else if(word.charAt(0) < 97 || word.charAt(0) > 122){
+			return null;
+		}
 		return findHelper(word, 0, baseNode.getNode(word.charAt(0) - 97));
 	}
 	
