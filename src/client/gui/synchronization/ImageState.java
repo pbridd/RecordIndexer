@@ -10,8 +10,10 @@ public class ImageState implements Serializable{
 	 */
 	private static final long serialVersionUID = 7018414239710439345L;
 	private boolean imageIsInverted;
+	private boolean imageIsHighlighted;
 	private int imagePosX;
 	private int imagePosY;
+	private int zoom;
 	private List<ImageStateListener> listeners;
 	
 	
@@ -34,6 +36,7 @@ public class ImageState implements Serializable{
 	 */
 	public void setImageIsInverted(boolean imageIsInverted){
 		this.imageIsInverted = imageIsInverted;
+		this.fireInvertToggled();
 	}
 	
 	
@@ -46,11 +49,30 @@ public class ImageState implements Serializable{
 	}
 	
 	/**
+	 * Set whether the image is highlighted or not
+	 * @param imageIsHighlighted
+	 */
+	public void setImageIsHighlighted(boolean imageIsHighlighted){
+		this.imageIsHighlighted = imageIsHighlighted;
+		this.fireHighlightsToggled();
+	}
+	
+	
+	/**
+	 * Get whether the image is highlighted or not
+	 * @return The highlighted setting
+	 */
+	public boolean getImageIsHighlighted(){
+		return this.imageIsHighlighted;
+	}
+	
+	/**
 	 * return imagePosX
 	 * @return imagePosX
 	 */
 	public int getImagePosX(){
 		return this.imagePosX;
+		
 	}
 	
 	/**
@@ -59,6 +81,7 @@ public class ImageState implements Serializable{
 	 */
 	public void setImagePosX(int imagePosX){
 		this.imagePosX = imagePosX;
+		this.fireImageCoordsChanged();
 	}
 	
 	
@@ -71,11 +94,54 @@ public class ImageState implements Serializable{
 	}
 	
 	/**
+	 * set the zoom level
+	 * @param zoom the new zoom level
+	 */
+	public void setZoomLevel(int zoom){
+		this.zoom = zoom;
+		this.fireImageZoomChanged();
+	}
+	
+	
+	/**
+	 * get the zoom level
+	 * @return the zoom level
+	 */
+	public int getZoomLevel(){
+		return this.zoom;
+	}
+	
+	/**
 	 * Set imagePosY
 	 * @param imagePosY
 	 */
 	public void setImagePosY(int imagePosY){
 		this.imagePosY = imagePosY;
+		this.fireImageCoordsChanged();
+	}
+	
+	private void fireInvertToggled(){
+		for(ImageStateListener il : listeners){
+			il.invertedToggled(this.imageIsInverted);
+		}
+	}
+	
+	private void fireImageCoordsChanged(){
+		for(ImageStateListener il : listeners){
+			il.imageCoordsChanged(this.imagePosX, this.imagePosY);
+		}
+	}
+	
+	private void fireHighlightsToggled(){
+		for(ImageStateListener il : listeners){
+			il.highlightsVisibleToggled(this.imageIsHighlighted);
+		}
+	}
+	
+	private void fireImageZoomChanged(){
+		for(ImageStateListener il : listeners){
+			il.imageZoomChanged(this.zoom);
+		}
 	}
 	
 }

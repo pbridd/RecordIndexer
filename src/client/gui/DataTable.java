@@ -41,7 +41,7 @@ public class DataTable extends JTable implements BatchStateListener, Serializabl
 		this.bchS = bchS;
 		bchS.addListener(this);
 		this.setCellSelectionEnabled(true);
-		//this.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+		this.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 	}
 	
 	public boolean getIsKnownWord(String str, int col){
