@@ -10,6 +10,7 @@ import javax.swing.JTable;
 import javax.swing.border.Border;
 import javax.swing.table.AbstractTableModel;
 import javax.swing.table.TableCellRenderer;
+import javax.swing.table.TableColumn;
 
 import client.gui.synchronization.BatchState;
 import client.gui.synchronization.BatchStateListener;
@@ -32,6 +33,7 @@ public class DataTable extends JTable implements BatchStateListener, Serializabl
 	public DataTable(BatchState bchS){
 		this.bchS = bchS;
 		bchS.addListener(this);
+		this.setCellSelectionEnabled(true);
 	}
 	
 	
@@ -44,6 +46,13 @@ public class DataTable extends JTable implements BatchStateListener, Serializabl
 		if(ba == BatchActions.BATCHDOWNLOADED){
 			DataTableModel currModel = new DataTableModel(bchS);
 			this.setModel(currModel);
+			
+			//set size and renderer
+			for(int i = 0; i < currModel.getColumnCount(); ++i){
+				TableColumn column = columnModel.getColumn(i);
+				column.setPreferredWidth(150);
+				column.setCellRenderer(new DataCellRenderer());
+			}
 		}
 		else if(ba == BatchActions.SELECTEDCOLCHANGED || ba == BatchActions.SELECTEDROWCHANGED){
 			this.changeSelection(bchS.getSelectedCellRow(), bchS.getSelectedCellCol() + 1, false, false);
@@ -63,8 +72,7 @@ public class DataTable extends JTable implements BatchStateListener, Serializabl
 
 @SuppressWarnings("serial")
 class DataCellRenderer extends JLabel implements TableCellRenderer {
-
-	private Border unselectedBorder = BorderFactory.createLineBorder(Color.BLACK, 1);
+	
 	private Border selectedBorder = BorderFactory.createLineBorder(Color.BLUE, 2);
 	private Color selectedBackground = new Color(105, 185, 251);
 
@@ -78,16 +86,16 @@ class DataCellRenderer extends JLabel implements TableCellRenderer {
 			Object value, boolean isSelected, boolean hasFocus, int row,
 			int column) {
 		
-		if (isSelected) {
-			this.setBorder(selectedBorder);
-			this.setBackground(selectedBackground);
-		}
-		else {
-			this.setBorder(unselectedBorder);
-			this.setBackground(Color.white);
-		}
+		if (table.isCellSelected(row, column))
+		    setBackground(selectedBackground);
+		else if (table.isRowSelected(row))
+		    setBackground(Color.white);
+		else if (table.isColumnSelected(column))
+		    setBackground(Color.white);
+		else
+		    setBackground(Color.white);
 		
-		this.setText((String)value);
+		this.setText(value.toString());
 		
 		return this;
 	}
