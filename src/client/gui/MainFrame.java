@@ -17,6 +17,9 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.OutputStream;
 import java.io.Serializable;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -272,9 +275,14 @@ public class MainFrame extends JFrame implements ActionListener, BatchStateListe
 				this.disableButtons();
 				downloadBatchMenuOption.setEnabled(true);
 				bchS.clearBatch();
-				File tempFile = new File("SavedData/" + bchS.getUser().getUsername() + 
-						bchS.getUser().getUserID() + ".ser");
-				tempFile.delete();
+				try{
+					Files.deleteIfExists(Paths.get("SavedData/" + bchS.getUser().getUsername() + 
+							bchS.getUser().getUserID() +"_BatchState"  + ".ser"));
+				}
+				catch(IOException ex){
+					System.out.println("Could not delete the old path file!");
+					ex.printStackTrace();
+				}
 				saveWindowState();
 				
 				for(MainFrameListener l : listeners){
