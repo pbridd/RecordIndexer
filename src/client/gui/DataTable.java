@@ -108,7 +108,7 @@ public class DataTable extends JTable implements BatchStateListener, Serializabl
 
 @SuppressWarnings("serial")
 class DataCellRenderer extends JLabel implements TableCellRenderer {
-	
+	private Border unselectedBorder = BorderFactory.createLineBorder(Color.BLACK, 0);
 	private Border selectedBorder = BorderFactory.createLineBorder(Color.BLUE, 2);
 	private Color selectedBackground = new Color(105, 185, 251);
 
@@ -125,15 +125,17 @@ class DataCellRenderer extends JLabel implements TableCellRenderer {
 		isKnownValue = ((DataTable)table).getIsKnownWord(c, column);
 		if(!isKnownValue)
 			setBackground(Color.red);
-		
+		setBorder(unselectedBorder);
 		
 		if (table.isCellSelected(row, column)){
+			setBorder(selectedBorder);
 			if(isKnownValue){
 				setBackground(selectedBackground);
 			}
 		}
 		else if(isKnownValue){
 			setBackground(Color.white);
+			
 		}
 		this.setText(c);
 		
