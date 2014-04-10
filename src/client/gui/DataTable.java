@@ -2,16 +2,22 @@ package client.gui;
 
 import java.awt.Color;
 import java.awt.Component;
+import java.io.IOException;
 import java.io.Serializable;
+import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.swing.BorderFactory;
 import javax.swing.JLabel;
 import javax.swing.JTable;
+import javax.swing.ListSelectionModel;
 import javax.swing.border.Border;
 import javax.swing.table.AbstractTableModel;
 import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableColumn;
 
+import client.gui.quality.Checker;
 import client.gui.synchronization.BatchState;
 import client.gui.synchronization.BatchStateListener;
 
@@ -25,6 +31,7 @@ public class DataTable extends JTable implements BatchStateListener, Serializabl
 	private static final long serialVersionUID = -9075334855451490406L;
 	//Global variables
 	BatchState bchS;
+	Checker[] checkers;
 	
 
 	
@@ -34,11 +41,20 @@ public class DataTable extends JTable implements BatchStateListener, Serializabl
 		this.bchS = bchS;
 		bchS.addListener(this);
 		this.setCellSelectionEnabled(true);
+		//this.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+	}
+	
+	public boolean getIsKnownWord(String str, int col){
+		if(col < 1 || str.length() == 0)
+			return true;
+		Checker check = checkers[col - 1];
+		if(check == null){
+			return true;
+		}
+		return check.existsInDict(str);
 	}
 	
 	
-
-
 
 
 	@Override
@@ -46,12 +62,35 @@ public class DataTable extends JTable implements BatchStateListener, Serializabl
 		if(ba == BatchActions.BATCHDOWNLOADED){
 			DataTableModel currModel = new DataTableModel(bchS);
 			this.setModel(currModel);
+			checkers = new Checker[currModel.getColumnCount() - 1];
+			for(int i = 0; i < currModel.getColumnCount() - 1; i ++){
+				checkers[i] = null;
+			}
 			
 			//set size and renderer
 			for(int i = 0; i < currModel.getColumnCount(); ++i){
 				TableColumn column = columnModel.getColumn(i);
 				column.setPreferredWidth(150);
 				column.setCellRenderer(new DataCellRenderer());
+				//set known data
+				if(i > 0){
+					String kDataPath = bchS.getField(i-1).getKnownData();
+					String kDataURL = "http://" + bchS.getServer_host() + ":" + bchS.getServer_port() +"/"
+							+ kDataPath;
+					if(kDataPath.length() > 0){
+						Checker check = new Checker();
+						
+						try{
+							URL kDataFormedURL = new URL(kDataURL);
+							check.useDictionary(kDataFormedURL);
+						}
+						catch(IOException e){
+							System.out.println("Could not open the knownData URL\n"+e.getMessage());
+							e.printStackTrace();
+						}
+						checkers[i-1] = check;
+					}
+				}
 			}
 		}
 		else if(ba == BatchActions.SELECTEDCOLCHANGED || ba == BatchActions.SELECTEDROWCHANGED){
@@ -74,7 +113,6 @@ class DataCellRenderer extends JLabel implements TableCellRenderer {
 	private Color selectedBackground = new Color(105, 185, 251);
 
 	public DataCellRenderer() {
-		
 		setOpaque(true);
 	}
 
@@ -82,16 +120,23 @@ class DataCellRenderer extends JLabel implements TableCellRenderer {
 			Object value, boolean isSelected, boolean hasFocus, int row,
 			int column) {
 		
-		if (table.isCellSelected(row, column))
-		    setBackground(selectedBackground);
-		else if (table.isRowSelected(row))
-		    setBackground(Color.white);
-		else if (table.isColumnSelected(column))
-		    setBackground(Color.white);
-		else
-		    setBackground(Color.white);
+		String c = value.toString();
+		boolean isKnownValue;
+		isKnownValue = ((DataTable)table).getIsKnownWord(c, column);
+		if(!isKnownValue)
+			setBackground(Color.red);
 		
-		this.setText(value.toString());
+		
+		if (table.isCellSelected(row, column)){
+			if(isKnownValue){
+				setBackground(selectedBackground);
+			}
+		}
+		else if(isKnownValue){
+			setBackground(Color.white);
+		}
+		this.setText(c);
+		
 		
 		return this;
 	}

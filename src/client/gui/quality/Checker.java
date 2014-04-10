@@ -1,8 +1,12 @@
 package client.gui.quality;
 
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStreamReader;
+import java.net.URL;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
@@ -28,17 +32,46 @@ public class Checker implements SpellCorrector {
 		scan.close();
 	}
 	
+
+	public void useDictionary(URL dictionaryFileURL) throws IOException {
+		currDict = new Dictionary();
+		
+		//get the reader
+		Scanner scan = new Scanner(
+				new InputStreamReader(dictionaryFileURL.openStream()));
+
+		//read the file in question
+
+        while (scan.hasNextLine()){
+        	String nextLn = scan.nextLine();
+        	List<String> knowndatas = Arrays.asList(nextLn.split(","));
+        	for(String a: knowndatas){
+        		String inputLine = a.replaceAll("[^a-zA-Z0-9\\s]", "");
+        		if(inputLine.length() != 0)
+        			//make sure everything is in lower case and trimmed
+        			currDict.add(inputLine.toLowerCase().trim());
+        	}
+        }
+        scan.close();
+    }
+		
+	
 	/**
 	 * Returns true if the word exists, false if it's not found
 	 * @param word The word to check
 	 * @return True if the word exists, false if it's not found
 	 */
 	public boolean existsInDict(String word){
-		String lowerCaseWord = word.toLowerCase();
-		if(currDict.find(lowerCaseWord) != null){
+		String lowerCaseWord = word.toLowerCase().trim();
+	
+		if(lowerCaseWord.length() == 0){
 			return true;
 		}
-		return false;
+		if(currDict.find(lowerCaseWord) == null){
+				return false;
+		}
+		
+		return true;
 	}
 
 	@Override

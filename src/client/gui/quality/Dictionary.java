@@ -25,6 +25,9 @@ public class Dictionary implements Trie {
 	}
 	
 	private void addHelper(String word, char[] str, int currentIdx, DictionaryNode currNode){
+		if(currNode == null){
+			return;
+		}
 		if(!currNode.existsNode(str[currentIdx])){
 			nodeCount ++;
 		}
@@ -54,6 +57,9 @@ public class Dictionary implements Trie {
 	@Override
 	public Node find(String word) {
 		//start the recursive find
+		if(word.charAt(0) == ' '){
+			return findHelper(word, 0, baseNode.getNode(26));
+		}
 		return findHelper(word, 0, baseNode.getNode(word.charAt(0) - 97));
 	}
 	
@@ -76,9 +82,14 @@ public class Dictionary implements Trie {
 		
 		//get char offset so we can get the next node
 		char currChar = word.charAt(idx + 1);
-		if(currChar < 97 || currChar > 122)
+		if((currChar < 97 || currChar > 122) && currChar != ' ')
 			return null;
+		
 		int offsetChar = currChar - 97;
+		if(currChar == ' '){
+			offsetChar = 26;
+		}
+		
 		
 		DictionaryNode nextNode = currNode.getNode(offsetChar);
 		
@@ -121,8 +132,12 @@ public class Dictionary implements Trie {
 	public int getDelSugs(String word, LinkedList<DictionaryNode> fList, LinkedList<String> ufList, int greatestValue)
 	{
 		for(int i = 0; i <= word.length(); i++){
-			for(int j = 97; j < 123; j++){
+			for(int j = 97; j < 124; j++){
 				char ch =(char)j;
+				if(j == 124){
+					ch = ' ';
+				}
+				
 				String tempStr;
 				tempStr = new StringBuffer(word).insert(i, ch).toString();
 				ufList.add(tempStr);
@@ -148,8 +163,11 @@ public class Dictionary implements Trie {
 
 	public int getAltSugs(String word, LinkedList<DictionaryNode> fList, LinkedList<String> ufList, int greatestValue){
 		for(int i = 0; i < word.length(); i++){
-			for(int j = 97; j < 123; j++){
+			for(int j = 97; j < 124; j++){
 				char ch =(char)j;
+				if(j == 124){
+					ch = ' ';
+				}
 				String tempStr;
 				StringBuilder strBT = new StringBuilder(word);
 				strBT.setCharAt(i, ch);

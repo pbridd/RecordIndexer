@@ -16,7 +16,7 @@ public class DictionaryNode implements Node {
 	}
 
 	public DictionaryNode(String str, char ctd, int val) {
-		subNodes = new DictionaryNode[26];
+		subNodes = new DictionaryNode[27];
 		value = val;
 		nodeChar = ctd;
 		nodeStr = str;
@@ -37,6 +37,13 @@ public class DictionaryNode implements Node {
 	}
 	
 	public boolean existsNode(char ch){
+		if(ch == ' '){
+			if(subNodes[26] == null)
+				return false;
+			return true;
+		}
+		if((ch - 97) < 0)
+			return true;
 		if(subNodes[ch - 97] == null){
 			return false;
 		}
@@ -47,14 +54,22 @@ public class DictionaryNode implements Node {
 	//without creating a new one.
 	public DictionaryNode createNode(String str, char a, int val){
 	//make sure the character passed is valid
-		if(a < 97 || a > 122)
+		if((a < 97 || a > 122) && a != ' ')
 			return null;
-		int offsetChar = a - 97;
-		//add node to array
-		if(subNodes[offsetChar] == null){
-			subNodes[offsetChar] = new DictionaryNode(str, a, val);
+		if(a == ' '){
+			if(subNodes[26] == null){
+				subNodes[26] = new DictionaryNode(str, a, val);
+			}
+			return subNodes[26];
 		}
-		return subNodes[offsetChar];
+		else{
+			int offsetChar = a - 97;
+			//add node to array
+			if(subNodes[offsetChar] == null){
+				subNodes[offsetChar] = new DictionaryNode(str, a, val);
+			}
+			return subNodes[offsetChar];
+		}
 	}
 	
 	
