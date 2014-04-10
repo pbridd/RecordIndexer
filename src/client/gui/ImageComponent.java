@@ -49,7 +49,7 @@ public class ImageComponent extends JComponent implements BatchStateListener, Se
 	private int w_dragStartOriginY;
 	
 	private String imagePath;
-	private Image image;
+	private BufferedImage image;
 	
 	
 	private List<DrawingShape> shapes;
@@ -111,13 +111,13 @@ public class ImageComponent extends JComponent implements BatchStateListener, Se
 	 * @param imageURL the URL of the image on the server
 	 * @return an Image object
 	 */
-	private Image loadImage(String imageURL) {
+	private BufferedImage loadImage(String imageURL) {
 		try {
 			URL url = new URL(imageURL);
 			return ImageIO.read(url);
 		}
 		catch (IOException e) {
-			return NULL_IMAGE;
+			return (BufferedImage)NULL_IMAGE;
 		}
 	}
 	
