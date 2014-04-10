@@ -61,11 +61,8 @@ public class DataTable extends JTable implements BatchStateListener, Serializabl
 		
 	}
 
-
-
 	@Override
 	public void batchActionPerformed(BatchActions ba, int row, int col) {
-		// TODO Auto-generated method stub
 	}
 
 }
@@ -79,7 +76,6 @@ class DataCellRenderer extends JLabel implements TableCellRenderer {
 	public DataCellRenderer() {
 		
 		setOpaque(true);
-		setFont(getFont().deriveFont(16.0f));
 	}
 
 	public Component getTableCellRendererComponent(JTable table,

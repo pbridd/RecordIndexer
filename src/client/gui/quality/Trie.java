@@ -1,4 +1,4 @@
-package client.gui.spelling;
+package client.gui.quality;
 
 /**
  * Your trie class should implement the Trie interface

@@ -5,4 +5,4 @@
  * @author pbridd
  *
  */
-package client.gui.spelling;
+package client.gui.quality;

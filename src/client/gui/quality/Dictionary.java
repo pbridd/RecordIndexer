@@ -1,4 +1,4 @@
-package client.gui.spelling;
+package client.gui.quality;
 
 import java.util.LinkedList;
 

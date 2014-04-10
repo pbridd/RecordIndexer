@@ -1,8 +1,11 @@
-package client.gui.spelling;
+package client.gui.quality;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.LinkedList;
+import java.util.List;
 import java.util.Scanner;
 
 public class Checker implements SpellCorrector {
@@ -23,6 +26,19 @@ public class Checker implements SpellCorrector {
 		}
 		
 		scan.close();
+	}
+	
+	/**
+	 * Returns true if the word exists, false if it's not found
+	 * @param word The word to check
+	 * @return True if the word exists, false if it's not found
+	 */
+	public boolean existsInDict(String word){
+		String lowerCaseWord = word.toLowerCase();
+		if(currDict.find(lowerCaseWord) != null){
+			return true;
+		}
+		return false;
 	}
 
 	@Override
@@ -86,9 +102,56 @@ public class Checker implements SpellCorrector {
 		
 		
 	}
-
-	public void testDriver() throws NoSimilarWordFoundException{
-		System.out.print(currDict.toString());
+	
+	public List<String> suggestSimilarWords(String inputWord)
+			throws NoSimilarWordFoundException {
+		//go through the base cases--if there's an empty string, throw nosimilarwordfound
+		if(inputWord.length() == 0)
+			throw new NoSimilarWordFoundException();
+		
+		String lowerCaseWord = inputWord.toLowerCase();
+		if(currDict.find(lowerCaseWord) != null){
+			return null;
+		}
+		
+		int greatestVal = 0;
+		
+		//go through the list the first time for edit distance 1
+		LinkedList<DictionaryNode> sugs = new LinkedList<DictionaryNode>();
+		LinkedList<String> ufList1 = new LinkedList<String>();
+		greatestVal = currDict.getInsSugs(lowerCaseWord, sugs, ufList1, greatestVal);
+		greatestVal = currDict.getDelSugs(lowerCaseWord, sugs, ufList1, greatestVal);
+		greatestVal = currDict.getAltSugs(lowerCaseWord, sugs, ufList1, greatestVal);
+		greatestVal = currDict.getTransSugs(lowerCaseWord,  sugs, ufList1, greatestVal);
+		//if something has been found, return it!
+		
+			
+		//go through again for the second edit distance
+		for(String str : ufList1){
+			LinkedList<String> ufList2 = new LinkedList<String>();
+			greatestVal = currDict.getInsSugs(str, sugs, ufList2, greatestVal);
+			greatestVal = currDict.getDelSugs(str, sugs, ufList2, greatestVal);
+			greatestVal = currDict.getAltSugs(str, sugs, ufList2, greatestVal);
+			greatestVal = currDict.getTransSugs(str,  sugs, ufList2, greatestVal);
+		}
+		//if we still haven't found anything, cry then throw a NoSimilarWordFoundException
+		if(sugs.size() == 0){
+			throw new NoSimilarWordFoundException();
+		}
+		//return the node with the highest frequency that we've been able to find
+		
+		List<String> retList = new ArrayList<String>();
+		
+		for(DictionaryNode dn : sugs){
+			retList.add(dn.getNodeStr());
+		}
+		
+		Collections.sort(retList);
+		
+		return retList;
+		
+		
+		
 	}
 
 	@Override

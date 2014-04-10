@@ -1,8 +1,8 @@
-package client.gui.spelling;
+package client.gui.quality;
 
 import java.util.Arrays;
 
-import client.gui.spelling.Trie.Node;
+import client.gui.quality.Trie.Node;
 
 public class DictionaryNode implements Node {
 	private String nodeStr;
