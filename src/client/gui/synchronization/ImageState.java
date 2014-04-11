@@ -44,6 +44,14 @@ public class ImageState implements Serializable{
 		this.fireInvertToggled();
 	}
 	
+	/**
+	 * Set imageIsInverted to the opposite and notifies listeners
+	 */
+	public void toggleImageIsInverted(){
+		this.imageIsInverted = ! this.imageIsInverted;
+		this.fireInvertToggled();
+	}
+	
 	
 	/**
 	 * 
@@ -53,12 +61,21 @@ public class ImageState implements Serializable{
 		return this.imageIsInverted;
 	}
 	
+	
 	/**
 	 * Set whether the image is highlighted or not
 	 * @param imageIsHighlighted
 	 */
 	public void setImageIsHighlighted(boolean imageIsHighlighted){
 		this.imageIsHighlighted = imageIsHighlighted;
+		this.fireHighlightsToggled();
+	}
+	
+	/**
+	 * Sets imageIsHighlighted to the opposite and notifies listeners
+	 */
+	public void toggleImageIsHighlighted(){
+		this.imageIsHighlighted = ! this.imageIsHighlighted;
 		this.fireHighlightsToggled();
 	}
 	

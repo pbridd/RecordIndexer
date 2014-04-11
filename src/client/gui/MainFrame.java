@@ -97,6 +97,7 @@ public class MainFrame extends JFrame implements ActionListener, BatchStateListe
 		bchS.setUser(user);
 		
 		WindowState ws = getWindowStateFromSerialized(user);
+		imgS = getImageStateFromSerialized(user);
 		
 		this.wManager = wManager;
 		this.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
@@ -171,7 +172,7 @@ public class MainFrame extends JFrame implements ActionListener, BatchStateListe
 		
 		this.add(buttonsPanel, BorderLayout.NORTH);
 		//create the image panel and its image
-		ImageComponent imageComp = new ImageComponent(bchS);		
+		ImageComponent imageComp = new ImageComponent(bchS, imgS);		
 		infoPanel = new InfoPanel(bchS);
 		entryPanel = new EntryPanel(bchS);
 		
@@ -252,6 +253,8 @@ public class MainFrame extends JFrame implements ActionListener, BatchStateListe
 				try{
 					Files.deleteIfExists(Paths.get("SavedData/" + bchS.getUser().getUsername() + 
 							bchS.getUser().getUserID() +"_BatchState"  + ".ser"));
+					Files.deleteIfExists(Paths.get("SavedData/" + bchS.getUser().getUsername() +
+							bchS.getUser().getUserID() + "_ImageState" + ".ser"));
 				}
 				catch(IOException ex){
 					System.out.println("Could not delete the old path file!");
@@ -264,15 +267,16 @@ public class MainFrame extends JFrame implements ActionListener, BatchStateListe
 				}
 				
 			}
-			
-			
-			
-			
 		}
 		else if(e.getSource() == saveButton){
 			saveState();
 		}
-		
+		else if(e.getSource() == invertImageButton){
+			imgS.toggleImageIsInverted();
+		}
+		else if(e.getSource() == toggleHighlightsButton){
+			imgS.toggleImageIsHighlighted();
+		}
 	}
 
 	
@@ -327,7 +331,7 @@ public class MainFrame extends JFrame implements ActionListener, BatchStateListe
 			//set default size
 			GraphicsDevice gd = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice();
 			int scWidth = gd.getDisplayMode().getWidth();
-			int scHeight = gd.getDisplayMode().getHeight();
+			int scHeight = gd.getDisplayMode ().getHeight();
 			this.setSize(scWidth, scHeight);
 			this.setLocation(scWidth/2 - this.getWidth(), scHeight/2 - this.getHeight());
 		}
@@ -338,6 +342,18 @@ public class MainFrame extends JFrame implements ActionListener, BatchStateListe
 		}
 		
 		return ws;
+	}
+	
+	private ImageState getImageStateFromSerialized(User user){
+		Object isO = (ImageState) getSerializedObject(user.getUsername() + user.getUserID() + "_ImageState");
+		ImageState imgState = null;
+		if(isO == null){
+			imgState = new ImageState();
+		}
+		else{
+			imgState =(ImageState) isO;
+		}
+		return imgState;
 	}
 	
 	/**

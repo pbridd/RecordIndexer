@@ -25,6 +25,7 @@ import javax.swing.JComponent;
 
 import client.gui.synchronization.BatchState;
 import client.gui.synchronization.BatchStateListener;
+import client.gui.synchronization.ImageState;
 
 
 public class ImageComponent extends JComponent implements BatchStateListener, Serializable{
@@ -58,7 +59,7 @@ public class ImageComponent extends JComponent implements BatchStateListener, Se
 	
 	private BatchState bchS;
 
-	public ImageComponent(BatchState bchS){
+	public ImageComponent(BatchState bchS, ImageState imgS){
 		this.bchS = bchS;
 		bchS.addListener(this);
 		shapes = new ArrayList<DrawingShape>();
