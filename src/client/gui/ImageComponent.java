@@ -27,6 +27,7 @@ import java.util.List;
 import javax.imageio.ImageIO;
 import javax.swing.JComponent;
 
+import shared.model.Field;
 import client.gui.synchronization.BatchState;
 import client.gui.synchronization.BatchStateListener;
 import client.gui.synchronization.ImageState;
@@ -59,6 +60,7 @@ public class ImageComponent extends JComponent implements BatchStateListener, Se
 	private BufferedImage invertedImage;
 	private BufferedImage originalImage;
 	
+	private DrawingImage dImage;
 	
 	private List<DrawingShape> shapes;
 	
@@ -81,8 +83,8 @@ public class ImageComponent extends JComponent implements BatchStateListener, Se
 		
 		//w_originX = (int) this.getWidth() / 2;
 		//w_originY = (int) this.getHeight() / 2;
-		imgS.setImagePosX((int) this.getWidth() / 2);
-		imgS.setImagePosY((int) this.getHeight() / 2);
+		imgS.setImagePosX((int) this.getWidth());
+		imgS.setImagePosY((int) this.getHeight());
 		//scale = 1.0;
 		imgS.setZoomLevel(1.0);
 		initDrag();
@@ -201,7 +203,8 @@ public class ImageComponent extends JComponent implements BatchStateListener, Se
 	
 	public void remakeShapes(){
 		shapes.clear();
-		shapes.add(new DrawingImage(image, new Rectangle2D.Double(350, 50, image.getWidth(null), image.getHeight(null))));
+		dImage = new DrawingImage(image, new Rectangle2D.Double(0, 0, image.getWidth(null), image.getHeight(null)));
+		shapes.add(dImage);
 		this.repaint();
 	}
 	
@@ -247,7 +250,27 @@ public class ImageComponent extends JComponent implements BatchStateListener, Se
 			if (hitShape) {
 				dragging = true;		
 				w_dragStartX = w_X;
-				w_dragStartY = w_Y;		
+				w_dragStartY = w_Y;
+				List<Field> fieldList = bchS.getFields();
+				int rowHeight = bchS.getProject().getRecordHeight();
+				int firstY = bchS.getProject().getFirstYCoord();
+				
+				//see if we hit a cell
+				for(int i = 0; i < bchS.getProject().getRecordsPerImage(); i++){	
+					//check to see if we hit a valid Y coordinate, and if we did, find which cell we're in
+					int yMin = (i * rowHeight) + firstY;
+					int yMax = ((i+1) * rowHeight) + firstY - 1;
+					if(w_Y >= yMin && w_Y <= yMax){
+						for(int j = 0; j < fieldList.size(); j++){
+							Field workField = fieldList.get(j);
+							int xCoord = workField.getXCoord();
+							//if we hit both a valid y and x, set the batch state's selected cell!
+							if(w_X >= xCoord && w_X < (workField.getWidth() + xCoord)){
+								bchS.setSelectedCell(i, j);
+							}
+						}
+					}
+				}
 				//w_dragStartOriginX = w_originX;
 				//w_dragStartOriginY = w_originY;
 				w_dragStartOriginX = imgS.getImagePosX();
@@ -300,8 +323,8 @@ public class ImageComponent extends JComponent implements BatchStateListener, Se
 		@Override
 		public void mouseWheelMoved(MouseWheelEvent e) {
 			double zoom = imgS.getZoomLevel();
-			double wheelRot = e.getWheelRotation() *.1;
-			if(Math.abs(imgS.getZoomLevel() + wheelRot) > 10){
+			double wheelRot = e.getWheelRotation() *-.1;
+			if(Math.abs(imgS.getZoomLevel() + wheelRot) > 5.0){
 				return;
 			}
 			imgS.setZoomLevel(zoom + wheelRot);
@@ -377,9 +400,9 @@ public class ImageComponent extends JComponent implements BatchStateListener, Se
 		@Override
 		public void draw(Graphics2D g2){
 			g2.drawImage(image, (int)rect.getMinX(), (int)rect.getMinY(), (int)rect.getMaxX(), (int)rect.getMaxY(),
-					0, 0, image.getWidth(null), image.getWidth(null), null);
+					0, 0, image.getWidth(null), image.getHeight(null), null);
+			
 		}
-		
 		@Override
 		public Rectangle2D getBounds(Graphics2D g2){
 			return rect.getBounds2D();
