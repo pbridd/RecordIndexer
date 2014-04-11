@@ -61,6 +61,7 @@ public class ImageComponent extends JComponent implements BatchStateListener, Se
 	private BufferedImage originalImage;
 	
 	private DrawingImage dImage;
+	private DrawingRect rect;
 	
 	private List<DrawingShape> shapes;
 	
@@ -205,6 +206,9 @@ public class ImageComponent extends JComponent implements BatchStateListener, Se
 		shapes.clear();
 		dImage = new DrawingImage(image, new Rectangle2D.Double(0, 0, image.getWidth(null), image.getHeight(null)));
 		shapes.add(dImage);
+		if(imgS.getImageIsHighlighted() && rect != null){
+			shapes.add(rect);
+		}
 		this.repaint();
 	}
 	
@@ -355,16 +359,7 @@ public class ImageComponent extends JComponent implements BatchStateListener, Se
 		}
 	};
 
-	@Override
-	public void batchActionPerformed(BatchActions ba) {
-		//Loads the image from the server if the image has changed
-		if(ba == BatchActions.IMAGECHANGED){
-			this.imagePath = bchS.getImagePath();
-			this.originalImage = loadImage(imagePath);
-			processImages();
-			remakeShapes();
-		}
-	}
+	
 	/////////////////
 	//DRAWING SHAPE//
 	/////////////////
@@ -409,6 +404,67 @@ public class ImageComponent extends JComponent implements BatchStateListener, Se
 		}
 		
 	}
+	
+	class DrawingRect implements DrawingShape{
+		private Rectangle2D rect;
+		private Color visibleColor = new Color(105, 185, 251, 125);
+
+		public DrawingRect(Rectangle2D rect){
+			this.rect = rect;
+
+		}
+		
+		
+		@Override
+		public boolean contains(Graphics2D g2, double x, double y) {
+			return rect.contains(x, y);
+		}
+
+		@Override
+		public void draw(Graphics2D g2) {
+			g2.setColor(visibleColor);
+			g2.fill(rect);
+			
+		}
+		
+
+		@Override
+		public Rectangle2D getBounds(Graphics2D g2) {
+			return rect.getBounds2D();
+		}
+		
+	}
+	
+	@Override
+	public void batchActionPerformed(BatchActions ba) {
+		//Loads the image from the server if the image has changed
+		if(ba == BatchActions.IMAGECHANGED){
+			this.imagePath = bchS.getImagePath();
+			this.originalImage = loadImage(imagePath);
+			processImages();
+			remakeShapes();
+		}
+		
+		else if(ba == BatchActions.SELECTEDCOLCHANGED){
+			if(imgS.getImageIsHighlighted()){
+				processRect();
+			}
+		}
+		
+		else if(ba == BatchActions.SELECTEDROWCHANGED){
+			processRect();
+		}
+	}
+	
+	private void processRect(){
+		int minY = (bchS.getProject().getRecordHeight() * bchS.getSelectedCellRow()) +
+				bchS.getProject().getFirstYCoord();
+		int maxY = bchS.getProject().getRecordHeight() + minY - 1;
+		int minX = bchS.getField(bchS.getSelectedCellCol()).getXCoord();
+		int maxX = bchS.getField(bchS.getSelectedCellCol()).getWidth() + minX - 1;
+		rect = new DrawingRect(new Rectangle2D.Double(minX, minY, maxX - minX, maxY - minY));
+		remakeShapes();
+	}
 
 	@Override
 	public void batchActionPerformed(BatchActions ba, int row, int col) {
@@ -436,15 +492,11 @@ public class ImageComponent extends JComponent implements BatchStateListener, Se
 
 	@Override
 	public void highlightsVisibleToggled(boolean highlightSetting) {
-		// TODO Auto-generated method stub
-		
+		processRect();
 	}
 
 	@Override
 	public void imageCoordsChanged(int x, int y) {
 		// TODO Auto-generated method stub
-		
 	}
-
-	
 }
