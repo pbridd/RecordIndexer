@@ -36,10 +36,11 @@ public class InfoPanel extends JTabbedPane implements BatchStateListener, Serial
 		htmlPane.setBackground(Color.white);
 		htmlPane.setEditable(false);
 		JScrollPane htmlScrollPane = new JScrollPane(htmlPane);
-		htmlScrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
+		htmlScrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
+		htmlScrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
 		
 		htmlPane.setContentType("text/html");
-		this.add("Field Help", htmlPane);
+		this.add("Field Help", htmlScrollPane);
 		
 		
 	}
