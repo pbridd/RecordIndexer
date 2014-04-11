@@ -16,6 +16,7 @@ import javax.swing.border.Border;
 import javax.swing.table.AbstractTableModel;
 import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableColumn;
+import javax.swing.table.TableColumnModel;
 
 import client.gui.quality.Checker;
 import client.gui.synchronization.BatchState;
@@ -42,6 +43,9 @@ public class DataTable extends JTable implements BatchStateListener, Serializabl
 		bchS.addListener(this);
 		this.setCellSelectionEnabled(true);
 		this.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+		this.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
+		
+		
 	}
 	
 	public boolean getIsKnownWord(String str, int col){
