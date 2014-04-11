@@ -170,6 +170,7 @@ public class MainFrame extends JFrame implements ActionListener, BatchStateListe
 		zoomInButton.addActionListener(this);
 		zoomOutButton.addActionListener(this);
 		invertImageButton.addActionListener(this);
+		toggleHighlightsButton.addActionListener(this);
 
 		
 		this.add(buttonsPanel, BorderLayout.NORTH);
@@ -291,6 +292,9 @@ public class MainFrame extends JFrame implements ActionListener, BatchStateListe
 		}
 		else if(e.getSource() == invertImageButton){
 			imgS.toggleImageIsInverted();
+		}
+		else if(e.getSource() == toggleHighlightsButton){
+			imgS.toggleImageIsHighlighted();
 		}
 	}
 
