@@ -74,7 +74,7 @@ public class DataTable extends JTable implements BatchStateListener, Serializabl
 			//set size and renderer
 			for(int i = 0; i < currModel.getColumnCount(); ++i){
 				TableColumn column = columnModel.getColumn(i);
-				column.setPreferredWidth(150);
+				column.setPreferredWidth(100);
 				column.setCellRenderer(new DataCellRenderer());
 				//set known data
 				if(i > 0){
