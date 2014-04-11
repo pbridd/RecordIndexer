@@ -9,12 +9,15 @@ import java.awt.event.ComponentEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseWheelEvent;
-import java.awt.event.MouseWheelListener;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.NoninvertibleTransformException;
 import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
+import java.awt.image.BufferedImageOp;
+import java.awt.image.LookupOp;
+import java.awt.image.RescaleOp;
+import java.awt.image.ShortLookupTable;
 import java.io.IOException;
 import java.io.Serializable;
 import java.net.URL;
@@ -39,7 +42,7 @@ public class ImageComponent extends JComponent implements BatchStateListener, Se
 	 */
 	private static final long serialVersionUID = 4131305282743377675L;
 
-	private static Image NULL_IMAGE = new BufferedImage(10, 10, BufferedImage.TYPE_INT_ARGB);
+	private static BufferedImage NULL_IMAGE = new BufferedImage(10, 10, BufferedImage.TYPE_INT_ARGB);
 	
 	//private int w_originX;
 	//private int w_originY;
@@ -76,7 +79,6 @@ public class ImageComponent extends JComponent implements BatchStateListener, Se
 		else
 			imagePath = tempImgPath;
 		
-		
 		//w_originX = (int) this.getWidth() / 2;
 		//w_originY = (int) this.getHeight() / 2;
 		imgS.setImagePosX((int) this.getWidth() / 2);
@@ -92,8 +94,9 @@ public class ImageComponent extends JComponent implements BatchStateListener, Se
 		this.addComponentListener(componentAdapter);
 		this.addMouseWheelListener(mouseAdapter);
 		
-		image = loadImage(imagePath);
-		shapes.add(new DrawingImage(image, new Rectangle2D.Double(350, 50, image.getWidth(null), image.getHeight(null))));
+		processImages();
+		
+		remakeShapes();
 		
 		
 	}
@@ -174,6 +177,37 @@ public class ImageComponent extends JComponent implements BatchStateListener, Se
 		for(DrawingShape shape : shapes){
 			shape.draw(g2);
 		}
+	}
+	
+	private void processImages(){
+		originalImage = loadImage(imagePath);
+		processInvertedImage();
+		if(imgS.getImageIsInverted()){
+			image = invertedImage;
+		}
+		else{
+			image = originalImage;
+		}
+	}
+	
+	private void processInvertedImage(){
+		if(originalImage != NULL_IMAGE){
+			invertedImage = invertImage(originalImage);
+		}
+		else{
+			invertedImage = NULL_IMAGE;
+		}
+	}
+	
+	public void remakeShapes(){
+		shapes.clear();
+		shapes.add(new DrawingImage(image, new Rectangle2D.Double(350, 50, image.getWidth(null), image.getHeight(null))));
+		this.repaint();
+	}
+	
+	private static BufferedImage invertImage(final BufferedImage src) {
+		RescaleOp op = new RescaleOp(-1.0f, 255f, null);
+		return op.filter(src, null);
 	}
 	
 	private MouseAdapter mouseAdapter = new MouseAdapter()  {
@@ -303,13 +337,10 @@ public class ImageComponent extends JComponent implements BatchStateListener, Se
 		//Loads the image from the server if the image has changed
 		if(ba == BatchActions.IMAGECHANGED){
 			this.imagePath = bchS.getImagePath();
-			this.image = loadImage(imagePath);
-			
-			shapes.clear();
-			shapes.add(new DrawingImage(image, new Rectangle2D.Double(350, 50, image.getWidth(null), image.getHeight(null))));
-			this.repaint();
+			this.originalImage = loadImage(imagePath);
+			processImages();
+			remakeShapes();
 		}
-		
 	}
 	/////////////////
 	//DRAWING SHAPE//
@@ -364,7 +395,13 @@ public class ImageComponent extends JComponent implements BatchStateListener, Se
 
 	@Override
 	public void invertedToggled(boolean invertSetting) {
-		// TODO Auto-generated method stub
+		if(invertSetting == true){
+			image = invertedImage;
+		}
+		else{
+			image = originalImage;
+		}
+		remakeShapes();
 		
 	}
 

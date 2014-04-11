@@ -27,6 +27,10 @@ public class ImageState implements Serializable{
 		this.listeners = new ArrayList<ImageStateListener>();
 	}
 	
+	public void initializeListenerList(){
+		this.listeners = new ArrayList<ImageStateListener>();
+	}
+	
 	/**
 	 * Add a listener to the list of listeners on this object
 	 * @param listener the ImageStateListener to add
@@ -48,7 +52,7 @@ public class ImageState implements Serializable{
 	 * Set imageIsInverted to the opposite and notifies listeners
 	 */
 	public void toggleImageIsInverted(){
-		this.imageIsInverted = ! this.imageIsInverted;
+		this.imageIsInverted = !this.imageIsInverted;
 		this.fireInvertToggled();
 	}
 	
@@ -165,5 +169,7 @@ public class ImageState implements Serializable{
 			il.imageZoomChanged(this.zoom);
 		}
 	}
+
+
 	
 }

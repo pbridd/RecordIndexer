@@ -169,6 +169,7 @@ public class MainFrame extends JFrame implements ActionListener, BatchStateListe
 		submitButton.addActionListener(this);
 		zoomInButton.addActionListener(this);
 		zoomOutButton.addActionListener(this);
+		invertImageButton.addActionListener(this);
 
 		
 		this.add(buttonsPanel, BorderLayout.NORTH);
@@ -288,6 +289,9 @@ public class MainFrame extends JFrame implements ActionListener, BatchStateListe
 				imgS.setZoomLevel(-10.0);
 			imgS.setZoomLevel(imgS.getZoomLevel() -.20);
 		}
+		else if(e.getSource() == invertImageButton){
+			imgS.toggleImageIsInverted();
+		}
 	}
 
 	
@@ -363,6 +367,7 @@ public class MainFrame extends JFrame implements ActionListener, BatchStateListe
 		}
 		else{
 			imgState =(ImageState) isO;
+			imgState.initializeListenerList();
 		}
 		return imgState;
 	}
