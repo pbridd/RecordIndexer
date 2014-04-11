@@ -45,8 +45,8 @@ public class BatchState implements Serializable{
 		batch = null;
 		fields = new ArrayList<Field>();
 		listeners = new ArrayList<BatchStateListener>();
-		this.selectedCellRow = -1;
-		this.selectedCellCol = -1;
+		this.selectedCellRow = 0;
+		this.selectedCellCol = 1;
 	}
 	
 	
@@ -98,8 +98,8 @@ public class BatchState implements Serializable{
 		batch = null;
 		fields = new ArrayList<Field>();
 		values = null;
-		selectedCellRow = -1;
-		selectedCellCol = -1;
+		selectedCellRow = 0;
+		selectedCellCol = 1;
 		imagePath = null;
 		fireBatchCleared();
 	}

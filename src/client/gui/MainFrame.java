@@ -167,7 +167,8 @@ public class MainFrame extends JFrame implements ActionListener, BatchStateListe
 		disableButtons();
 		saveButton.addActionListener(this);
 		submitButton.addActionListener(this);
-		
+		zoomInButton.addActionListener(this);
+		zoomOutButton.addActionListener(this);
 
 		
 		this.add(buttonsPanel, BorderLayout.NORTH);
@@ -276,6 +277,16 @@ public class MainFrame extends JFrame implements ActionListener, BatchStateListe
 		}
 		else if(e.getSource() == toggleHighlightsButton){
 			imgS.toggleImageIsHighlighted();
+		}
+		else if(e.getSource() == zoomInButton){
+			if(imgS.getZoomLevel() + .20 > 10.0)
+				imgS.setZoomLevel(10.0);
+			imgS.setZoomLevel(imgS.getZoomLevel() + .20);
+		}
+		else if(e.getSource() == zoomOutButton){
+			if(imgS.getZoomLevel() - .20 < -10.0)
+				imgS.setZoomLevel(-10.0);
+			imgS.setZoomLevel(imgS.getZoomLevel() -.20);
 		}
 	}
 

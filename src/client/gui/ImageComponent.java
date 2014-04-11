@@ -9,6 +9,7 @@ import java.awt.event.ComponentEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseWheelEvent;
+import java.awt.event.MouseWheelListener;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.NoninvertibleTransformException;
 import java.awt.geom.Point2D;
@@ -26,9 +27,10 @@ import javax.swing.JComponent;
 import client.gui.synchronization.BatchState;
 import client.gui.synchronization.BatchStateListener;
 import client.gui.synchronization.ImageState;
+import client.gui.synchronization.ImageStateListener;
 
 
-public class ImageComponent extends JComponent implements BatchStateListener, Serializable{
+public class ImageComponent extends JComponent implements BatchStateListener, Serializable, ImageStateListener{
 
 	
 	
@@ -39,9 +41,9 @@ public class ImageComponent extends JComponent implements BatchStateListener, Se
 
 	private static Image NULL_IMAGE = new BufferedImage(10, 10, BufferedImage.TYPE_INT_ARGB);
 	
-	private int w_originX;
-	private int w_originY;
-	private double scale;
+	//private int w_originX;
+	//private int w_originY;
+	//private double scale;
 	
 	private boolean dragging;
 	private int w_dragStartX;
@@ -58,10 +60,14 @@ public class ImageComponent extends JComponent implements BatchStateListener, Se
 	private List<DrawingShape> shapes;
 	
 	private BatchState bchS;
+	private ImageState imgS;
+	
 
 	public ImageComponent(BatchState bchS, ImageState imgS){
 		this.bchS = bchS;
+		this.imgS = imgS;
 		bchS.addListener(this);
+		imgS.addListener(this);
 		shapes = new ArrayList<DrawingShape>();
 		String tempImgPath = bchS.getImagePath();
 		if(tempImgPath == null){
@@ -71,10 +77,12 @@ public class ImageComponent extends JComponent implements BatchStateListener, Se
 			imagePath = tempImgPath;
 		
 		
-		w_originX = (int) this.getWidth() / 2;
-		w_originY = (int) this.getHeight() / 2;
-		scale = 1.0;
-		
+		//w_originX = (int) this.getWidth() / 2;
+		//w_originY = (int) this.getHeight() / 2;
+		imgS.setImagePosX((int) this.getWidth() / 2);
+		imgS.setImagePosY((int) this.getHeight() / 2);
+		//scale = 1.0;
+		imgS.setZoomLevel(1.0);
 		initDrag();
 		
 		this.setBackground(new Color(96, 96, 96));
@@ -82,6 +90,7 @@ public class ImageComponent extends JComponent implements BatchStateListener, Se
 		this.addMouseListener(mouseAdapter);
 		this.addMouseMotionListener(mouseAdapter);
 		this.addComponentListener(componentAdapter);
+		this.addMouseWheelListener(mouseAdapter);
 		
 		image = loadImage(imagePath);
 		shapes.add(new DrawingImage(image, new Rectangle2D.Double(350, 50, image.getWidth(null), image.getHeight(null))));
@@ -95,7 +104,8 @@ public class ImageComponent extends JComponent implements BatchStateListener, Se
 	 * @param newScale the new scale to set the image to
 	 */
 	public void setScale(double newScale){
-		scale = newScale;
+		//scale = newScale;
+		imgS.setZoomLevel(newScale);
 		this.repaint();
 	}
 	
@@ -105,8 +115,10 @@ public class ImageComponent extends JComponent implements BatchStateListener, Se
 	 * @param w_newOriginY	The new origin Y to set
 	 */
 	public void setOrigin(int w_newOriginX, int w_newOriginY){
-		w_originX = w_newOriginX;
-		w_originY = w_newOriginY;
+		imgS.setImagePosX(w_newOriginX);
+		imgS.setImagePosY(w_newOriginY);
+		//w_originX = w_newOriginX;
+		//w_originY = w_newOriginY;
 	}
 	
 	/**
@@ -141,8 +153,9 @@ public class ImageComponent extends JComponent implements BatchStateListener, Se
 		Graphics2D g2 = (Graphics2D)g;
 		drawBackground(g2);
 		
-		g2.scale(scale,  scale);
-		g2.translate(-w_originX, -w_originY);
+		g2.scale(imgS.getZoomLevel(),  imgS.getZoomLevel());
+		//g2.translate(-w_originX, -w_originY);
+		g2.translate(-imgS.getImagePosX(), -imgS.getImagePosY());
 		
 		drawShapes(g2);
 		
@@ -171,8 +184,9 @@ public class ImageComponent extends JComponent implements BatchStateListener, Se
 			int d_Y = e.getY();
 			
 			AffineTransform transform = new AffineTransform();
-			transform.scale(scale, scale);
-			transform.translate(-w_originX, -w_originY);
+			transform.scale(imgS.getZoomLevel(), imgS.getZoomLevel());
+			//transform.translate(-w_originX, -w_originY);
+			transform.translate(-imgS.getImagePosX(), -imgS.getImagePosY());
 			
 			Point2D d_Pt = new Point2D.Double(d_X, d_Y);
 			Point2D w_Pt = new Point2D.Double();
@@ -200,8 +214,10 @@ public class ImageComponent extends JComponent implements BatchStateListener, Se
 				dragging = true;		
 				w_dragStartX = w_X;
 				w_dragStartY = w_Y;		
-				w_dragStartOriginX = w_originX;
-				w_dragStartOriginY = w_originY;
+				//w_dragStartOriginX = w_originX;
+				//w_dragStartOriginY = w_originY;
+				w_dragStartOriginX = imgS.getImagePosX();
+				w_dragStartOriginY = imgS.getImagePosY();
 			}
 		}
 		
@@ -213,7 +229,7 @@ public class ImageComponent extends JComponent implements BatchStateListener, Se
 				int d_Y = e.getY();
 				
 				AffineTransform transform = new AffineTransform();
-				transform.scale(scale, scale);
+				transform.scale(imgS.getZoomLevel(), imgS.getZoomLevel());
 				transform.translate(-w_dragStartOriginX, -w_dragStartOriginY);
 				
 				Point2D d_Pt = new Point2D.Double(d_X, d_Y);
@@ -231,8 +247,10 @@ public class ImageComponent extends JComponent implements BatchStateListener, Se
 				int w_deltaX = w_X - w_dragStartX;
 				int w_deltaY = w_Y - w_dragStartY;
 				
-				w_originX = w_dragStartOriginX - w_deltaX;
-				w_originY = w_dragStartOriginY - w_deltaY;
+				//w_originX = w_dragStartOriginX - w_deltaX;
+				//w_originY = w_dragStartOriginY - w_deltaY;
+				imgS.setImagePosX(w_dragStartOriginX - w_deltaX);
+				imgS.setImagePosY(w_dragStartOriginY - w_deltaY);
 				
 				repaint();
 			}
@@ -247,7 +265,13 @@ public class ImageComponent extends JComponent implements BatchStateListener, Se
 
 		@Override
 		public void mouseWheelMoved(MouseWheelEvent e) {
-			return;
+			double zoom = imgS.getZoomLevel();
+			double wheelRot = e.getWheelRotation() *.1;
+			if(Math.abs(imgS.getZoomLevel() + wheelRot) > 10){
+				return;
+			}
+			imgS.setZoomLevel(zoom + wheelRot);
+			repaint();
 		}	
 	};
 	
@@ -337,4 +361,30 @@ public class ImageComponent extends JComponent implements BatchStateListener, Se
 		// TODO Auto-generated method stub
 		
 	}
+
+	@Override
+	public void invertedToggled(boolean invertSetting) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void imageZoomChanged(double zoom) {
+		repaint();
+		
+	}
+
+	@Override
+	public void highlightsVisibleToggled(boolean highlightSetting) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void imageCoordsChanged(int x, int y) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	
 }

@@ -13,8 +13,8 @@ public class ImageState implements Serializable{
 	private boolean imageIsHighlighted;
 	private int imagePosX;
 	private int imagePosY;
-	private int zoom;
-	private List<ImageStateListener> listeners;
+	private double zoom;
+	private transient List<ImageStateListener> listeners;
 	
 	
 	
@@ -23,7 +23,7 @@ public class ImageState implements Serializable{
 		this.imageIsHighlighted = true;
 		this.imagePosX = 0;
 		this.imagePosY = 0;
-		this.zoom = 100;
+		this.zoom = 1.0;
 		this.listeners = new ArrayList<ImageStateListener>();
 	}
 	
@@ -117,10 +117,10 @@ public class ImageState implements Serializable{
 	
 	/**
 	 * set the zoom level
-	 * @param zoom the new zoom level
+	 * @param d the new zoom level
 	 */
-	public void setZoomLevel(int zoom){
-		this.zoom = zoom;
+	public void setZoomLevel(double d){
+		this.zoom = d;
 		this.fireImageZoomChanged();
 	}
 	
@@ -129,7 +129,7 @@ public class ImageState implements Serializable{
 	 * get the zoom level
 	 * @return the zoom level
 	 */
-	public int getZoomLevel(){
+	public double getZoomLevel(){
 		return this.zoom;
 	}
 	
