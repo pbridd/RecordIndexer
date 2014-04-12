@@ -148,6 +148,7 @@ public class ImageState implements Serializable{
 		this.fireImageCoordsChanged();
 	}
 	
+	
 	/**
 	 * 
 	 * @return if the imagestate is new or not -- if not, it was loaded from serialization
@@ -159,6 +160,7 @@ public class ImageState implements Serializable{
 	/**
 	 * 
 	 * @param nVal whether imagestate is new or not
+	 * 
 	 */
 	public void setIsNewImgS(boolean nVal){
 		this.isNewImgS = nVal;

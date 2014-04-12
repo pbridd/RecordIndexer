@@ -1,5 +1,6 @@
 package client.gui;
 
+
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
@@ -14,10 +15,7 @@ import java.awt.geom.NoninvertibleTransformException;
 import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
-import java.awt.image.BufferedImageOp;
-import java.awt.image.LookupOp;
 import java.awt.image.RescaleOp;
-import java.awt.image.ShortLookupTable;
 import java.io.IOException;
 import java.io.Serializable;
 import java.net.URL;
@@ -84,6 +82,7 @@ public class ImageComponent extends JComponent implements BatchStateListener, Se
 		if(imgS.getIsNewImgS()){
 			imgS.setImagePosX((int) this.getWidth());
 			imgS.setImagePosY((int) this.getHeight());
+			imgS.setIsNewImgS(false);
 		}
 		
 		initDrag();
