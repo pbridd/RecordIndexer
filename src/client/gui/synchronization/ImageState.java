@@ -11,6 +11,7 @@ public class ImageState implements Serializable{
 	private static final long serialVersionUID = 7018414239710439345L;
 	private boolean imageIsInverted;
 	private boolean imageIsHighlighted;
+	private boolean isNewImgS;
 	private int imagePosX;
 	private int imagePosY;
 	private double zoom;
@@ -25,6 +26,7 @@ public class ImageState implements Serializable{
 		this.imagePosY = 0;
 		this.zoom = 1.0;
 		this.listeners = new ArrayList<ImageStateListener>();
+		this.isNewImgS = true;
 	}
 	
 	public void initializeListenerList(){
@@ -146,6 +148,21 @@ public class ImageState implements Serializable{
 		this.fireImageCoordsChanged();
 	}
 	
+	/**
+	 * 
+	 * @return if the imagestate is new or not -- if not, it was loaded from serialization
+	 */
+	public boolean getIsNewImgS(){
+		return isNewImgS;
+	}
+	
+	/**
+	 * 
+	 * @param nVal whether imagestate is new or not
+	 */
+	public void setIsNewImgS(boolean nVal){
+		this.isNewImgS = nVal;
+	}
 	private void fireInvertToggled(){
 		for(ImageStateListener il : listeners){
 			il.invertedToggled(this.imageIsInverted);

@@ -283,12 +283,12 @@ public class MainFrame extends JFrame implements ActionListener, BatchStateListe
 		}
 		else if(e.getSource() == zoomInButton){
 			if(imgS.getZoomLevel() + .20 > 5.0)
-				imgS.setZoomLevel(10.0);
+				imgS.setZoomLevel(5.0);
 			imgS.setZoomLevel(imgS.getZoomLevel() + .20);
 		}
 		else if(e.getSource() == zoomOutButton){
 			if(imgS.getZoomLevel() - .20 < -5.0)
-				imgS.setZoomLevel(-10.0);
+				imgS.setZoomLevel(-5.0);
 			imgS.setZoomLevel(imgS.getZoomLevel() -.20);
 		}
 		else if(e.getSource() == invertImageButton){
@@ -369,13 +369,12 @@ public class MainFrame extends JFrame implements ActionListener, BatchStateListe
 		ImageState imgState = null;
 		if(isO == null){
 			imgState = new ImageState();
-			imgState.setImagePosX((int) this.getWidth());
-			imgState.setImagePosY((int) this.getHeight());
 			imgState.setZoomLevel(1.0);
 		}
 		else{
 			imgState =(ImageState) isO;
 			imgState.initializeListenerList();
+			imgState.setIsNewImgS(false);
 		}
 		return imgState;
 	}

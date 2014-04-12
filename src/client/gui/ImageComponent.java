@@ -79,10 +79,12 @@ public class ImageComponent extends JComponent implements BatchStateListener, Se
 		if(tempImgPath == null){
 			imagePath = "";
 		}
-			else
-				imagePath = tempImgPath;
-		
-		
+		else
+			imagePath = tempImgPath;
+		if(imgS.getIsNewImgS()){
+			imgS.setImagePosX((int) this.getWidth());
+			imgS.setImagePosY((int) this.getHeight());
+		}
 		
 		initDrag();
 		
