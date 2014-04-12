@@ -75,6 +75,7 @@ public class MainFrame extends JFrame implements ActionListener, BatchStateListe
 	private List<MainFrameListener> listeners;
 	
 	
+	
 	public MainFrame(String server_host, int server_port, User user, WindowManager wManager, MainFrameListener listen) {
 		listeners = new ArrayList<MainFrameListener>();
 		listeners.add(listen);
@@ -368,6 +369,9 @@ public class MainFrame extends JFrame implements ActionListener, BatchStateListe
 		ImageState imgState = null;
 		if(isO == null){
 			imgState = new ImageState();
+			imgState.setImagePosX((int) this.getWidth());
+			imgState.setImagePosY((int) this.getHeight());
+			imgState.setZoomLevel(1.0);
 		}
 		else{
 			imgState =(ImageState) isO;
