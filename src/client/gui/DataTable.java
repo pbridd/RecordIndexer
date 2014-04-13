@@ -58,6 +58,15 @@ public class DataTable extends JTable implements BatchStateListener, Serializabl
 		return check.existsInDict(str);
 	}
 	
+	/**
+	 * Get the checker at the specified index
+	 * @param i The index of the checker to retrieve
+	 * @return The checker at the specified index
+	 */
+	public Checker getChecker(int i){
+		return checkers[i];
+	}
+	
 	
 
 
