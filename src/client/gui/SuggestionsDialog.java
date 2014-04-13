@@ -85,7 +85,7 @@ public class SuggestionsDialog extends JDialog implements ActionListener {
 		
 		//try to get suggestions. If none are found, then make sure the user can't
 		//"choose a suggestion."
-		List<String> sugs = null;;
+		List<String> sugs = null;
 		try {
 			sugs = check.suggestSimilarWords(word);
 		} catch (NoSimilarWordFoundException e) {
