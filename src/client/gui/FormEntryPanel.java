@@ -74,7 +74,7 @@ public class FormEntryPanel extends JPanel implements BatchStateListener, Action
 		
 		//make the popup menu
 		sugMenu = new JPopupMenu();
-		seeSugMenuItem = new JMenuItem("See Suggestions...");
+		seeSugMenuItem = new JMenuItem("See Suggestions");
 		sugMenu.add(seeSugMenuItem);
 		seeSugMenuItem.addActionListener(this);
 		
