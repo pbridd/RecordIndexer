@@ -250,7 +250,7 @@ public class ImageComponent extends JComponent implements BatchStateListener, Se
 				dragging = true;		
 				w_dragStartX = w_X;
 				w_dragStartY = w_Y;
-				List<Field> fieldList = bchS.getFields();
+				/*List<Field> fieldList = bchS.getFields();
 				int rowHeight = bchS.getProject().getRecordHeight();
 				int firstY = bchS.getProject().getFirstYCoord();
 				
@@ -269,9 +269,8 @@ public class ImageComponent extends JComponent implements BatchStateListener, Se
 							}
 						}
 					}
-				}
-				//w_dragStartOriginX = w_originX;
-				//w_dragStartOriginY = w_originY;
+				}*/
+
 				w_dragStartOriginX = imgS.getImagePosX();
 				w_dragStartOriginY = imgS.getImagePosY();
 			}
@@ -316,6 +315,61 @@ public class ImageComponent extends JComponent implements BatchStateListener, Se
 
 		@Override
 		public void mouseReleased(MouseEvent e) {
+			
+			if(w_dragStartOriginX ==imgS.getImagePosX() && w_dragStartOriginY == imgS.getImagePosY()){
+				int d_X = e.getX();
+				int d_Y = e.getY();
+			
+				AffineTransform transform = new AffineTransform();
+				transform.scale(imgS.getZoomLevel(), imgS.getZoomLevel());
+				//transform.translate(-w_originX, -w_originY);
+				transform.translate(-imgS.getImagePosX(), -imgS.getImagePosY());
+				
+				Point2D d_Pt = new Point2D.Double(d_X, d_Y);
+				Point2D w_Pt = new Point2D.Double();
+				try
+				{
+					transform.inverseTransform(d_Pt, w_Pt);
+				}
+				catch (NoninvertibleTransformException ex) {
+					return;
+				}
+				int w_X = (int)w_Pt.getX();
+				int w_Y = (int)w_Pt.getY();
+				
+				boolean hitShape = false;
+				
+				Graphics2D g2 = (Graphics2D)getGraphics();
+				for (DrawingShape shape : shapes) {
+					if (shape.contains(g2, w_X, w_Y)) {
+						hitShape = true;
+						break;
+					}
+				}
+				
+				if (hitShape) {
+					List<Field> fieldList = bchS.getFields();
+					int rowHeight = bchS.getProject().getRecordHeight();
+					int firstY = bchS.getProject().getFirstYCoord();
+					
+					//see if we hit a cell
+					for(int i = 0; i < bchS.getProject().getRecordsPerImage(); i++){	
+						//check to see if we hit a valid Y coordinate, and if we did, find which cell we're in
+						int yMin = (i * rowHeight) + firstY;
+						int yMax = ((i+1) * rowHeight) + firstY - 1;
+						if(w_Y >= yMin && w_Y <= yMax){
+							for(int j = 0; j < fieldList.size(); j++){
+								Field workField = fieldList.get(j);
+								int xCoord = workField.getXCoord();
+								//if we hit both a valid y and x, set the batch state's selected cell!
+								if(w_X >= xCoord && w_X < (workField.getWidth() + xCoord)){
+									bchS.setSelectedCell(i, j);
+								}
+							}
+						}
+					}
+				}
+			}
 			initDrag();
 		}
 

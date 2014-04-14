@@ -126,13 +126,13 @@ public class FormEntryPanel extends JPanel implements BatchStateListener, Action
 			int selectedColumn = bchS.getSelectedCellCol();
 			int selectedRow = bchS.getSelectedCellRow();
 			recordList.setSelectedIndex(selectedRow);
-			//inputFields.get(selectedColumn).requestFocus();
+			inputFields.get(selectedColumn).requestFocus();
 		}
 		else if(ba == BatchActions.SELECTEDCOLCHANGED){
 			int selectedColumn = bchS.getSelectedCellCol();
 			int selectedRow = bchS.getSelectedCellRow();
 			recordList.setSelectedIndex(selectedRow);
-			//inputFields.get(selectedColumn).requestFocus();
+			inputFields.get(selectedColumn).requestFocus();
 		}
 		
 	}
