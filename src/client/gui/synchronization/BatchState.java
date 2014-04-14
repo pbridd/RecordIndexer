@@ -340,8 +340,13 @@ public class BatchState implements Serializable{
 		 * @param yIdx
 		 */
 		public void setSelectedCell(int row, int col){
-			setSelectedCellRow(row);
-			setSelectedCellCol(col);
+			boolean fSelRowChanged = this.selectedCellRow != row;
+			boolean fSelColChanged = this.selectedCellCol != col;
+			this.selectedCellRow = row;
+			this.selectedCellCol = col;
+			if(fSelRowChanged) this.fireSelectedCellRowChanged();
+			if(fSelColChanged) this.fireSelectedCellColChanged();
+
 		}
 		
 		/**
@@ -358,8 +363,10 @@ public class BatchState implements Serializable{
 		}
 		
 		public void setValueAt(String val, int row, int col){
-			values[row][col].setDataValue(val);
-			this.fireDataValueChanged(row, col);
+			if(!values[row][col].getDataValue().equals(val)){
+				values[row][col].setDataValue(val);
+				this.fireDataValueChanged(row, col);
+			}
 		}
 		
 		

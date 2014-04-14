@@ -122,8 +122,17 @@ public class FormEntryPanel extends JPanel implements BatchStateListener, Action
 		if(ba == BatchActions.BATCHDOWNLOADED){
 			createComponents();
 		}
-		if(ba == BatchActions.SELECTEDROWCHANGED){
-			recordList.setSelectedIndex(bchS.getSelectedCellRow());
+		else if(ba == BatchActions.SELECTEDROWCHANGED){
+			int selectedColumn = bchS.getSelectedCellCol();
+			int selectedRow = bchS.getSelectedCellRow();
+			recordList.setSelectedIndex(selectedRow);
+			//inputFields.get(selectedColumn).requestFocus();
+		}
+		else if(ba == BatchActions.SELECTEDCOLCHANGED){
+			int selectedColumn = bchS.getSelectedCellCol();
+			int selectedRow = bchS.getSelectedCellRow();
+			recordList.setSelectedIndex(selectedRow);
+			//inputFields.get(selectedColumn).requestFocus();
 		}
 		
 	}
@@ -141,6 +150,12 @@ public class FormEntryPanel extends JPanel implements BatchStateListener, Action
 		}
 		if(ba == BatchActions.SELECTEDROWCHANGED){
 			recordList.setSelectedIndex(bchS.getSelectedCellRow());
+		}
+		else if(ba == BatchActions.SELECTEDCOLCHANGED){
+			int selectedColumn = bchS.getSelectedCellCol();
+			int selectedRow = bchS.getSelectedCellRow();
+			recordList.setSelectedIndex(selectedRow);
+			inputFields.get(selectedColumn).requestFocus();
 		}
 		
 	}
@@ -178,7 +193,8 @@ public class FormEntryPanel extends JPanel implements BatchStateListener, Action
 		for(int i = 0; i < inputFields.size(); i++){
 			JTextField j = inputFields.get(i);
 			if(arg0.getSource() == j){
-				bchS.setSelectedCell(recordList.getSelectedIndex(), i);
+				int selIdx = recordList.getSelectedIndex();
+				bchS.setSelectedCell(selIdx, i);
 			}
 		}
 		

@@ -254,6 +254,7 @@ public class MainFrame extends JFrame implements ActionListener, BatchStateListe
 				downloadBatchMenuOption.setEnabled(true);
 				bchS.clearBatch();
 				try{
+					
 					Files.deleteIfExists(Paths.get("SavedData/" + bchS.getUser().getUsername() + 
 							bchS.getUser().getUserID() +"_BatchState"  + ".ser"));
 					Files.deleteIfExists(Paths.get("SavedData/" + bchS.getUser().getUsername() +

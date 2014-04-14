@@ -160,8 +160,11 @@ public class DataTable extends JTable implements BatchStateListener, ActionListe
 	@Override
 	public void batchActionPerformed(BatchActions ba, int row, int col) {
 		if(ba == BatchActions.DATAVALUECHANGED){
+			int selColB4 = bchS.getSelectedCellCol();
+			int selRowB4 = bchS.getSelectedCellRow();
 			DataTableModel model = (DataTableModel) this.getModel();
 			model.fireTableDataChanged();
+			bchS.setSelectedCell(selRowB4, selColB4);
 		}
 	}
 
