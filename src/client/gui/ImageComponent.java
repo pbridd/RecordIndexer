@@ -325,7 +325,7 @@ public class ImageComponent extends JComponent implements BatchStateListener, Se
 		public void mouseWheelMoved(MouseWheelEvent e) {
 			double zoom = imgS.getZoomLevel();
 			double wheelRot = e.getWheelRotation() *-.1;
-			if(Math.abs(imgS.getZoomLevel() + wheelRot) > 5.0){
+			if(imgS.getZoomLevel() + wheelRot > 2.0 || imgS.getZoomLevel() + wheelRot < .4){
 				return;
 			}
 			imgS.setZoomLevel(zoom + wheelRot);

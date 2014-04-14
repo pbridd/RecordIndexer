@@ -281,13 +281,17 @@ public class MainFrame extends JFrame implements ActionListener, BatchStateListe
 			imgS.toggleImageIsHighlighted();
 		}
 		else if(e.getSource() == zoomInButton){
-			if(imgS.getZoomLevel() + .20 > 5.0)
-				imgS.setZoomLevel(5.0);
+			if(imgS.getZoomLevel() + .20 > 2.0){
+				imgS.setZoomLevel(2.0);
+				return;
+			}
 			imgS.setZoomLevel(imgS.getZoomLevel() + .20);
 		}
 		else if(e.getSource() == zoomOutButton){
-			if(imgS.getZoomLevel() - .20 < -5.0)
-				imgS.setZoomLevel(-5.0);
+			if(imgS.getZoomLevel() - .20 < .4){
+				imgS.setZoomLevel(.4);
+				return;
+			}
 			imgS.setZoomLevel(imgS.getZoomLevel() -.20);
 		}
 		else if(e.getSource() == invertImageButton){

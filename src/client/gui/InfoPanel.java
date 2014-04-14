@@ -6,6 +6,7 @@ import java.io.Serializable;
 
 import javax.swing.JEditorPane;
 import javax.swing.JOptionPane;
+import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTabbedPane;
 
@@ -41,6 +42,11 @@ public class InfoPanel extends JTabbedPane implements BatchStateListener, Serial
 		
 		htmlPane.setContentType("text/html");
 		this.add("Field Help", htmlScrollPane);
+		
+		
+		JPanel imgNavPanel = new JPanel();
+		
+		this.add("Image Navigator", imgNavPanel);
 		
 		
 	}
