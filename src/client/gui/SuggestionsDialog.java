@@ -1,6 +1,8 @@
 package client.gui;
 
 import java.awt.Dimension;
+import java.awt.GraphicsDevice;
+import java.awt.GraphicsEnvironment;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.List;
@@ -46,6 +48,10 @@ public class SuggestionsDialog extends JDialog implements ActionListener {
 		this.setModal(true);
 		this.setResizable(false);
 		this.setTitle("Suggestions");
+		GraphicsDevice gd = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice();
+		int scWidth = gd.getDisplayMode().getWidth();
+		int scHeight = gd.getDisplayMode().getHeight();
+		this.setLocation(scWidth/2 - 200, scHeight/2 - 100);
 		this.createComponents();
 	}
 	
@@ -106,7 +112,7 @@ public class SuggestionsDialog extends JDialog implements ActionListener {
 			}
 		}
 		
-		this.setLocationRelativeTo(null);
+
 		
 	}
 

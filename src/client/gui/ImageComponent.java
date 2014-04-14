@@ -155,9 +155,7 @@ public class ImageComponent extends JComponent implements BatchStateListener, Se
 		super.paintComponent(g);
 		Graphics2D g2 = (Graphics2D)g;
 		drawBackground(g2);
-		
 		g2.scale(imgS.getZoomLevel(),  imgS.getZoomLevel());
-		//g2.translate(-w_originX, -w_originY);
 		g2.translate(-imgS.getImagePosX(), -imgS.getImagePosY());
 		
 		drawShapes(g2);
