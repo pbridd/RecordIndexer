@@ -137,7 +137,7 @@ public class Dictionary implements Trie {
 		for(int i = 0; i <= word.length(); i++){
 			for(int j = 97; j < 124; j++){
 				char ch =(char)j;
-				if(j == 124){
+				if(j == 123){
 					ch = ' ';
 				}
 				
@@ -168,7 +168,7 @@ public class Dictionary implements Trie {
 		for(int i = 0; i < word.length(); i++){
 			for(int j = 97; j < 124; j++){
 				char ch =(char)j;
-				if(j == 124){
+				if(j == 123){
 					ch = ' ';
 				}
 				String tempStr;
