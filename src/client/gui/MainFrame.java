@@ -105,6 +105,15 @@ public class MainFrame extends JFrame implements ActionListener, BatchStateListe
 		bchS.addListener(this);
 		this.createComponents(ws);
 		
+		this.addWindowListener(new java.awt.event.WindowAdapter(){
+			@Override
+			public void windowClosing(java.awt.event.WindowEvent windowEvent){
+				MainFrame mf = (MainFrame) windowEvent.getComponent();
+				mf.saveState();
+				System.exit(0);
+			}
+		});
+		
 	}
 	
 	
@@ -446,9 +455,11 @@ public class MainFrame extends JFrame implements ActionListener, BatchStateListe
 		if(ba == BatchActions.BATCHDOWNLOADED){
 			enableButtons();
 			downloadBatchMenuOption.setEnabled(false);
-		}
-		
+		}	
 	}
+	
+	
+	
 	@Override
 	public void batchActionPerformed(BatchActions ba, int row, int col) {
 		// TODO Auto-generated method stub

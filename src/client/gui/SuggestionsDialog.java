@@ -69,9 +69,11 @@ public class SuggestionsDialog extends JDialog implements ActionListener {
 		DefaultListModel<String> listModel = new DefaultListModel<String>();
 		list = new JList<String>(listModel);
 		list.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-		list.setPreferredSize(new Dimension(150, 100));
-		textScrollPane = new JScrollPane(list);
-		//textScrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+		
+		textScrollPane = new JScrollPane();
+		textScrollPane.setViewportView(list);
+		textScrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
+		textScrollPane.setPreferredSize(new Dimension(150, 100));
 		topPanel.add(Box.createRigidArea(new Dimension(20, 0)));
 		topPanel.add(textScrollPane);
 		topPanel.add(Box.createRigidArea(new Dimension(20, 0)));
@@ -91,7 +93,7 @@ public class SuggestionsDialog extends JDialog implements ActionListener {
 		dialogPanel.add(topPanel);
 		dialogPanel.add(Box.createRigidArea(new Dimension(0, 10)));
 		dialogPanel.add(bottomPanel);
-		this.setContentPane(dialogPanel);
+		this.add(dialogPanel);
 		
 		//try to get suggestions. If none are found, then make sure the user can't
 		//"choose a suggestion."
