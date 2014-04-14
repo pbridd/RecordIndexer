@@ -45,6 +45,7 @@ public class SuggestionsDialog extends JDialog implements ActionListener {
 		this.bchS = bchS;
 		this.setModal(true);
 		this.setResizable(false);
+		this.setTitle("Suggestions");
 		this.createComponents();
 	}
 	
@@ -58,13 +59,16 @@ public class SuggestionsDialog extends JDialog implements ActionListener {
 		
 		
 		//set up the list
+		topPanel.setLayout(new BoxLayout(topPanel, BoxLayout.X_AXIS));
 		DefaultListModel<String> listModel = new DefaultListModel<String>();
 		list = new JList<String>(listModel);
 		list.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-		list.setPreferredSize(new Dimension(400, 300));
+		list.setPreferredSize(new Dimension(150, 100));
 		textScrollPane = new JScrollPane(list);
-		textScrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+		//textScrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+		topPanel.add(Box.createRigidArea(new Dimension(20, 0)));
 		topPanel.add(textScrollPane);
+		topPanel.add(Box.createRigidArea(new Dimension(20, 0)));
 		
 		
 		useSuggestionButton = new JButton("Use Suggestion");
@@ -77,8 +81,9 @@ public class SuggestionsDialog extends JDialog implements ActionListener {
 		bottomPanel.add(useSuggestionButton);
 		bottomPanel.add(Box.createGlue());
 		
-		dialogPanel.add(topPanel);
 		dialogPanel.add(Box.createRigidArea(new Dimension(0, 5)));
+		dialogPanel.add(topPanel);
+		dialogPanel.add(Box.createRigidArea(new Dimension(0, 10)));
 		dialogPanel.add(bottomPanel);
 		this.setContentPane(dialogPanel);
 		
@@ -100,6 +105,8 @@ public class SuggestionsDialog extends JDialog implements ActionListener {
 				listModel.addElement(str);
 			}
 		}
+		
+		this.setLocationRelativeTo(null);
 		
 	}
 

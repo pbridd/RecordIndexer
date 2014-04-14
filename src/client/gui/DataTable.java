@@ -157,11 +157,16 @@ public class DataTable extends JTable implements BatchStateListener, ActionListe
 		}
 		
 		
+		
 	}
 
 
 	@Override
 	public void batchActionPerformed(BatchActions ba, int row, int col) {
+		if(ba == BatchActions.DATAVALUECHANGED){
+			DataTableModel model = (DataTableModel) this.getModel();
+			model.fireTableDataChanged();
+		}
 	}
 
 	@Override
