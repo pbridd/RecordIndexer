@@ -24,7 +24,6 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
 import shared.communication.DownloadBatch_Result;
-import shared.model.User;
 import shared.model.Project;
 import client.ClientException;
 import client.gui.synchronization.BatchState;
@@ -54,7 +53,7 @@ public class DownloadBatchDialog extends JDialog implements ActionListener, Seri
 		GraphicsDevice gd = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice();
 		int scWidth = gd.getDisplayMode().getWidth();
 		int scHeight = gd.getDisplayMode().getHeight();
-		this.setLocation(scWidth/2 - this.getWidth(), scHeight/2 - this.getHeight());
+		this.setLocation(scWidth/2 - 200, scHeight/2 - 50);
 		this.createComponents();
 		
 	}
@@ -212,6 +211,10 @@ public class DownloadBatchDialog extends JDialog implements ActionListener, Seri
         
         viewSampleImageDialog.setContentPane(mJPanel);
         viewSampleImageDialog.pack();
+        GraphicsDevice gd = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice();
+		int scWidth = gd.getDisplayMode().getWidth();
+		int scHeight = gd.getDisplayMode().getHeight();
+		viewSampleImageDialog.setLocation(scWidth/2 - 350, scHeight/2 - 250);
         viewSampleImageDialog.setVisible(true);
 	}
 	

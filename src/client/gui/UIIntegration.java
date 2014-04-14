@@ -1,6 +1,5 @@
 package client.gui;
 
-import java.util.Arrays;
 import java.util.List;
 
 import shared.communication.DownloadBatch_Params;

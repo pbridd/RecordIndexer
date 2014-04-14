@@ -6,7 +6,6 @@ import java.io.InputStreamReader;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Scanner;
@@ -39,7 +38,7 @@ public class Checker implements SpellCorrector {
 		
 		//get the reader
 		Scanner scan = new Scanner(
-				new InputStreamReader(dictionaryFileURL.openStream()));
+           				new InputStreamReader(dictionaryFileURL.openStream()));
 
 		//read the file in question
 

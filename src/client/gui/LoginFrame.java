@@ -57,7 +57,7 @@ public class LoginFrame extends JFrame implements ActionListener, Serializable{
 		GraphicsDevice gd = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice();
 		int scWidth = gd.getDisplayMode().getWidth();
 		int scHeight = gd.getDisplayMode().getHeight();
-		this.setLocation(scWidth/2 - this.getWidth(), scHeight/2 - this.getHeight());
+		this.setLocation(scWidth/2 - 200, scHeight/2 - 50);
 		this.wManager = wManager;
 		userIsAuthenticated = false;
 		authenticatedUser = null;
