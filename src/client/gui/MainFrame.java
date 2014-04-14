@@ -101,6 +101,7 @@ public class MainFrame extends JFrame implements ActionListener, BatchStateListe
 		
 		this.wManager = wManager;
 		this.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+		this.setTitle("Indexer");
 		bchS.addListener(this);
 		this.createComponents(ws);
 		
